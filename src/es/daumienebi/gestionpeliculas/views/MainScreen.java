@@ -1,4 +1,4 @@
-package views;
+package es.daumienebi.gestionpeliculas.views;
 
 import java.awt.EventQueue;
 

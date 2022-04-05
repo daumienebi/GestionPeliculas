@@ -1,1 +1,1 @@
-package views;
+package es.daumienebi.gestionpeliculas.views;

@@ -1,1 +1,1 @@
-package models;
+package es.daumienebi.gestionpeliculas.models;

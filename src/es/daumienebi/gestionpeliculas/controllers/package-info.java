@@ -1,1 +1,1 @@
-package controllers;
+package es.daumienebi.gestionpeliculas.controllers;

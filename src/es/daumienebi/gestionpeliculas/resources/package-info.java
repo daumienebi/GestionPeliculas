@@ -1,1 +1,1 @@
-package resources;
+package es.daumienebi.gestionpeliculas.resources;
