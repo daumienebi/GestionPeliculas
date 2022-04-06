@@ -4,11 +4,18 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
+
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JMenuItem;
 import java.awt.Color;
 
@@ -23,8 +30,10 @@ public class MainScreen {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					//DbConnection.conectar();
 					MainScreen window = new MainScreen();
 					window.frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -36,7 +45,22 @@ public class MainScreen {
 	 * Create the application.
 	 */
 	public MainScreen() {
+		
 		initialize();
+		DbConnection.connect();
+		
+		ResultSet rs;
+		try {
+			PreparedStatement p = DbConnection.getConexion().prepareStatement("select email from cliente");
+			rs = p.executeQuery();
+			while(rs.next()) {
+				System.out.print(rs.getString("email"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**

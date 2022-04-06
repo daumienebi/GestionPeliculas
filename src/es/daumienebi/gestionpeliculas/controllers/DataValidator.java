@@ -3,8 +3,6 @@ package es.daumienebi.gestionpeliculas.controllers;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 public class DataValidator {
 
@@ -35,33 +33,5 @@ public class DataValidator {
 		}
 		
 		return numerico;
-	}
-	
-	public static boolean enBlanco(JTextField x) {
-		//comprobar si un TextField esta en blanco o no
-		
-		if(x.getText().isEmpty()) {
-			return true;
-		}else
-			return false;
-	}
-		
-	public static boolean esDniValido(String dni) {
-		if(dni.length()==9) {
-			return true;
-		}else
-			return false;
-	}
-	
-	public static boolean enBlanco2 (Object object) {
-		JTextField txtField = null;
-		JTextArea  txtArea = null;
-		if(object.equals(txtField) && txtField.getText().isEmpty()) {
-			return true;
-		}else
-			if(object.equals(txtArea) && txtArea.getText().isEmpty()) {
-				return true;
-			}
-		return false;
 	}
 }
