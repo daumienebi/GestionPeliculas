@@ -4,8 +4,10 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
+import resources.RoundedBorder;
 
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
@@ -34,12 +36,20 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.SystemColor;
+import java.awt.Cursor;
+import javax.swing.JComboBox;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.ComponentOrientation;
 
 public class MainScreen {
 
 	private JFrame frmGestionPeliculas;
 	private JPanel mainPanel;
 	int panelHeight,panelWidth;
+	private JButton startBtn;
 
 	/**
 	 * Launch the application.
@@ -51,7 +61,9 @@ public class MainScreen {
 					//DbConnection.conectar();
 					MainScreen window = new MainScreen();					
 					window.frmGestionPeliculas.setLocationRelativeTo(null);
+					
 					window.frmGestionPeliculas.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,10 +78,17 @@ public class MainScreen {
 	 * @throws InstantiationException 
 	 * @throws ClassNotFoundException 
 	 */
-	public MainScreen(){
-		//UIManager.setLookAndFeel(UIManager. getCrossPlatformLookAndFeelClassName());
-		//this.frame.setDefaultLookAndFeelDecorated(true);
+	public MainScreen() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+		UIManager u = new UIManager();
+		/*
+		u.setLookAndFeel(UIManager. getCrossPlatformLookAndFeelClassName());
+		*/
+		//this.frmGestionPeliculas.setDefaultLookAndFeelDecorated(true);
+		//frmGestionPeliculas.setUndecorated(true);
+		
 		initialize();
+		//frmGestionPeliculas.getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
+		//frmGestionPeliculas.getRootPane().setBackground(Color.black);
 		/*
 		DbConnection.connect();
 		
@@ -92,13 +111,13 @@ public class MainScreen {
 	 */
 	private void initialize() {
 		frmGestionPeliculas = new JFrame();
-		frmGestionPeliculas.setTitle("Gestion Peliculas");
+		frmGestionPeliculas.setTitle("Movie Management");
 		frmGestionPeliculas.setResizable(false);
 		frmGestionPeliculas.setBounds(100, 100, 900,600);
 		frmGestionPeliculas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmGestionPeliculas.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		ImageIcon fondo = new ImageIcon(getClass().getResource("/images/background.jpg"));
+		ImageIcon fondo = new ImageIcon(getClass().getResource("/resources/background.jpg"));
 		Image img = fondo.getImage();
 		//escalar la imagen
 		Image imgNuevo = img.getScaledInstance(1024,600,java.awt.Image.SCALE_SMOOTH );
@@ -116,10 +135,27 @@ public class MainScreen {
 		mainPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel inferiorPanel = new JPanel();
+		inferiorPanel.setBackground(new Color(188, 143, 143));
+		inferiorPanel.setForeground(Color.LIGHT_GRAY);
 		mainPanel.add(inferiorPanel, BorderLayout.SOUTH);
 		inferiorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JButton startBtn = new JButton("Start");
+		startBtn = new JButton("Start");
+		startBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				HomeScreen hm = new HomeScreen();
+				hm.setLocationRelativeTo(null);			
+				hm.setVisible(true);
+			}
+		});
+		startBtn.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		//RoundedBorder r = new RoundedBorder();
+		startBtn.setBorder(new RoundedBorder(10));
+		startBtn.setOpaque(true);
+		startBtn.setFocusable(false);
+		startBtn.setFocusPainted(false);
+		startBtn.setBackground(SystemColor.textHighlight);
+		startBtn.setForeground(Color.WHITE);
 		inferiorPanel.add(startBtn);
 		startBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 40));
 		
@@ -130,9 +166,6 @@ public class MainScreen {
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Start");
 		mnNewMenu.add(mntmNewMenuItem_4);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Refresh");
-		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Exit");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
@@ -166,6 +199,20 @@ public class MainScreen {
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Technical Manual");
 		mnNewMenu_2.add(mntmNewMenuItem_2);
+		
+		JPanel panel_1 = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		menuBar.add(panel_1);
+		
+		JLabel lblNewLabel = new JLabel("Select Languaje");
+		panel_1.add(lblNewLabel);
+		lblNewLabel.setBackground(new Color(205, 133, 63));
+		
+		JComboBox comboBox = new JComboBox();
+		panel_1.add(comboBox);
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Spanish", "English", "Pidgin"}));
+		comboBox.setMaximumSize(new Dimension(100, 100));
 		
 		JMenu mnNewMenu_3 = new JMenu((String) null);
 		menuBar.add(mnNewMenu_3);
