@@ -4,15 +4,17 @@ import java.time.LocalDate;
 
 public class Pelicula {
 
+	private int id;
 	private String titulo;
 	private String sinoposis;
-	private int puntuation;
+	private double puntuation;
 	private int duracionEnMinutos;
 	private LocalDate fechaEstreno;
 	private String caratula;
 	
-	public Pelicula(String titulo, String sinoposis, int puntuation, int duracionEnMinutos, LocalDate fechaEstreno,String caratula) {
+	public Pelicula(int id,String titulo, String sinoposis, double puntuation, int duracionEnMinutos, LocalDate fechaEstreno,String caratula) {
 		super();
+		this.id = id;
 		this.titulo = titulo;
 		this.sinoposis = sinoposis;
 		this.puntuation = puntuation;
@@ -24,6 +26,14 @@ public class Pelicula {
 	public Pelicula() {
 		
 	}	
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	public String getTitulo() {
 		return titulo;
@@ -37,10 +47,10 @@ public class Pelicula {
 	public void setSinoposis(String sinoposis) {
 		this.sinoposis = sinoposis;
 	}
-	public int getPuntuation() {
+	public double getPuntuation() {
 		return puntuation;
 	}
-	public void setPuntuation(int puntuation) {
+	public void setPuntuation(double puntuation) {
 		this.puntuation = puntuation;
 	}
 	public int getDuracionEnMinutos() {
@@ -67,7 +77,7 @@ public class Pelicula {
 
 	@Override
 	public String toString() {
-		return "Pelicula [titulo=" + titulo + ", sinoposis=" + sinoposis + ", puntuation=" + puntuation
+		return "Pelicula [id= " + id + ", titulo=" + titulo + ", sinoposis=" + sinoposis + ", puntuation=" + puntuation
 				+ ", duracionEnMinutos=" + duracionEnMinutos + ", caratula=" + caratula + "]";
 	}
 	

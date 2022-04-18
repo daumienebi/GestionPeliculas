@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 
-public class GenreManagementUI extends JDialog {
+public class ActorDetailsUI extends JDialog {
 
 	/**
 	 * Launch the application.
@@ -13,7 +13,7 @@ public class GenreManagementUI extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GenreManagementUI dialog = new GenreManagementUI();
+					ActorDetailsUI dialog = new ActorDetailsUI();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -26,9 +26,9 @@ public class GenreManagementUI extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public GenreManagementUI() {
+	public ActorDetailsUI() {
 		setBounds(100, 100, 450, 300);
-
+		
 	}
 
 }

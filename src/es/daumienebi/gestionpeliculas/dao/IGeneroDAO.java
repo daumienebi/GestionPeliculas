@@ -1,5 +1,19 @@
 package es.daumienebi.gestionpeliculas.dao;
 
-public class IGeneroDAO {
+import java.util.ArrayList;
+
+import es.daumienebi.gestionpeliculas.models.Genero;
+
+public interface IGeneroDAO{
+
+	public void Insert(Genero genre);
+
+	public void Delete(Genero genre);
+	
+	public ArrayList<Genero> getAll();
+
+	public void Modify(int id);
+	
+	public Genero getGenre(int id);
 
 }

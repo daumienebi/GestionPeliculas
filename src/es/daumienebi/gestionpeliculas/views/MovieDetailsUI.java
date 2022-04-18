@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-public class PeliculaDetailUI extends JDialog {
+public class MovieDetailsUI extends JDialog {
 
 	/**
 	 * Launch the application.
@@ -16,7 +16,7 @@ public class PeliculaDetailUI extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PeliculaDetailUI dialog = new PeliculaDetailUI();
+					MovieDetailsUI dialog = new MovieDetailsUI();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -29,7 +29,7 @@ public class PeliculaDetailUI extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public PeliculaDetailUI() {
+	public MovieDetailsUI() {
 		setBounds(100, 100, 793, 511);
 		URL url = getClass().getResource("/resources/avengerGif.Gif");
 		ImageIcon img = new ImageIcon(url);

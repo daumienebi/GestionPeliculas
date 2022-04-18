@@ -3,19 +3,29 @@ package es.daumienebi.gestionpeliculas.models;
 import java.time.LocalDate;
 
 public class Actor {
-
+	
+	private int id;
 	private String nombre;
 	private String apellidos;
 	private LocalDate fechaNac;
-	private String foto;
+	private String foto; //imgUrl
 		
-	public Actor(String nombre, String apellidos, LocalDate fechaNac, String foto) {
+	public Actor(int id, String nombre, String apellidos, LocalDate fechaNac, String foto) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.fechaNac = fechaNac;
 		this.foto = foto;
 	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -42,7 +52,7 @@ public class Actor {
 	}
 	@Override
 	public String toString() {
-		return "Actor [nombre=" + nombre + ", apellidos=" + apellidos + ", fechaNac=" + fechaNac + ", foto=" + foto
+		return "Actor [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", fechaNac=" + fechaNac + ", foto=" + foto
 				+ "]";
 	}
 }
