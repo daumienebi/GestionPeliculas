@@ -82,7 +82,7 @@ public class AddActorUI extends JDialog {
 		btnImage.setMargin(new Insets(0, 0, 0, 0));
 		btnImage.setBounds(10,11,150,150);
 		Image img = null;
-		String imgUrl = "https://xpectrumuwu.com/imagenes/logo.PNG";				
+		String imgUrl = "https://xpectrumuwu.com/imagenes/lcogo.PNG";				
 		ImageIcon icon = controller.getImage(imgUrl);
 		img = icon.getImage();			
 		//scale the image
