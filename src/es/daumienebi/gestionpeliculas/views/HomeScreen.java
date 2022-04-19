@@ -6,8 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
+import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.controllers.HomeScreenController;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
+import es.daumienebi.gestionpeliculas.views.ConfigUI;
 import resources.RoundedBorder;
 
 import java.awt.BorderLayout;
@@ -52,6 +54,11 @@ import java.awt.Toolkit;
 import javax.swing.JSlider;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class HomeScreen {
 
@@ -59,6 +66,15 @@ public class HomeScreen {
 	private JPanel mainPanel;
 	int panelHeight,panelWidth;
 	private JLabel imgSlider;
+	private JMenu genreMenu;
+	private JMenu homeMenu;
+	private JMenu settingsMenu;
+	private JMenu helpMenu;
+	private JMenu reportMenu;
+	private JMenu movieMenu;
+	private JMenu actorMenu;
+	
+	
 	String[] imgList = HomeScreenController.getMovieSliderImages();
 	Timer tm;
     int imgPos = 0; //for the image position
@@ -75,6 +91,7 @@ public class HomeScreen {
 					//GraphicsEnvironment graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
 					//GraphicsDevice device = graphics.getDefaultScreenDevice();
 				    //device.setFullScreenWindow(window.frmGestionPeliculas);
+					window.disableMenus();
 					window.frmGestionPeliculas.setVisible(true);
 					
 				} catch (Exception e) {
@@ -84,6 +101,25 @@ public class HomeScreen {
 		});
 	}
 
+	void disableMenus() {
+		if(Configuration.use_default_connection == -1) {
+			homeMenu.setEnabled(false);
+			actorMenu.setEnabled(false);
+			movieMenu.setEnabled(false);
+			genreMenu.setEnabled(false);
+			reportMenu.setEnabled(false);
+			helpMenu.setEnabled(false);
+			settingsMenu.setEnabled(false);
+		}else {
+			homeMenu.setEnabled(true);
+			actorMenu.setEnabled(true);
+			movieMenu.setEnabled(true);
+			genreMenu.setEnabled(true);
+			reportMenu.setEnabled(true);
+			helpMenu.setEnabled(true);
+			settingsMenu.setEnabled(true);
+		}
+	}
 	public HomeScreen(){
 		UIManager u = new UIManager();
 		/*
@@ -160,9 +196,25 @@ public class HomeScreen {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		frmGestionPeliculas.setJMenuBar(menuBar);
-		JMenu mnNewMenu = new JMenu("Home");
-		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		menuBar.add(mnNewMenu);
+		
+		JMenu dbMenu = new JMenu("Database Connection");
+		dbMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(dbMenu);
+		
+		JMenuItem mntmNewMenuItem_12 = new JMenuItem("Configure Connection");
+		mntmNewMenuItem_12.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		mntmNewMenuItem_12.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/management.jpg")));
+		mntmNewMenuItem_12.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConfigUI configUI = new ConfigUI();
+				configUI.setLocationRelativeTo(frmGestionPeliculas);
+				configUI.setVisible(true);
+			}
+		});
+		dbMenu.add(mntmNewMenuItem_12);
+		homeMenu = new JMenu("Home");
+		homeMenu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		menuBar.add(homeMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Exit");
 		mntmNewMenuItem.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/exit.jpg")));
@@ -189,12 +241,12 @@ public class HomeScreen {
 		});
 		refreshOption.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/refresh.jpg")));
 		refreshOption.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		mnNewMenu.add(refreshOption);
-		mnNewMenu.add(mntmNewMenuItem);
+		homeMenu.add(refreshOption);
+		homeMenu.add(mntmNewMenuItem);
 		
-		JMenu mnNewMenu_5 = new JMenu("Actors");
-		mnNewMenu_5.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		menuBar.add(mnNewMenu_5);
+		actorMenu = new JMenu("Actors");
+		actorMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(actorMenu);
 		
 		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Add new Actor");
 		mntmNewMenuItem_7.addActionListener(new ActionListener() {
@@ -206,7 +258,7 @@ public class HomeScreen {
 		});
 		mntmNewMenuItem_7.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/add_icon.jpg")));
 		mntmNewMenuItem_7.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		mnNewMenu_5.add(mntmNewMenuItem_7);
+		actorMenu.add(mntmNewMenuItem_7);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Actors Management");
 		mntmNewMenuItem_4.addActionListener(new ActionListener() {
@@ -219,11 +271,11 @@ public class HomeScreen {
 		});
 		mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		mntmNewMenuItem_4.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/management.jpg")));
-		mnNewMenu_5.add(mntmNewMenuItem_4);
+		actorMenu.add(mntmNewMenuItem_4);
 		
-		JMenu mnNewMenu_4 = new JMenu("Movie");
-		mnNewMenu_4.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		menuBar.add(mnNewMenu_4);
+		movieMenu = new JMenu("Movie");
+		movieMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(movieMenu);
 		
 		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Add new movie");
 		mntmNewMenuItem_6.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -236,7 +288,7 @@ public class HomeScreen {
 				newMovieUI.setVisible(true);
 			}
 		});
-		mnNewMenu_4.add(mntmNewMenuItem_6);
+		movieMenu.add(mntmNewMenuItem_6);
 		
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Movie Management");
 		mntmNewMenuItem_5.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -249,28 +301,28 @@ public class HomeScreen {
 				mngUI.setVisible(true);
 			}
 		});
-		mnNewMenu_4.add(mntmNewMenuItem_5);
+		movieMenu.add(mntmNewMenuItem_5);
 		
-		JMenu mnNewMenu_1 = new JMenu("Genre");
-		mnNewMenu_1.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		menuBar.add(mnNewMenu_1);
+		genreMenu = new JMenu("Genre");
+		genreMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(genreMenu);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Genre Management");
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		mntmNewMenuItem_1.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/management.jpg")));
-		mnNewMenu_1.add(mntmNewMenuItem_1);
+		genreMenu.add(mntmNewMenuItem_1);
 		
-		JMenu mnReports = new JMenu("Reports");
-		mnReports.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		menuBar.add(mnReports);
+		reportMenu = new JMenu("Reports");
+		reportMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(reportMenu);
 		
-		JMenu mnNewMenu_3 = new JMenu("Settings");
-		mnNewMenu_3.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		menuBar.add(mnNewMenu_3);
+		settingsMenu = new JMenu("Settings");
+		settingsMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(settingsMenu);
 		
 		JMenu mnNewMenu_6 = new JMenu("Select Language");
 		mnNewMenu_6.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		mnNewMenu_3.add(mnNewMenu_6);
+		settingsMenu.add(mnNewMenu_6);
 		
 		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Spanish");
 		mnNewMenu_6.add(mntmNewMenuItem_10);
@@ -281,20 +333,22 @@ public class HomeScreen {
 		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Pidgin");
 		mnNewMenu_6.add(mntmNewMenuItem_8);
 		
-		JMenu mnNewMenu_2 = new JMenu("Help");
-		mnNewMenu_2.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		menuBar.add(mnNewMenu_2);
+		helpMenu = new JMenu("Help");
+		helpMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		menuBar.add(helpMenu);
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Help Contents");
 		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		mntmNewMenuItem_3.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/help.jpg")));
-		mnNewMenu_2.add(mntmNewMenuItem_3);
+		helpMenu.add(mntmNewMenuItem_3);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Technical Manual");
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		mntmNewMenuItem_2.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/help.jpg")));
-		mnNewMenu_2.add(mntmNewMenuItem_2);
+		helpMenu.add(mntmNewMenuItem_2);
+		
 	}
+	
 	
 	public void SetImageSize(int index){
 		Image img = null;
@@ -306,4 +360,21 @@ public class HomeScreen {
         imgSlider.setIcon(finalImg);
     }
 
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }

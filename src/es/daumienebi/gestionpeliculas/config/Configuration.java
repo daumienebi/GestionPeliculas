@@ -6,42 +6,31 @@ package es.daumienebi.gestionpeliculas.config;
 
 public class Configuration {
 	
-	private String  ip;
-	private String  db_user;
-	private String  db_password;
-	private String  port;
+	public static String ip;
+	public static String db_user;
+	public static String db_password;
+	public static String port;
 	
-	public Configuration(String ip, String db_user, String db_password, String port) {
-		super();
-		this.ip = ip;
-		this.db_user = db_user;
-		this.db_password = db_password;
-		this.port = port;
-	}
-	public String getIp() {
+	public static int use_default_connection = -1; //{1} to use default connection, {0} to not use it and {-1} if its not configured
+	
+	public static String getIp() {
 		return ip;
 	}
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-	public String getDb_user() {
+	public static String getDb_user() {
 		return db_user;
 	}
-	public void setDb_user(String db_user) {
-		this.db_user = db_user;
-	}
-	public String getDb_password() {
+	public static String getDb_password() {
 		return db_password;
 	}
-	public void setDb_password(String db_password) {
-		this.db_password = db_password;
-	}
-	public String getPort() {
+	public static String getPort() {
 		return port;
 	}
-	public void setPort(String port) {
-		this.port = port;
+	public static int getUseDefaultConnection() {
+		return use_default_connection;
 	}
 	
+	public static Configuration getDefaultConfig() {
+		return null;
+	}
 	
 }

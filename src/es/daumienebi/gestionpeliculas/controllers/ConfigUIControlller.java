@@ -15,15 +15,14 @@ import java.net.URL;
 
 public class ConfigUIControlller {
 
-	private void saveConfig(Configuration config) {
+	private void saveConfig() {
 		Properties prop = null;
 		//get the props
 		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("connection.properties")){
 			prop = new Properties();
 			prop.load(inputStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();			
 		}
 		
 		URL resourseUrl = this.getClass().getClassLoader().getResource("connection.properties");
@@ -31,18 +30,18 @@ public class ConfigUIControlller {
 		try{
 			file = new File(resourseUrl.toURI());
 			try(OutputStream outputStream = new FileOutputStream(file);){
-				prop.setProperty("ip",config.getIp());
-				prop.setProperty("port",config.getPort());
-				prop.setProperty("db_user",config.getDb_user());
-				prop.setProperty("db_password",config.getDb_password());
+				prop.setProperty("ip",Configuration.getIp());
+				prop.setProperty("port",Configuration.getPort());
+				prop.setProperty("db_user",Configuration.getDb_user());
+				prop.setProperty("db_password",Configuration.getDb_password());
 				prop.store(outputStream, null);
+				
+				//store it with the Configuration object
 			
 		}catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();		
 		} 
 		}catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}				
 }
