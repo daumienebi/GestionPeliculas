@@ -10,7 +10,7 @@ public interface IGeneroDAO{
 
 	public void Delete(Genero genre);
 	
-	public ArrayList<Genero> getAll();
+	public ArrayList<Genero> getAllGenres();
 
 	public void Modify(int id);
 	

@@ -59,12 +59,13 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class HomeScreen {
 
 	private JFrame frmGestionPeliculas;
 	private JPanel mainPanel;
-	int panelHeight,panelWidth;
 	private JLabel imgSlider;
 	private JMenu genreMenu;
 	private JMenu homeMenu;
@@ -78,7 +79,7 @@ public class HomeScreen {
 	String[] imgList = HomeScreenController.getMovieSliderImages();
 	Timer tm;
     int imgPos = 0; //for the image position
-    private boolean muteAudio = false; //to be used later for controlling the background audio
+    //private boolean muteAudio = false; //to be used later for controlling the background audio
 	/**
 	 * Launch the application.
 	 */
@@ -88,12 +89,7 @@ public class HomeScreen {
 				try {					
 					HomeScreen window = new HomeScreen();										
 					window.frmGestionPeliculas.setResizable(true);
-					//GraphicsEnvironment graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
-					//GraphicsDevice device = graphics.getDefaultScreenDevice();
-				    //device.setFullScreenWindow(window.frmGestionPeliculas);
-					window.disableMenus();
-					window.frmGestionPeliculas.setVisible(true);
-					
+					window.frmGestionPeliculas.setVisible(true);					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -144,24 +140,9 @@ public class HomeScreen {
 		frmGestionPeliculas.getContentPane().setLayout(new BorderLayout(0, 0));
 		frmGestionPeliculas.setLocationRelativeTo(frmGestionPeliculas); //to center the JFrame to the center of the screen
 		
-		mainPanel = new JPanel() {
-			@Override
-		     protected void paintComponent(Graphics g)
-		     {
-		        //super.paintComponent(g);
-		        //g.drawImage(a.getImage(), 0, 0, null);
-		     }
-		};
+		mainPanel = new JPanel();
 		frmGestionPeliculas.getContentPane().add(mainPanel);		
-		/*
-		 * Resize an image
-		ImageIcon fondo = new ImageIcon(getClass().getResource("/resources/increibles.jpg"));
-		//https://www.youtube.com/watch?v=pN1uoJD_uSE
-		Image img = fondo.getImage();
-		Image imgNuevo = img.getScaledInstance(350,500,java.awt.Image.SCALE_SMOOTH);
-		//volver a asignarle la imagen redimensionada al icono
-		ImageIcon a =new ImageIcon(imgNuevo);
-		*/
+		//https://www.youtube.com/watch?v=pN1uoJD_uSE -- image slider
 		imgSlider = new JLabel();
 		imgSlider.setHorizontalAlignment(SwingConstants.CENTER);
 		imgSlider.setBounds(40, 30, 700, 300);
@@ -197,7 +178,7 @@ public class HomeScreen {
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		frmGestionPeliculas.setJMenuBar(menuBar);
 		
-		JMenu dbMenu = new JMenu("Database Connection");
+		JMenu dbMenu = new JMenu("Connection");
 		dbMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(dbMenu);
 		
@@ -212,6 +193,29 @@ public class HomeScreen {
 			}
 		});
 		dbMenu.add(mntmNewMenuItem_12);
+		
+		JMenuItem refreshGui = new JMenuItem("Refresh GUI");
+		refreshGui.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/refresh.jpg")));
+		refreshGui.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		refreshGui.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(" value before :" + Configuration.use_default_connection);
+				frmGestionPeliculas.dispose();
+				try {
+					Thread.sleep(2500);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				HomeScreen window = new HomeScreen();										
+				window.frmGestionPeliculas.setResizable(true);
+				System.out.println(" value before :" + Configuration.use_default_connection);
+				disableMenus();
+				System.out.println(" value after :" + Configuration.use_default_connection);
+				window.frmGestionPeliculas.setVisible(true);
+			}
+		});
+		dbMenu.add(refreshGui);
 		homeMenu = new JMenu("Home");
 		homeMenu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		menuBar.add(homeMenu);
@@ -289,7 +293,7 @@ public class HomeScreen {
 			}
 		});
 		movieMenu.add(mntmNewMenuItem_6);
-		
+ 		
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Movie Management");
 		mntmNewMenuItem_5.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		mntmNewMenuItem_5.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/management.jpg")));
@@ -308,6 +312,14 @@ public class HomeScreen {
 		menuBar.add(genreMenu);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Genre Management");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GenreManagementUI genreMng = new GenreManagementUI();
+				genreMng.setModal(true);
+				genreMng.setLocationRelativeTo(frmGestionPeliculas);
+				genreMng.setVisible(true);
+			}			
+		});
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		mntmNewMenuItem_1.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/management.jpg")));
 		genreMenu.add(mntmNewMenuItem_1);
@@ -347,6 +359,7 @@ public class HomeScreen {
 		mntmNewMenuItem_2.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/help.jpg")));
 		helpMenu.add(mntmNewMenuItem_2);
 		
+		disableMenus();
 	}
 	
 	
@@ -359,22 +372,4 @@ public class HomeScreen {
         ImageIcon finalImg = new ImageIcon(newImg);
         imgSlider.setIcon(finalImg);
     }
-
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
 }

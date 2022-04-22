@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import es.daumienebi.gestionpeliculas.config.Configuration;
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 
 public class DbConnection {
 
@@ -17,21 +18,24 @@ public class DbConnection {
 private static Connection con;
     
     public static Connection connect(){
+    	//get the values from the
         String ip = Configuration.getIp();
         String port = Configuration.getPort();
+        String db_name = Configuration.getDb_Name();
         String db_user = Configuration.getDb_user();
         String db_password = Configuration.getDb_password();
         try
         {
         	if(Configuration.use_default_connection == 1) {
-        		Class.forName("com.mysql.cj.jdbc.Driver");
-                String urlCon="jdbc:mysql://192.168.0.69:3306/taller";
-                con=DriverManager.getConnection(urlCon, "root", "root");
+        		Class.forName("org.mariadb.jdbc.Driver");
+        		//Class.forName("com.mysql.cj.jdbc.Driver");
+        		String urlCon="jdbc:mariadb://"+DefaultConfiguration.ip+":"+DefaultConfiguration.port+"/"+DefaultConfiguration.db_name;
+                con=DriverManager.getConnection(urlCon, DefaultConfiguration.db_user, DefaultConfiguration.db_password);
                 con.setAutoCommit(false);          
                 return con;
         	}else {
-        		Class.forName("com.mysql.cj.jdbc.Driver");
-        		String urlCon="jdbc:mysql://"+ip+":"+port+"/moviedb";
+        		Class.forName("org.mariadb.jdbc.Driver");
+        		String urlCon="jdbc:mariadb://"+ip+":"+port+"/"+db_name;
                 con=DriverManager.getConnection(urlCon, db_user, db_password);
                 con.setAutoCommit(false);          
                 return con;
@@ -47,4 +51,14 @@ private static Connection con;
     public static Connection getConexion(){
     	return con != null ? con : null;
     }
+    
+    public static void closeConnection() {
+    	try {
+			con.close();
+		} catch (SQLException e) {
+			 JOptionPane.showMessageDialog(null, "Error closing the connection");
+		}
+    }
+
+    //seperate the connections with switch statements
 }

@@ -2,12 +2,12 @@ package es.daumienebi.gestionpeliculas.models;
 
 public class Genero {
 	private int id;
-	private String genreName;
+	private String name;
 	//private ArrayList<Pelicula> getMovies; //returns movies of a specific genre
-	public Genero(int id, String genreName) {
+	public Genero(int id, String name) {
 		super();
 		this.id = id;
-		this.genreName = genreName;
+		this.name = name;
 	}
 	public int getId() {
 		return id;
@@ -15,15 +15,15 @@ public class Genero {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getGenreName() {
-		return genreName;
+	public String getName() {
+		return name;
 	}
-	public void setGenreName(String genreName) {
-		this.genreName = genreName;
+	public void setGenreName(String name) {
+		this.name = name;
 	}
 	@Override
 	public String toString() {
-		return "Genero [id=" + id + ", genreName=" + genreName + "]";
+		return "Genero [id=" + id + ", genreName=" + name + "]";
 	}
 	
 	

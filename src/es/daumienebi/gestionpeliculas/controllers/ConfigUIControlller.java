@@ -18,14 +18,14 @@ public class ConfigUIControlller {
 	private void saveConfig() {
 		Properties prop = null;
 		//get the props
-		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("connection.properties")){
+		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("app.properties")){
 			prop = new Properties();
 			prop.load(inputStream);
 		} catch (IOException e) {
 			e.printStackTrace();			
 		}
 		
-		URL resourseUrl = this.getClass().getClassLoader().getResource("connection.properties");
+		URL resourseUrl = this.getClass().getClassLoader().getResource("app.properties");
 		File file;
 		try{
 			file = new File(resourseUrl.toURI());
@@ -49,8 +49,7 @@ public class ConfigUIControlller {
 	private void loadConfig() {
 		ResourceBundle.clearCache();
 		//ResourceBundle.clearCache(this.getClass().getClassLoader());
-		ResourceBundle resourceBundle = ResourceBundle.getBundle("connection");
-		
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("app");
 		
 	}
 }

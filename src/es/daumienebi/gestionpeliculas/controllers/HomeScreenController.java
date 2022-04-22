@@ -20,8 +20,7 @@ public class HomeScreenController {
             "/resources/4k.jpg","/resources/machete.jpg",
             "/resources/johnwick.jpg","/resources/minion3.jpg",
             "/resources/warcraft.jpg","/resources/superman.jpg",
-            "/resources/bobesponja.jpg","/resources/deadpool.jpg",
-            "/resources/avengerGif.gif","/resources/minion1.jpg",               
+            "/resources/bobesponja.jpg","/resources/deadpool.jpg","/resources/minion1.jpg",               
 	};
 	
 	public static String[] getMovieSliderImages(){

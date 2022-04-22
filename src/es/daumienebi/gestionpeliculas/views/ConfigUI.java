@@ -3,24 +3,24 @@ package es.daumienebi.gestionpeliculas.views;
 import java.awt.EventQueue;
 import java.awt.Image;
 
-import javax.swing.JFrame;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import java.awt.Toolkit;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
 
 import es.daumienebi.gestionpeliculas.config.Configuration;
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
+import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
 
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
@@ -32,7 +32,7 @@ public class ConfigUI extends JDialog{
 	private JTextField txtPort;
 	private JTextField txtDbUser;
 	private JPasswordField txtDbPassword;
-
+	private JTextField txtDbName;
 	/**
 	 * Launch the application.
 	 */
@@ -78,7 +78,7 @@ public class ConfigUI extends JDialog{
 		txtIp.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("PORT");
-		lblNewLabel_1.setBounds(33, 178, 116, 14);
+		lblNewLabel_1.setBounds(33, 159, 116, 14);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("DB_USER");
@@ -86,11 +86,11 @@ public class ConfigUI extends JDialog{
 		panel.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("DB_PASSWORD");
-		lblNewLabel_3.setBounds(33, 272, 116, 14);
+		lblNewLabel_3.setBounds(33, 256, 116, 14);
 		panel.add(lblNewLabel_3);
 		
 		txtPort = new JTextField();
-		txtPort.setBounds(208, 175, 80, 20);
+		txtPort.setBounds(208, 156, 80, 20);
 		panel.add(txtPort);
 		txtPort.setColumns(10);
 		
@@ -100,7 +100,7 @@ public class ConfigUI extends JDialog{
 		txtDbUser.setColumns(10);
 		
 		txtDbPassword = new JPasswordField();
-		txtDbPassword.setBounds(208, 269, 190, 20);
+		txtDbPassword.setBounds(208, 253, 190, 20);
 		panel.add(txtDbPassword);
 		
 		JCheckBox chkBoxDefaultConfig = new JCheckBox("Use default configuration");
@@ -108,7 +108,11 @@ public class ConfigUI extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if(chkBoxDefaultConfig.isSelected()) {
 					disableTxtBoxes();
-				}else enableTxtBoxes();
+					fiilDefaultValues();
+				}else {
+					enableTxtBoxes();
+					hideDefaultValues();
+				}
 			}
 		});
 		
@@ -126,6 +130,15 @@ public class ConfigUI extends JDialog{
 		lblNewLabel_4.setBounds(166, 11, 99, 100);
 		panel.add(lblNewLabel_4);
 		
+		JLabel lblNewLabel_5 = new JLabel("DB_NAME");
+		lblNewLabel_5.setBounds(33, 194, 116, 14);
+		panel.add(lblNewLabel_5);
+		
+		txtDbName = new JTextField();
+		txtDbName.setBounds(208, 187, 190, 20);
+		panel.add(txtDbName);
+		txtDbName.setColumns(10);
+		
 		
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
@@ -135,17 +148,56 @@ public class ConfigUI extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if(chkBoxDefaultConfig.isSelected()) {
 					Configuration.use_default_connection = 1;
-					System.out.println(Configuration.db_password + " " + Configuration.db_user);
+					try {
+						DbConnection.connect();
+						Connection con = DbConnection.getConexion();
+						if(con != null) {
+							ResultSet rs = con.prepareStatement("Select * from genre order by id asc").executeQuery();
+							while(rs.next()) {
+								System.out.println(rs.getInt("id") + " " + rs.getString("name") + "\n");
+							}
+							System.out.print(rs.toString());
+						}else {
+							JOptionPane.showMessageDialog(null, "Unable to connect");
+							Configuration.use_default_connection = -1;
+						}
+					} catch (SQLException sqlEx) {
+						System.out.println(sqlEx.getMessage());
+					}
+					
+					//System.out.println(Configuration.db_password + " " + Configuration.db_user);
+					//System.exit(0);
 				}else {
-					if(!txtIp.getText().isBlank() && !txtPort.getText().isBlank() && !txtDbUser.getText().isBlank() && !txtDbPassword.getPassword().toString().isBlank()) {
+					Configuration.use_default_connection = 0;
+					if(!txtIp.getText().isBlank() && !txtPort.getText().isBlank() && !txtDbUser.getText().isBlank() && 
+							!txtDbPassword.getPassword().toString().isBlank() && !txtDbName.getText().isBlank()) {
 						Configuration.ip = txtIp.getText();
 						Configuration.port = txtPort.getText();
+						Configuration.db_name = txtDbName.getText();
 						Configuration.db_user = txtDbUser.getText();
-						Configuration.db_password = txtDbPassword.getPassword().toString().trim(); //check out the password control
+						Configuration.db_password = "root";
+						//Configuration.db_password = txtDbPassword.getPassword().toString().trim(); //check out the password control
 						
 						//call the saveConfig and then activate the home screen
-						//maybe create a DefaultConfiguration.java to return the default config
+						try {
+							DbConnection.connect();
+							Connection con = DbConnection.getConexion();
+							if(con != null) {
+								ResultSet rs = con.prepareStatement("Select * from Genre").executeQuery();
+								while(rs.next()) {
+									System.out.println(rs.getInt("id") + " " + rs.getString("name") + "\n");
+								}
+								System.out.print(rs.toString());
+							}else {
+								JOptionPane.showMessageDialog(null, "Unable to connect");
+								Configuration.use_default_connection = -1;
+							}
+						} catch (SQLException sqlEx) {
+							System.out.println(sqlEx.getMessage());
+						}
+						
 						System.out.println(Configuration.db_password + " " + Configuration.db_user);
+						//System.exit(0);
 					}else {
 						JOptionPane.showMessageDialog(null,"Fill  in the necessary fields","Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -161,6 +213,7 @@ public class ConfigUI extends JDialog{
 		txtDbUser.setEnabled(false);
 		txtPort.setEnabled(false);
 		txtIp.setEnabled(false);
+		txtDbName.setEnabled(false);
 	}
 	
 	void enableTxtBoxes() {
@@ -168,5 +221,22 @@ public class ConfigUI extends JDialog{
 		txtDbUser.setEnabled(true);
 		txtPort.setEnabled(true);
 		txtIp.setEnabled(true);
+		txtDbName.setEnabled(true);
+	}
+	
+	void fiilDefaultValues() {
+		txtIp.setText(DefaultConfiguration.ip);
+		txtPort.setText(DefaultConfiguration.port);
+		txtDbUser.setText(DefaultConfiguration.db_user);
+		txtDbPassword.setText(DefaultConfiguration.db_password);
+		txtDbName.setText(DefaultConfiguration.db_name);
+	}
+	
+	void hideDefaultValues() {
+		txtIp.setText("");
+		txtPort.setText("");
+		txtDbUser.setText("");
+		txtDbPassword.setText("");
+		txtDbName.setText("");
 	}
 }
