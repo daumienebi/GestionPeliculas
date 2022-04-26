@@ -13,32 +13,24 @@ import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 
 public class DbConnection {
 
-	//creates a MYSQL DB connection using the available connector
-	//This class will be modified later on
+//creates a MYSQL DB connection using the available connector
+//This class will be modified later on
 private static Connection con;
-    
-    public static Connection connect(){
-    	//get the values from the
-        String ip = Configuration.getIp();
-        String port = Configuration.getPort();
-        String db_name = Configuration.getDb_Name();
-        String db_user = Configuration.getDb_user();
-        String db_password = Configuration.getDb_password();
+static String ip = Configuration.getIp();
+static String port = Configuration.getPort();
+static String db_name = Configuration.getDb_Name();
+static String db_user = Configuration.getDb_user();
+static String db_password = Configuration.getDb_password();
+
+public static Connection connect(){        
         try
         {
         	if(Configuration.use_default_connection == 1) {
-        		Class.forName("org.mariadb.jdbc.Driver");
-        		//Class.forName("com.mysql.cj.jdbc.Driver");
-        		String urlCon="jdbc:mariadb://"+DefaultConfiguration.ip+":"+DefaultConfiguration.port+"/"+DefaultConfiguration.db_name;
-                con=DriverManager.getConnection(urlCon, DefaultConfiguration.db_user, DefaultConfiguration.db_password);
-                con.setAutoCommit(false);          
-                return con;
+        		defaultConnection();
+        		//return con; maybe
         	}else {
-        		Class.forName("org.mariadb.jdbc.Driver");
-        		String urlCon="jdbc:mariadb://"+ip+":"+port+"/"+db_name;
-                con=DriverManager.getConnection(urlCon, db_user, db_password);
-                con.setAutoCommit(false);          
-                return con;
+        		userConnection();
+        		//return con;
         	}            
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "The JDBC library was not found");
@@ -46,6 +38,23 @@ private static Connection con;
             JOptionPane.showMessageDialog(null, "Error in the database connection");
         }
         return null;
+    }
+    
+    public static Connection defaultConnection() throws ClassNotFoundException, SQLException {
+    	Class.forName("org.mariadb.jdbc.Driver");
+		//Class.forName("com.mysql.cj.jdbc.Driver");
+		String urlCon="jdbc:mariadb://"+DefaultConfiguration.ip+":"+DefaultConfiguration.port+"/"+DefaultConfiguration.db_name;
+        con=DriverManager.getConnection(urlCon, DefaultConfiguration.db_user, DefaultConfiguration.db_password);
+        con.setAutoCommit(false);          
+        return con;
+    }
+    
+    public static Connection userConnection() throws ClassNotFoundException, SQLException {
+    	Class.forName("org.mariadb.jdbc.Driver");
+		String urlCon="jdbc:mariadb://"+ip+":"+port+"/"+db_name;
+        con=DriverManager.getConnection(urlCon, db_user, db_password);
+        con.setAutoCommit(false);          
+        return con;
     }
      
     public static Connection getConexion(){

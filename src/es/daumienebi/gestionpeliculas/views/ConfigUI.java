@@ -175,7 +175,7 @@ public class ConfigUI extends JDialog{
 						Configuration.port = txtPort.getText();
 						Configuration.db_name = txtDbName.getText();
 						Configuration.db_user = txtDbUser.getText();
-						Configuration.db_password = "root";
+						//Configuration.db_password = "root";
 						//Configuration.db_password = txtDbPassword.getPassword().toString().trim(); //check out the password control
 						
 						//call the saveConfig and then activate the home screen

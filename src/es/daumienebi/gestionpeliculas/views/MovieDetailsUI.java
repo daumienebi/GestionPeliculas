@@ -31,7 +31,8 @@ public class MovieDetailsUI extends JDialog {
 	 */
 	public MovieDetailsUI() {
 		setBounds(100, 100, 793, 511);
-		URL url = getClass().getResource("/resources/avengerGif.Gif");
+		//URL url = getClass().getResource("/resources/avengerGif.Gif");
+		String url = "http://192.168.56.102/images/windows.png";
 		ImageIcon img = new ImageIcon(url);
 		JLabel lblNewLabel = new JLabel(img);
 	}

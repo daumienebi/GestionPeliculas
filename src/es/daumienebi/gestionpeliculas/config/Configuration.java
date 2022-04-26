@@ -45,5 +45,28 @@ public class Configuration {
 	public static int getLanguage() {
 		return language;
 	}
+	public static void setIp(String ip) {
+		Configuration.ip = ip;
+	}
+	public static void setDb_name(String db_name) {
+		Configuration.db_name = db_name;
+	}
+	public static void setDb_user(String db_user) {
+		Configuration.db_user = db_user;
+	}
+	public static void setDb_password(String db_password) {
+		Configuration.db_password = db_password;
+	}
+	public static void setPort(String port) {
+		Configuration.port = port;
+	}
+	public static void setLanguage(int language) {
+		Configuration.language = language;
+	}
+	public static void setUse_default_connection(int use_default_connection) {
+		Configuration.use_default_connection = use_default_connection;
+	}
+	
+	
 	
 }

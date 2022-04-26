@@ -116,16 +116,9 @@ public class HomeScreen {
 			settingsMenu.setEnabled(true);
 		}
 	}
-	public HomeScreen(){
-		UIManager u = new UIManager();
-		/*
-		u.setLookAndFeel(UIManager. getCrossPlatformLookAndFeelClassName());
-		*/
-		//this.frmGestionPeliculas.setDefaultLookAndFeelDecorated(true);
-		//frmGestionPeliculas.setUndecorated(true);	
+	public HomeScreen(){	
 		initialize();
-		//frmGestionPeliculas.getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
-		//frmGestionPeliculas.getRootPane().setBackground(Color.black);
+		
 	}
 
 	/**
