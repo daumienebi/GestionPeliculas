@@ -11,8 +11,9 @@ public class Pelicula {
 	private int duracionEnMinutos;
 	private LocalDate fechaEstreno;
 	private String caratula;
+	private int id_genero;
 	
-	public Pelicula(int id,String titulo, String sinoposis, double puntuation, int duracionEnMinutos, LocalDate fechaEstreno,String caratula) {
+	public Pelicula(int id,String titulo, String sinoposis, double puntuation, int duracionEnMinutos, LocalDate fechaEstreno,String caratula,int id_genero) {
 		super();
 		this.id = id;
 		this.titulo = titulo;
@@ -21,6 +22,7 @@ public class Pelicula {
 		this.duracionEnMinutos = duracionEnMinutos;
 		this.fechaEstreno = fechaEstreno;
 		this.caratula = caratula;
+		this.id_genero = id_genero;
 	}
 	
 	public Pelicula() {
@@ -31,6 +33,14 @@ public class Pelicula {
 		return id;
 	}
 	
+	public int getId_genero() {
+		return id_genero;
+	}
+
+	public void setId_genero(int id_genero) {
+		this.id_genero = id_genero;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}

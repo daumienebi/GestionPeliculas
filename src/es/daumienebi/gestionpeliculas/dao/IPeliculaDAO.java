@@ -8,11 +8,11 @@ public interface IPeliculaDAO {
 
 	public ArrayList<Pelicula> getAllMovies();
 	
-	public void AddMovie(Pelicula movie);
+	public int AddMovie(Pelicula movie);
 	
-	public void modifyMovie(Pelicula movie);
+	public int modifyMovie(Pelicula movie);
 	
-	public void deleteMovie(int id);
+	public int deleteMovie(int id);
 
 	public ArrayList<Pelicula> filterMovies(String title);
 }

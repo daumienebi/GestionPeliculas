@@ -44,6 +44,7 @@ public class AddActorUI extends JDialog {
 	private JTextField txtMonth;
 	private JTextField txtYear;
 	Actor actor;
+	private String nombreImagen = "";
 	/**
 	 * Launch the application.
 	 */
@@ -82,6 +83,11 @@ public class AddActorUI extends JDialog {
 		mainPanel.add(panel, BorderLayout.NORTH);
 		
 		JButton btnImage = new JButton("");
+		btnImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nombreImagen = controller.setFotoPerfil(btnImage);
+			}
+		});
 		btnImage.setMargin(new Insets(0, 0, 0, 0));
 		btnImage.setBounds(10,11,150,150);
 		Image img = null;
@@ -96,7 +102,7 @@ public class AddActorUI extends JDialog {
 		JButton btnAddImage = new JButton("Add Image");
 		btnAddImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				nombreImagen = controller.setFotoPerfil(btnImage);
 			}
 		});
 		panel.add(btnAddImage);
@@ -125,7 +131,7 @@ public class AddActorUI extends JDialog {
 				
 				//check for blank text boxes
 				if(!name.isBlank() && !surname.isBlank() && validDate) {
-					actor = new Actor(0,name,surname,birthDate,"");
+					actor = new Actor(0,name,surname,birthDate,nombreImagen);
 					//if the actor is added correctly, upload the image to the server else, don't upload it
 					int response = controller.addActor(actor);
 					if(response == 1) {

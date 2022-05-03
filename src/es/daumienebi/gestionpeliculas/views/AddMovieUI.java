@@ -29,6 +29,7 @@ import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class AddMovieUI extends JDialog {
 	private JTextField txtDuration;
@@ -49,6 +52,9 @@ public class AddMovieUI extends JDialog {
 	private Pelicula movie;
 	private String imgRoute;
 	private JTextArea txtSynopsis;
+	private JComboBox genreCombo;
+	private int id_genero;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -65,14 +71,18 @@ public class AddMovieUI extends JDialog {
 			}
 		});
 	}
-
+	
+	public AddMovieUI() {
+		Inicialize();
+		loadGenreCombo();
+	}
 	/**
 	 * Create the dialog.
 	 */
-	public AddMovieUI() {
+	private void Inicialize() {
 		setTitle("Add a new movie");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AddMovieUI.class.getResource("/resources/movie_management.png")));
-		setBounds(100, 100, 851, 700);
+		setBounds(100, 100, 898, 700);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel headerPanel = new JPanel();
@@ -107,9 +117,6 @@ public class AddMovieUI extends JDialog {
 			}
 		});
 		headerPanel.add(btnAddPoster);
-		
-		Label label = new Label(" ");
-		headerPanel.add(label);
 		
 		Panel panel_5 = new Panel();
 		panel_5.setBackground(Color.LIGHT_GRAY);
@@ -237,6 +244,20 @@ public class AddMovieUI extends JDialog {
 		lblNewLabel_6.setIcon(new ImageIcon(AddMovieUI.class.getResource("/resources/rating.png")));
 		rating_panel.add(lblNewLabel_6);
 		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.LIGHT_GRAY);
+		FlowLayout flowLayout_7 = (FlowLayout) panel_3.getLayout();
+		flowLayout_7.setHgap(50);
+		panel_5.add(panel_3);
+		
+		JLabel lblNewLabel_11 = new JLabel("Genre");
+		lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_3.add(lblNewLabel_11);
+		
+		genreCombo = new JComboBox();
+		panel_3.add(genreCombo);
+		genreCombo.setModel(new DefaultComboBoxModel(new String[] {"Sciencia Ficcion", "Miedo", "Comedia", ""}));
+		
 		Panel panel = new Panel();
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		
@@ -252,8 +273,14 @@ public class AddMovieUI extends JDialog {
 				int year =Integer.valueOf(txtYear.getText());
 				int duration = Integer.valueOf(txtDuration.getText());
 				
-				movie = new Pelicula(id,title,synopsis,rating,duration,LocalDate.of(year, month, day),imgRoute);
-				AddMovieUIController.addMovie(movie);
+				movie = new Pelicula(id,title,synopsis,rating,duration,LocalDate.of(year, month, day),imgRoute,id_genero);
+				int response = AddMovieUIController.addMovie(movie);
+				if(response == 0) {
+					JOptionPane.showMessageDialog(getContentPane(),"The record has been added successfully",""
+							,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+				}else
+					JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+					
 			}
 		});
 		panel.add(btnAddMovie);
@@ -296,5 +323,8 @@ public class AddMovieUI extends JDialog {
 		panel_2.add(scrollPane);
 		panel_2.add(btnAddActors);
 
+	}
+	void loadGenreCombo() {
+		
 	}
 }

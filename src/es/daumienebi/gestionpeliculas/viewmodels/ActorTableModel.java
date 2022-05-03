@@ -12,7 +12,7 @@ import javax.swing.table.AbstractTableModel;
 import es.daumienebi.gestionpeliculas.models.Actor;
 
 public class ActorTableModel extends AbstractTableModel {
-	final static String ACTOR_IMAGE_SERVER = "http://192.168.56.101/moviemanagement_images/actors/";
+	final static String ACTOR_IMAGE_SERVER = "http://192.168.56.102/moviemanagement_images/actors/";
 	private ArrayList<Actor> actorsList = new ArrayList<>();
 	private String [] columns = {"Id","Name","Surname","Date of birth","Image"};
 	

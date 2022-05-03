@@ -1,6 +1,7 @@
 package es.daumienebi.gestionpeliculas.dao.mysql;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +13,7 @@ import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public class MySQLPeliculaDAO implements IPeliculaDAO {
 	
-	/*
+	/**
 	public void createMovies() {
 		//movieList = new ArrayList<>();
 		movieList.add(new Pelicula(1,"Los Increibles","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
@@ -37,11 +38,12 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				6.3,110,LocalDate.now(),"/resources/warcraft.jpg"));
 	}
 	*/
+	
 	@Override
 	public ArrayList<Pelicula> getAllMovies() {
 		// TODO Auto-generated method stub
 		ArrayList<Pelicula> movieList = new ArrayList<>();
-		int id,duracion;
+		int id,duracion,id_genero;
 		String titulo,sinopsis,caratula;
 		double puntuacion;
 		LocalDate fecha_estreno;
@@ -60,8 +62,9 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				titulo = rs.getString("titulo");
 				sinopsis = rs.getString("sinopsis");
 				caratula = rs.getString("imagen");
-				puntuacion = rs.getDouble("puntuacion");				
-				Pelicula p = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula);
+				puntuacion = rs.getDouble("puntuacion");
+				id_genero = rs.getInt("id_genero");
+				Pelicula p = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula,id_genero);
 				movieList.add(p);			
 			}
 		} catch (SQLException e) {
@@ -74,7 +77,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 
 	public ArrayList<Pelicula> filterMovies(String title){
 		ArrayList<Pelicula> filterList = new ArrayList<>();
-		int id,duracion;
+		int id,duracion,id_genero;
 		String titulo,sinopsis,caratula;
 		double puntuacion;
 		LocalDate fecha_estreno;
@@ -94,8 +97,9 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				titulo = rs.getString("titulo");
 				sinopsis = rs.getString("sinopsis");
 				caratula = rs.getString("imagen");
-				puntuacion = rs.getDouble("puntuacion");				
-				Pelicula p = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula);
+				puntuacion = rs.getDouble("puntuacion");
+				id_genero = rs.getInt("id_genero");
+				Pelicula p = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula,id_genero);
 				filterList.add(p);			
 			}
 		} catch (SQLException e) {
@@ -106,19 +110,39 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		return filterList;
 	}
 	@Override
-	public void AddMovie(Pelicula movie) {
+	public int AddMovie(Pelicula movie) {
 		// TODO Auto-generated method stub
-		//movieList.add(movie);
+		Connection con = null;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "INSERT INTO movie (titulo,puntacion,duracion,imagen,id_genero,fecha_estreno,sinopsis) VALUES(?,?,?,?,?,?,?)";
+			PreparedStatement preparedSt = null;		
+			preparedSt = con.prepareStatement(sql);
+			preparedSt.setString(1, movie.getTitulo());
+			preparedSt.setDouble(2, movie.getPuntuation());
+			preparedSt.setInt(3, movie.getDuracionEnMinutos());
+			preparedSt.setString(4, movie.getCaratula());
+			preparedSt.setInt(5, movie.getId_genero());
+			preparedSt.setDate(6, Date.valueOf(movie.getFechaEstreno()));
+			preparedSt.setString(7, movie.getSinoposis());
+			preparedSt.executeUpdate();
+			con.commit();
+			return  0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
 	}
 
 	@Override
-	public void modifyMovie(Pelicula movie) {
+	public int modifyMovie(Pelicula movie) {
 		// TODO Auto-generated method stub
-		
+	
+		return 0;
 	}
 
 	@Override
-	public void deleteMovie(int id) {
+	public int deleteMovie(int id) {
 		// TODO Auto-generated method stub
 		ArrayList<Pelicula> auxList = null;
 		//try with an Iterator
@@ -131,6 +155,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		}*/
 		//movieList.clear();
 		//movieList.addAll(auxList);
+		return 0;
 	}
 	
 	

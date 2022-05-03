@@ -280,8 +280,7 @@ public class HomeScreen {
 			public void actionPerformed(ActionEvent e) {
 				ActorManagementUI actorManagement = new ActorManagementUI();
 				actorManagement.setLocationRelativeTo(frmGestionPeliculas);
-				actorManagement.setVisible(true);
-				
+				actorManagement.setVisible(true);				
 			}
 		});
 		mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.PLAIN, 13));

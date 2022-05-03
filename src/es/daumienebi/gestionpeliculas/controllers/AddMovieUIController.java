@@ -9,22 +9,26 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import es.daumienebi.gestionpeliculas.dao.IGeneroDAO;
+import es.daumienebi.gestionpeliculas.dao.mysql.MySQLGenreDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLPeliculaDAO;
+import es.daumienebi.gestionpeliculas.models.Genero;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public class AddMovieUIController {
 	private static MySQLPeliculaDAO movieDAO = new MySQLPeliculaDAO();
+	private static IGeneroDAO genreDAO = new MySQLGenreDAO();
 	
 	public static ArrayList<Pelicula> getAllMovies(){
 		return movieDAO.getAllMovies();
 	}
 	
-	public static void addMovie(Pelicula movie) {
-		movieDAO.AddMovie(movie);
+	public static int addMovie(Pelicula movie) {
+		return movieDAO.AddMovie(movie);
 	}
 	
-	public static void deleteMovie(int id) {
-		movieDAO.deleteMovie(id);
+	public static int deleteMovie(int id) {
+		return movieDAO.deleteMovie(id);
 	}
 	
 	public static String setImagePoster(JButton imgBtn) {
@@ -32,6 +36,7 @@ public class AddMovieUIController {
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogTitle("Select the image poster");
 		String imgRoute = "";
+		String imgName ="";
 		
 		//poner el directorio en el escritorio
 		String dirEsc = System.getProperty("user.home");
@@ -42,6 +47,7 @@ public class AddMovieUIController {
 		int option = jfc.showOpenDialog(jfc);
 		if(option == JFileChooser.APPROVE_OPTION) {
 			imgRoute = jfc.getSelectedFile().getAbsolutePath();
+			imgName = jfc.getSelectedFile().getName();
 		}		
 		//check if the imgRoute is not null before placing the button
 		
@@ -56,6 +62,10 @@ public class AddMovieUIController {
 			imgBtn.setIcon(icon);
 		}
 		
-		return imgRoute;
+		return imgName;
+	}
+	
+	public static ArrayList<Genero> getAllGenres(){
+		return genreDAO.getAllGenres();
 	}
 }
