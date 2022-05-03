@@ -13,4 +13,6 @@ public interface IPeliculaDAO {
 	public void modifyMovie(Pelicula movie);
 	
 	public void deleteMovie(int id);
+
+	public ArrayList<Pelicula> filterMovies(String title);
 }

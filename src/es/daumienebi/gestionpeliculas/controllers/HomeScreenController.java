@@ -15,9 +15,9 @@ public class HomeScreenController {
 	public static String [] imgList = {
 
             "/resources/hobbit.jpg","/resources/minion2.jpg",
-            "/resources/hunger_games.jpg","/resources/themanfromuncle.jpg",
+            "/resources/themanfromuncle.jpg",
             "/resources/interstellar.jpg",
-            "/resources/4k.jpg","/resources/machete.jpg",
+            "/resources/machete.jpg","/resources/4k.jpg",
             "/resources/johnwick.jpg","/resources/minion3.jpg",
             "/resources/warcraft.jpg","/resources/superman.jpg",
             "/resources/bobesponja.jpg","/resources/deadpool.jpg","/resources/minion1.jpg",               

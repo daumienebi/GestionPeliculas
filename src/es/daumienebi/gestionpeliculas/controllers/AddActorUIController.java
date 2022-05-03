@@ -34,11 +34,11 @@ public class AddActorUIController {
 		
 	}
 	
-	public static void addActor(Actor actor) {
-		actorDAO.addActor(actor);
+	public int addActor(Actor actor) {
+		return actorDAO.addActor(actor);
 	}
 	
-	public static void print(Object value) {
+	public void print(Object value) {
 		System.out.print(value);
 	}
 }

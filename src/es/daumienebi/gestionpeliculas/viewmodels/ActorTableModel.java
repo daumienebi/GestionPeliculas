@@ -1,6 +1,8 @@
 package es.daumienebi.gestionpeliculas.viewmodels;
 
 import java.awt.Image;
+import java.awt.MediaTracker;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
@@ -10,9 +12,9 @@ import javax.swing.table.AbstractTableModel;
 import es.daumienebi.gestionpeliculas.models.Actor;
 
 public class ActorTableModel extends AbstractTableModel {
-	
+	final static String ACTOR_IMAGE_SERVER = "http://192.168.56.101/moviemanagement_images/actors/";
 	private ArrayList<Actor> actorsList = new ArrayList<>();
-	private String [] columns = {"Name","Surname","Date of birth","Image"};
+	private String [] columns = {"Id","Name","Surname","Date of birth","Image"};
 	
 	public ActorTableModel(ArrayList<Actor> actorsList) {
 		this.actorsList = actorsList;
@@ -45,7 +47,7 @@ public class ActorTableModel extends AbstractTableModel {
 	public Class<?> getColumnClass(int columnIndex) {
 		// TODO Auto-generated method stub
 		switch(columnIndex) {
-		case 3: return Icon.class;
+		case 4: return Icon.class;
 		default : return Actor.class;
 		}
 	}
@@ -56,22 +58,36 @@ public class ActorTableModel extends AbstractTableModel {
 		Actor actor = actorsList.get(rowIndex);
 		
 		switch(columnIndex) {
-		case 0: return actor.getNombre();
-		case 1: return actor.getApellidos();
-		case 2: return actor.getFechaNac();
-		case 3: return getActorsImage(actor.getFoto());
+		case 0: return actor.getId();
+		case 1: return actor.getNombre();
+		case 2: return actor.getApellidos();
+		case 3: return actor.getFechaNac();
+		case 4: return getActorsImage(actor.getFoto());
 		default:
 			return "-";
 		}
 	}
 	
 	private ImageIcon getActorsImage(String imgRoute) {
-		ImageIcon icon = new ImageIcon(getClass().getResource(imgRoute));
-		Image img = icon.getImage();
-		//escalar la imagen
-		Image imgNuevo = img.getScaledInstance(150,150,  java.awt.Image.SCALE_SMOOTH );
-		//volver a asignarle la imagen redimensionada al icono
-		icon =new ImageIcon(imgNuevo);
-		return icon;
+		URL url = null;
+		ImageIcon icon = null;
+		ImageIcon default_icon = new ImageIcon(getClass().getResource("/resources/no_image.jpg"));
+		try {
+			url = new URL(ACTOR_IMAGE_SERVER + imgRoute);
+			icon = new ImageIcon(url);
+			if(icon.getImageLoadStatus() == MediaTracker.ERRORED) {
+				//
+			}
+			if(icon == null || icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
+				icon = default_icon;
+			}
+			Image img = icon.getImage();
+			//Rescale the image
+			Image imgNuevo = img.getScaledInstance(150,150,  java.awt.Image.SCALE_SMOOTH );
+			icon =new ImageIcon(imgNuevo);
+			return icon;
+		} catch (Exception e) {
+		}
+		return null;
 	}
 }

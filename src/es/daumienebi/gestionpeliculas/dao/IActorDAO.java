@@ -3,6 +3,7 @@ package es.daumienebi.gestionpeliculas.dao;
 import java.util.ArrayList;
 
 import es.daumienebi.gestionpeliculas.models.Actor;
+import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public interface IActorDAO {
 	
@@ -10,9 +11,11 @@ public interface IActorDAO {
 	
 	Actor getActor(int id);
 	
-	void deleteActor();
+	int deleteActor(int id);
 	
-	void modifyActor(Actor actor);
+	int modifyActor(Actor actor);
 	
-	void addActor(Actor actor);
+	int addActor(Actor actor);
+	
+	ArrayList<Actor> filterActors(String name);
 }

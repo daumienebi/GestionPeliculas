@@ -7,22 +7,17 @@ import es.daumienebi.gestionpeliculas.dao.mysql.MySQLPeliculaDAO;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public class MovieManagementUIController {
+	final static String MOVIE_IMAGE_SERVER = "http://192.168.56.101/moviemanagement_images/movies/"; 
 	private static IPeliculaDAO movieDAO = new MySQLPeliculaDAO();
+	//private static MySQLPeliculaDAO movieDAO = new MySQLPeliculaDAO(); -- de esta manera si creo otro metodo en MYSQLPeliculaDAO, da error, necesito crearla en la interfaz tambien
 	
 	public static ArrayList<Pelicula> getAllMovies(){
 		return movieDAO.getAllMovies();
 	}
 	
 	public static ArrayList<Pelicula> fliterMovie(String title) {
-		//para reordenar la tabla despues de meter un dato
-		//creo un ArrayLista para meter los datos filtrados
-		ArrayList<Pelicula> listaAux = new ArrayList<>();
-		
-		for(Pelicula movie : movieDAO.getAllMovies()) {
-			if(movie.getTitulo().startsWith(title)) {
-				listaAux.add(movie);
-			}
-		}
-		return listaAux;
+		ArrayList<Pelicula> filteredMovies = new ArrayList<>();
+		filteredMovies = movieDAO.filterMovies(title);
+		return filteredMovies;
 	}
 }

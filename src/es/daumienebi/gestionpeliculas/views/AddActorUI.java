@@ -29,11 +29,13 @@ import java.awt.GridLayout;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import es.daumienebi.gestionpeliculas.views.AddActorUI.years;
+import resources.GlobalResources;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class AddActorUI extends JDialog {
-	AddActorUIController controller = new AddActorUIController();
+	private AddActorUIController controller = new AddActorUIController();
 	private JPanel mainPanel;
 	private JTextField txtName;
 	private JTextField txtSurname;
@@ -66,12 +68,13 @@ public class AddActorUI extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddActorUI() {
-		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AddActorUI.class.getResource("/resources/movie_management.png")));
 		setBounds(100, 100, 650, 600);
+		getContentPane().setLayout(new BorderLayout(0, 0));
+		
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
-		getContentPane().add(mainPanel);
+		mainPanel.setLayout(new BorderLayout(0,0));
+		getContentPane().add(mainPanel,BorderLayout.CENTER);
 		
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
@@ -82,9 +85,7 @@ public class AddActorUI extends JDialog {
 		btnImage.setMargin(new Insets(0, 0, 0, 0));
 		btnImage.setBounds(10,11,150,150);
 		Image img = null;
-		String imgUrl = "http://192.168.56.102/images/windows.png";				
-		//String imgUrl = "https://xpectrumuwu.com/imagenes/logo.PNG";	
-		ImageIcon icon = controller.getImage(imgUrl);
+		ImageIcon icon = new ImageIcon(getClass().getResource("/resources/add_image.png"));
 		img = icon.getImage();			
 		//scale the image
 		Image imgNuevo = img.getScaledInstance(btnImage.getWidth(),btnImage.getHeight(),  java.awt.Image.SCALE_SMOOTH );
@@ -93,14 +94,18 @@ public class AddActorUI extends JDialog {
 		panel.add(btnImage);
 		
 		JButton btnAddImage = new JButton("Add Image");
-		btnAddImage.setIcon(new ImageIcon(AddActorUI.class.getResource("/resources/add_icon.jpg")));
+		btnAddImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		panel.add(btnAddImage);
 		
 		JPanel panel_1 = new JPanel();
 		mainPanel.add(panel_1, BorderLayout.SOUTH);
 		
-		JButton btnNewButton = new JButton("Save Actor");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnSave = new JButton("Save Actor");
+		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = txtName.getText();
 				String surname = txtSurname.getText();
@@ -112,7 +117,7 @@ public class AddActorUI extends JDialog {
 					int month =Integer.parseInt(txtMonth.getText());
 					int year =Integer.parseInt(txtYear.getText());
 					
-					if(DataValidator.isValidDate(day, month, year)) {
+					if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
 						birthDate = LocalDate.of(year, month, day);
 						validDate = true; //year takes more than 9999 -- fix that
 					}else JOptionPane.showMessageDialog(mainPanel,"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
@@ -120,15 +125,21 @@ public class AddActorUI extends JDialog {
 				
 				//check for blank text boxes
 				if(!name.isBlank() && !surname.isBlank() && validDate) {
-					actor = new Actor(1,name,surname,birthDate,"/resources/sus.jpg");
-					AddActorUIController.addActor(actor);
-					JOptionPane.showMessageDialog(mainPanel,"Actor/Actress Added Successfully",":)",JOptionPane.INFORMATION_MESSAGE);
+					actor = new Actor(0,name,surname,birthDate,"");
+					//if the actor is added correctly, upload the image to the server else, don't upload it
+					int response = controller.addActor(actor);
+					if(response == 1) {
+						JOptionPane.showMessageDialog(mainPanel,"The record has been added successfully",""
+								,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+					}else {
+						JOptionPane.showMessageDialog(mainPanel,"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+					}
 				}else {
 					JOptionPane.showMessageDialog(mainPanel,"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
 				}				
 			}
 		});
-		panel_1.add(btnNewButton);
+		panel_1.add(btnSave);
 		
 		JPanel formPanel = new JPanel();
 		mainPanel.add(formPanel, BorderLayout.CENTER);

@@ -25,17 +25,19 @@ static String db_password = Configuration.getDb_password();
 public static Connection connect(){        
         try
         {
+        	defaultConnection();
+        	/*
         	if(Configuration.use_default_connection == 1) {
         		defaultConnection();
         		//return con; maybe
         	}else {
         		userConnection();
         		//return con;
-        	}            
+        	} */           
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "The JDBC library was not found");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error in the database connection");
+        	JOptionPane.showMessageDialog(null,"Error in the database connection, please check your settings.","Error",JOptionPane.ERROR_MESSAGE);
         }
         return null;
     }

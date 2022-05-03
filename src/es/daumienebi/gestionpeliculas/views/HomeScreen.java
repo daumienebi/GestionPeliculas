@@ -98,7 +98,7 @@ public class HomeScreen {
 	}
 
 	void disableMenus() {
-		if(Configuration.use_default_connection == -1) {
+		if(DbConnection.getConexion() == null) { //Configuration.use_default_config == -1
 			homeMenu.setEnabled(false);
 			actorMenu.setEnabled(false);
 			movieMenu.setEnabled(false);
@@ -117,6 +117,8 @@ public class HomeScreen {
 		}
 	}
 	public HomeScreen(){	
+		
+		DbConnection.connect();
 		initialize();
 		
 	}
@@ -183,6 +185,22 @@ public class HomeScreen {
 				ConfigUI configUI = new ConfigUI();
 				configUI.setLocationRelativeTo(frmGestionPeliculas);
 				configUI.setVisible(true);
+				
+				if(DbConnection.getConexion() != null) {
+					configUI.dispose();
+					frmGestionPeliculas.dispose();
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					HomeScreen window = new HomeScreen();										
+					window.frmGestionPeliculas.setResizable(true);
+					disableMenus();
+					window.frmGestionPeliculas.setVisible(true);
+				}
 			}
 		});
 		dbMenu.add(mntmNewMenuItem_12);

@@ -10,20 +10,17 @@ import es.daumienebi.gestionpeliculas.models.Pelicula;
 public class ActorManagementUIController {
 	private static IActorDAO actorDAO = new MySQLActorDAO();
 	
-	public static ArrayList<Actor> getAllActors() {
+	public ArrayList<Actor> getAllActors() {
 		return actorDAO.getAllActors();
 	}
 	
-	public static ArrayList<Actor> fliterMovie(String title) {
-		//para reordenar la tabla despues de meter un dato
-		//creo un ArrayLista para meter los datos filtrados
-		ArrayList<Actor> listaAux = new ArrayList<>();
-		
-		for(Actor actor : actorDAO.getAllActors()) {
-			if(actor.getNombre().startsWith(title)) {
-				listaAux.add(actor);
-			}
-		}
-		return listaAux;
+	public ArrayList<Actor> fliterMovie(String title) {
+		ArrayList<Actor> filteredActors = new ArrayList<>();
+		filteredActors = actorDAO.filterActors(title);
+		return filteredActors;
+	}
+	
+	public int deleteActor(int actor_id) {
+		return actorDAO.deleteActor(actor_id);
 	}
 }

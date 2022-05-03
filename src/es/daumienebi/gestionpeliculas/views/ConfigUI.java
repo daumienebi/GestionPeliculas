@@ -148,21 +148,15 @@ public class ConfigUI extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if(chkBoxDefaultConfig.isSelected()) {
 					Configuration.use_default_connection = 1;
-					try {
-						DbConnection.connect();
-						Connection con = DbConnection.getConexion();
-						if(con != null) {
-							ResultSet rs = con.prepareStatement("Select * from genre order by id asc").executeQuery();
-							while(rs.next()) {
-								System.out.println(rs.getInt("id") + " " + rs.getString("name") + "\n");
-							}
-							System.out.print(rs.toString());
-						}else {
-							JOptionPane.showMessageDialog(null, "Unable to connect");
-							Configuration.use_default_connection = -1;
-						}
-					} catch (SQLException sqlEx) {
-						System.out.println(sqlEx.getMessage());
+					DbConnection.connect();
+					Connection con = DbConnection.getConexion();
+					if(con != null) {
+						ImageIcon icon = new ImageIcon(getClass().getResource("/resources/tick.jpg"));
+						JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully "+ '\n' +" The Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
+						dispose();
+					}else {
+						//JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully !","Database connection",JOptionPane.ERROR_MESSAGE);
+						Configuration.use_default_connection = -1;
 					}
 					
 					//System.out.println(Configuration.db_password + " " + Configuration.db_user);
@@ -178,24 +172,14 @@ public class ConfigUI extends JDialog{
 						//Configuration.db_password = "root";
 						//Configuration.db_password = txtDbPassword.getPassword().toString().trim(); //check out the password control
 						
-						//call the saveConfig and then activate the home screen
-						try {
-							DbConnection.connect();
-							Connection con = DbConnection.getConexion();
-							if(con != null) {
-								ResultSet rs = con.prepareStatement("Select * from Genre").executeQuery();
-								while(rs.next()) {
-									System.out.println(rs.getInt("id") + " " + rs.getString("name") + "\n");
-								}
-								System.out.print(rs.toString());
-							}else {
-								JOptionPane.showMessageDialog(null, "Unable to connect");
-								Configuration.use_default_connection = -1;
-							}
-						} catch (SQLException sqlEx) {
-							System.out.println(sqlEx.getMessage());
-						}
-						
+						DbConnection.connect();
+						Connection con = DbConnection.getConexion();
+						if(con != null) {
+							ImageIcon icon = new ImageIcon(getClass().getResource("/resources/tick.jpg"));
+							JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully !, the Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
+						}else {
+							Configuration.use_default_connection = -1;
+						}						
 						System.out.println(Configuration.db_password + " " + Configuration.db_user);
 						//System.exit(0);
 					}else {
@@ -203,7 +187,9 @@ public class ConfigUI extends JDialog{
 					}
 					
 				}
+				
 			}
+			
 		});
 		panel_1.add(btnConnect);	
 	}
