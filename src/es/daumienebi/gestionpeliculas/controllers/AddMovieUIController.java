@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import es.daumienebi.gestionpeliculas.dao.IGeneroDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLGenreDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLPeliculaDAO;
+import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Genero;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
@@ -67,5 +68,9 @@ public class AddMovieUIController {
 	
 	public static ArrayList<Genero> getAllGenres(){
 		return genreDAO.getAllGenres();
+	}
+	
+	public static int addMovie(Pelicula movie, ArrayList<Actor> actorsList) {
+		return movieDAO.AddMovie(movie, actorsList);
 	}
 }

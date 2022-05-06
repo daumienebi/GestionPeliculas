@@ -42,7 +42,7 @@ public class GenreManagementUI extends JDialog {
 	 * Create the dialog.
 	 */
 	public GenreManagementUI() {
-		setBounds(100, 100, 554, 440);
+		setBounds(100, 100, 307, 526);
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.SOUTH);

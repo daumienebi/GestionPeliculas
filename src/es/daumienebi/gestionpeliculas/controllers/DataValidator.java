@@ -29,4 +29,16 @@ public class DataValidator {
 		}		
 		return numerico;
 	}
+	
+	public static boolean isDouble(String valor) {
+		//checks if a given value is numeric
+		boolean doublee;		
+		try {
+			double num = Double.parseDouble(valor);
+			doublee = true;
+		}catch(NumberFormatException ex) {
+			doublee = false;
+		}		
+		return doublee;
+	}
 }

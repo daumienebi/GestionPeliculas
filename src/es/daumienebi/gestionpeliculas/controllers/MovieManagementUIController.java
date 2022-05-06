@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import es.daumienebi.gestionpeliculas.dao.IPeliculaDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLPeliculaDAO;
+import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public class MovieManagementUIController {
@@ -19,5 +20,13 @@ public class MovieManagementUIController {
 		ArrayList<Pelicula> filteredMovies = new ArrayList<>();
 		filteredMovies = movieDAO.filterMovies(title);
 		return filteredMovies;
+	}
+	
+	public static int deleteMovie(int id) {
+		return movieDAO.deleteMovie(id);
+	}
+	
+	public static Pelicula getMovie(int movie_id) {
+		return movieDAO.getMovie(movie_id);
 	}
 }

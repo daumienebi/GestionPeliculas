@@ -1,14 +1,17 @@
 package es.daumienebi.gestionpeliculas.dao.mysql;
 
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import es.daumienebi.gestionpeliculas.dao.IPeliculaDAO;
+import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public class MySQLPeliculaDAO implements IPeliculaDAO {
@@ -115,7 +118,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		Connection con = null;
 		try {
 			con = DbConnection.getConexion();
-			String sql = "INSERT INTO movie (titulo,puntacion,duracion,imagen,id_genero,fecha_estreno,sinopsis) VALUES(?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO movie (titulo,puntuacion,duracion,imagen,id_genero,fecha_estreno,sinopsis) VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement preparedSt = null;		
 			preparedSt = con.prepareStatement(sql);
 			preparedSt.setString(1, movie.getTitulo());
@@ -143,20 +146,119 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 
 	@Override
 	public int deleteMovie(int id) {
+		Connection con = null;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "DELETE FROM movie WHERE id = ?";
+			PreparedStatement preparedSt = null;		
+			preparedSt = con.prepareStatement(sql);
+			preparedSt.setInt(1, id);
+			preparedSt.executeUpdate();
+			con.commit();
+			return 1;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+	}
+
+	@Override
+	public int AddMovie(Pelicula movie, ArrayList<Actor> actorsList) {
 		// TODO Auto-generated method stub
-		ArrayList<Pelicula> auxList = null;
-		//try with an Iterator
-		/*
-		for(Pelicula movie : movieList) {
-			if(movie.getId() == id) {
-				//does nothing
+		int last_id = 0;
+		Connection con = null;
+		try {
+			con = DbConnection.getConexion();
+			
+			String sql = "INSERT INTO movie (titulo,puntuacion,duracion,imagen,id_genero,fecha_estreno,sinopsis) VALUES(?,?,?,?,?,?,?)";
+			PreparedStatement preparedSt = null;		
+			preparedSt = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			preparedSt.setString(1, movie.getTitulo());
+			preparedSt.setDouble(2, movie.getPuntuation());
+			preparedSt.setInt(3, movie.getDuracionEnMinutos());
+			preparedSt.setString(4, movie.getCaratula());
+			preparedSt.setInt(5, movie.getId_genero());
+			preparedSt.setDate(6, Date.valueOf(movie.getFechaEstreno()));
+			preparedSt.setString(7, movie.getSinoposis());
+			preparedSt.executeUpdate();
+			
+			//obtain the last inserted id
+			ResultSet result = preparedSt.getGeneratedKeys();
+			
+			if(result.next()) {
+				last_id = Integer.valueOf(result.getInt(1));
 			}
-			else auxList.add(movie);
-		}*/
-		//movieList.clear();
-		//movieList.addAll(auxList);
-		return 0;
+			
+			//add the actors to the movie
+			if(actorsList.size() > 0 && actorsList != null) {
+				sql = "SET FOREIGN_KEY_CHECKS = 0";
+				preparedSt = con.prepareStatement(sql);
+				preparedSt.executeUpdate();
+				for(Actor actor : actorsList) {
+					sql = "INSERT INTO movie_actor VALUES(?,?)";
+					preparedSt = con.prepareStatement(sql);
+					preparedSt.setInt(1, last_id);
+					preparedSt.setInt(2, actor.getId());
+					preparedSt.executeUpdate();
+				}
+				sql = "SET FOREIGN_KEY_CHECKS = 1";
+				preparedSt = con.prepareStatement(sql);
+				preparedSt.executeUpdate();
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}finally {
+			try {
+				con.commit(); //o todo o nada  
+				return  0;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return -1;
 	}
 	
+	
+	public Pelicula getMovie(int movie_id) {
+		Pelicula movie = null;
+		int id, id_genero,duracion;
+		String titulo,sinopsis,imagen;
+		double puntuacion;
+		LocalDate fecha_estreno;
+		Connection con = null;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "SELECT * FROM movie WHERE id = ?";
+			PreparedStatement ps = null;
+			ResultSet rs = null;			
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, movie_id);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				id = rs.getInt("id");
+				id_genero = rs.getInt("id_genero");
+				fecha_estreno = LocalDate.parse(rs.getDate("fecha_estreno").toString());
+				titulo = rs.getString("titulo");
+				sinopsis = rs.getString("sinopsis");
+				imagen = rs.getString("imagen");	
+				duracion = rs.getInt("duracion");
+				puntuacion = rs.getDouble("puntuacion");
+				
+				movie = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, imagen, id_genero);
+				return movie;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 	
 }

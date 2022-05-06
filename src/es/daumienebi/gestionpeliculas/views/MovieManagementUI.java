@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTable;
 
@@ -114,24 +115,36 @@ public class MovieManagementUI extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
 			JButton btnEdit = new JButton("Edit Movie");
+			btnEdit.setVisible(false);
 			btnEdit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int movie_id = getMovieId();
 					System.out.println(movie_id);
+					btnEdit.setVisible(false);
 				}
+				
 			});
 			buttonPane.add(btnEdit);
 			
 			JButton btnDelete = new JButton("Delete Movie");
+			btnDelete.setVisible(false);
 			btnDelete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int movie_id = getMovieId();
-					System.out.println(movie_id);
+					int response = MovieManagementUIController.deleteMovie(movie_id);
+					if(response == 1) {
+						JOptionPane.showMessageDialog(getContentPane(), "Record deleted successfully", "Delete Record",
+								JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+						loadMoviesTable();
+					}else {
+						JOptionPane.showMessageDialog(getContentPane(), "Error deleting the record", 
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+					btnDelete.setVisible(false);
 				}
 			});
-			buttonPane.add(btnDelete);
-			
-			
+			buttonPane.add(btnDelete);	
+			buttomBtnActions(btnEdit,btnDelete);
 	}
 	
 	void loadMoviesTable() {

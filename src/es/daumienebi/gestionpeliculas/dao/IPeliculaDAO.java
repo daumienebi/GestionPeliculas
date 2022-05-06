@@ -2,6 +2,7 @@ package es.daumienebi.gestionpeliculas.dao;
 
 import java.util.ArrayList;
 
+import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public interface IPeliculaDAO {
@@ -15,4 +16,8 @@ public interface IPeliculaDAO {
 	public int deleteMovie(int id);
 
 	public ArrayList<Pelicula> filterMovies(String title);
+	
+	public int AddMovie(Pelicula movie, ArrayList<Actor> actorsList);
+	
+	public Pelicula getMovie(int movie_id);
 }
