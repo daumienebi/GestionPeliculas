@@ -147,15 +147,22 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 	@Override
 	public int deleteMovie(int id) {
 		Connection con = null;
+		PreparedStatement preparedSt = null;
 		try {
 			con = DbConnection.getConexion();
-			String sql = "DELETE FROM movie WHERE id = ?";
-			PreparedStatement preparedSt = null;		
-			preparedSt = con.prepareStatement(sql);
+			//firstly delete from movie_actor table
+			String query1 = "DELETE FROM movie_actor WHERE movie_id = ?";
+			preparedSt = con.prepareStatement(query1);
+			preparedSt.setInt(1, id);
+			preparedSt.executeUpdate();
+			
+			//finally delete the movies
+			String query2 = "DELETE FROM movie WHERE id = ?";	
+			preparedSt = con.prepareStatement(query2);
 			preparedSt.setInt(1, id);
 			preparedSt.executeUpdate();
 			con.commit();
-			return 1;
+			return 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			return -1;
@@ -261,4 +268,5 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		return null;
 	}
 	
+	//delete movies from movie_actor
 }

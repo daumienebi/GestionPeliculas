@@ -9,10 +9,11 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.models.Pelicula;
 
 public class MovieTableModel extends AbstractTableModel{
-	final static String MOVIE_IMAGE_SERVER = "http://192.168.56.101/moviemanagement_images/movies/";
+	final static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
 	
 	private ArrayList<Pelicula> movieList;
 	private String [] columns = {"Id","Title","Rating","Duration","Premiere Date","Poster"};

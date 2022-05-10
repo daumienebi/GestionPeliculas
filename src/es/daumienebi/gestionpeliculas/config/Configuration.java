@@ -12,7 +12,7 @@ public class Configuration {
 	public static String db_user;
 	public static String db_password;
 	public static String port;
-	// {1} -> English 
+	// {1} -> English   or directly save the locale
 	// {2} -> Spanish
 	public static int language = 1;
 	
