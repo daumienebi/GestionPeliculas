@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
-import es.daumienebi.gestionpeliculas.models.Genero;
+import es.daumienebi.gestionpeliculas.models.Genre;
 
 public class GenreTableModel extends AbstractTableModel{
 
-	private ArrayList<Genero> genreList;
+	private ArrayList<Genre> genreList;
 	private String [] columns = {"ID","NAME"};
 	
-	public GenreTableModel(ArrayList<Genero> genreList) {
+	public GenreTableModel(ArrayList<Genre> genreList) {
 		this.genreList = genreList;
 	}	
 	
@@ -48,7 +48,7 @@ public class GenreTableModel extends AbstractTableModel{
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
-		Genero genre = genreList.get(rowIndex);
+		Genre genre = genreList.get(rowIndex);
 		switch(columnIndex) {
 		case 0: return genre.getId();
 		case 1: return genre.getName();

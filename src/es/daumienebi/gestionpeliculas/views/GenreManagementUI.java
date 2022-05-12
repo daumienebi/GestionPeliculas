@@ -11,7 +11,7 @@ import javax.swing.JTable;
 
 import es.daumienebi.gestionpeliculas.controllers.ActorManagementUIController;
 import es.daumienebi.gestionpeliculas.controllers.GenreManagementUIController;
-import es.daumienebi.gestionpeliculas.models.Genero;
+import es.daumienebi.gestionpeliculas.models.Genre;
 import es.daumienebi.gestionpeliculas.viewmodels.ActorTableModel;
 import es.daumienebi.gestionpeliculas.viewmodels.GenreTableModel;
 
@@ -20,7 +20,7 @@ import java.awt.Color;
 
 public class GenreManagementUI extends JDialog {
 	JTable table;
-	private ArrayList<Genero> genreList;
+	private ArrayList<Genre> genreList;
 	/**
 	 * Launch the application.
 	 */

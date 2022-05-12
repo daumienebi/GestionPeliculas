@@ -11,32 +11,36 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.dao.IActorDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLActorDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
 
 public class AddActorUIController {
 	private static IActorDAO actorDAO = new MySQLActorDAO();
+	private static String ACTOR_IMAGE_SERVER = DefaultConfiguration.actor_image_server;
 	
-	public ImageIcon getImage(String imgUrl) {
+	public ImageIcon getActorsImage(String imgRoute) {
 		URL url = null;
 		ImageIcon icon = null;
 		ImageIcon default_icon = new ImageIcon(getClass().getResource("/resources/no_image.jpg"));
 		try {
-			url = new URL(imgUrl);
+			url = new URL(ACTOR_IMAGE_SERVER + imgRoute);
 			icon = new ImageIcon(url);
 			if(icon.getImageLoadStatus() == MediaTracker.ERRORED) {
-				//JOptionPane.showMessageDialog(null, "Could not retrive the image");
-				print("Could not retrieve the image");
+				//
 			}
 			if(icon == null || icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
-				return default_icon;
+				icon = default_icon;
 			}
+			Image img = icon.getImage();
+			//Rescale the image
+			Image imgNuevo = img.getScaledInstance(150,150,  java.awt.Image.SCALE_SMOOTH );
+			icon =new ImageIcon(imgNuevo);
+			return icon;
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
-		return icon;
-		
+		return null;
 	}
 	
 	public int addActor(Actor actor) {
@@ -77,6 +81,10 @@ public class AddActorUIController {
 		return nombreImagen; //to save the image name in the db
 	}		
 		
+	public int modifyActor(Actor actor) {
+		return actorDAO.modifyActor(actor);
+	}
+	
 	public void print(Object value) {
 		System.out.print(value);
 	}

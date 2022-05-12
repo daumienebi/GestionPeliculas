@@ -24,11 +24,15 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.ImageIcon;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -79,7 +83,13 @@ public class ActorManagementUI extends JDialog {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int actor_id = getActorId();
-				System.out.println("Actor ID :" + actor_id);
+				Actor actor = controller.getActor(actor_id);
+				AddActorUI ui = new AddActorUI(actor);
+				ui.setModal(true);
+				ui.setLocationRelativeTo(getContentPane());
+				ui.setVisible(true);
+				loadActorsTable();
+				
 			}
 		});
 		btnEdit.setVisible(false);
@@ -88,17 +98,21 @@ public class ActorManagementUI extends JDialog {
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int actor_id,response;
+				int actor_id,response,exitCode;
 				actor_id= getActorId();
-				response = controller.deleteActor(actor_id);
-				if(response == 1) {
-					JOptionPane.showMessageDialog(getContentPane(), "Record deleted successfully", "Delete Record",
-							JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-					loadActorsTable();
-				}else {
-					JOptionPane.showMessageDialog(getContentPane(), "Error deleting the record", 
-							"Error", JOptionPane.ERROR_MESSAGE);
-				}
+				
+				response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the actor ?", "Delete actor", JOptionPane.YES_NO_OPTION);
+				if(response == JOptionPane.YES_OPTION) {
+					exitCode = controller.deleteActor(actor_id);
+					if(exitCode == 0) {
+						JOptionPane.showMessageDialog(getContentPane(), "Record deleted successfully", "Delete Record",
+								JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+						loadActorsTable();
+					}else {
+						JOptionPane.showMessageDialog(getContentPane(), "Error deleting the record", 
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}	
 			}
 		});
 		btnDelete.setVisible(false);
@@ -141,9 +155,38 @@ public class ActorManagementUI extends JDialog {
 		txtName.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		panel.add(txtName);
 		txtName.setColumns(20);
-		buttomBtnActions(btnEdit,btnDelete);
 		
+		//extra actions and more stuff
+		buttomBtnActions(btnEdit,btnDelete);
+		tableDoubleClick(table);
 	}
+	
+	void tableDoubleClick(JTable table) {
+		table.addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent mouseEvent) {
+		        JTable table =(JTable) mouseEvent.getSource();
+		        Point point = mouseEvent.getPoint();
+		        int row = table.rowAtPoint(point);
+		        if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+		            int id = Integer.valueOf(table.getModel().getValueAt(row, 0).toString());
+		            //String nombre =table.getValueAt(row, 1).toString();
+		            //String apellido = table.getValueAt(row, 2).toString();
+		            //LocalDate fechaNac = LocalDate.parse(table.getValueAt(row, 3).toString());
+		            //String foto = table.getValueAt(row, 4).toString();
+		            //Actor actor = new Actor(id, nombre, apellido, fechaNac, foto);
+		            Actor actor = controller.getActor(id);
+		            if(actor == null) {
+		            	JOptionPane.showMessageDialog(table, "Actor not found","Data not found",JOptionPane.ERROR_MESSAGE);
+		            }else {
+		            	ActorDetailsUI ui = new ActorDetailsUI(actor);
+		            	ui.setLocationRelativeTo(getContentPane());
+		            	ui.setVisible(true);
+		            }
+		        }
+		    }
+		});
+	}
+	
 	void buttomBtnActions(JButton btnEdit,JButton btnDelete) {
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {			
 			@Override

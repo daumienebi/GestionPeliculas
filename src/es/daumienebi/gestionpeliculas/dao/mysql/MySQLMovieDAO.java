@@ -10,42 +10,16 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import es.daumienebi.gestionpeliculas.dao.IPeliculaDAO;
+import es.daumienebi.gestionpeliculas.dao.IMovieDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
-import es.daumienebi.gestionpeliculas.models.Pelicula;
+import es.daumienebi.gestionpeliculas.models.Movie;
 
-public class MySQLPeliculaDAO implements IPeliculaDAO {
-	
-	/**
-	public void createMovies() {
-		//movieList = new ArrayList<>();
-		movieList.add(new Pelicula(1,"Los Increibles","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				7.5,120,LocalDate.now(),"/resources/increibles.jpg"));
-		movieList.add(new Pelicula(2,"Interstellar","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				3.5,110,LocalDate.now(),"/resources/superman.jpg"));
-		movieList.add(new Pelicula(3,"Superman vs Batman","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				7.5,110,LocalDate.now(),"/resources/superman.jpg"));
-		movieList.add(new Pelicula(4,"Damian : The way home","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				1.5,110,LocalDate.now(),"/resources/damian.jpg"));
-		movieList.add(new Pelicula(5,"DEADPOOL","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				10,110,LocalDate.now(),"/resources/deadpool.jpg"));
-		movieList.add(new Pelicula(6,"Hunger games","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				5,110,LocalDate.now(),"/resources/hunger_games.jpg"));
-		movieList.add(new Pelicula(7,"Spiderman 3","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				4.5,110,LocalDate.now(),"/resources/spiderman.jpg"));
-		movieList.add(new Pelicula(8,"Superman : Damian Master","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				8.1,110,LocalDate.now(),"/resources/superman.jpg"));
-		movieList.add(new Pelicula(9,"4k film : Latest Edition","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				9,110,LocalDate.now(),"/resources/4k.jpg"));
-		movieList.add(new Pelicula(10,"Superman : Damian Master","Una familia aleatoria que busca encontrarse en una ciudad llena de Damianes, no se que poner",
-				6.3,110,LocalDate.now(),"/resources/warcraft.jpg"));
-	}
-	*/
+	public class MySQLMovieDAO implements IMovieDAO {
 	
 	@Override
-	public ArrayList<Pelicula> getAllMovies() {
+	public ArrayList<Movie> getAllMovies() {
 		// TODO Auto-generated method stub
-		ArrayList<Pelicula> movieList = new ArrayList<>();
+		ArrayList<Movie> movieList = new ArrayList<>();
 		int id,duracion,id_genero;
 		String titulo,sinopsis,caratula;
 		double puntuacion;
@@ -67,7 +41,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				caratula = rs.getString("imagen");
 				puntuacion = rs.getDouble("puntuacion");
 				id_genero = rs.getInt("id_genero");
-				Pelicula p = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula,id_genero);
+				Movie p = new Movie(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula,id_genero);
 				movieList.add(p);			
 			}
 		} catch (SQLException e) {
@@ -78,8 +52,8 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		return movieList;
 	}
 
-	public ArrayList<Pelicula> filterMovies(String title){
-		ArrayList<Pelicula> filterList = new ArrayList<>();
+	public ArrayList<Movie> filterMovies(String title){
+		ArrayList<Movie> filterList = new ArrayList<>();
 		int id,duracion,id_genero;
 		String titulo,sinopsis,caratula;
 		double puntuacion;
@@ -102,7 +76,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				caratula = rs.getString("imagen");
 				puntuacion = rs.getDouble("puntuacion");
 				id_genero = rs.getInt("id_genero");
-				Pelicula p = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula,id_genero);
+				Movie p = new Movie(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, caratula,id_genero);
 				filterList.add(p);			
 			}
 		} catch (SQLException e) {
@@ -112,8 +86,9 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		}
 		return filterList;
 	}
+	
 	@Override
-	public int AddMovie(Pelicula movie) {
+	public int AddMovie(Movie movie) {
 		// TODO Auto-generated method stub
 		Connection con = null;
 		try {
@@ -138,10 +113,40 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 	}
 
 	@Override
-	public int modifyMovie(Pelicula movie) {
+	public int modifyMovie(Movie movie) {
 		// TODO Auto-generated method stub
-	
-		return 0;
+		Connection con = null;
+		try {
+			con = DbConnection.getConexion();
+			String sql = 	"UPDATE movie SET titulo = ?, puntuacion = ?, duracion = ?, imagen = ?,"+
+							" id_genero = ?, fecha_estreno = ?, sinopsis = ? WHERE id = ?";
+			PreparedStatement preparedSt = null;		
+			preparedSt = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			preparedSt.setString(1, movie.getTitulo());
+			preparedSt.setDouble(2, movie.getPuntuation());
+			preparedSt.setInt(3, movie.getDuracionEnMinutos());
+			preparedSt.setString(4, movie.getCaratula());
+			preparedSt.setInt(5, movie.getId_genero());
+			preparedSt.setDate(6, Date.valueOf(movie.getFechaEstreno()));
+			preparedSt.setString(7, movie.getSinoposis());
+			preparedSt.setInt(8, movie.getId());
+			preparedSt.executeUpdate();
+			
+			//the actors will not be modified in this case, it might be added later on
+			con.commit();
+			return  0;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			try {
+				con.rollback();
+			} catch (SQLException ex) {
+				// TODO Auto-generated catch block
+				print("Entered Rollback block");
+				ex.printStackTrace();
+			}
+		}
+		return -1;
+		
 	}
 
 	@Override
@@ -170,7 +175,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 	}
 
 	@Override
-	public int AddMovie(Pelicula movie, ArrayList<Actor> actorsList) {
+	public int AddMovie(Movie movie, ArrayList<Actor> actorsList) {
 		// TODO Auto-generated method stub
 		int last_id = 0;
 		Connection con = null;
@@ -204,38 +209,31 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				for(Actor actor : actorsList) {
 					sql = "INSERT INTO movie_actor VALUES(?,?)";
 					preparedSt = con.prepareStatement(sql);
-					preparedSt.setInt(1, last_id);
-					preparedSt.setInt(2, actor.getId());
+					preparedSt.setInt(1, actor.getId());
+					preparedSt.setInt(2, last_id);
 					preparedSt.executeUpdate();
 				}
 				sql = "SET FOREIGN_KEY_CHECKS = 1";
 				preparedSt = con.prepareStatement(sql);
 				preparedSt.executeUpdate();
 			}
-			
+			con.commit();
+			return  0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			try {
 				con.rollback();
-			} catch (SQLException e1) {
+			} catch (SQLException ex) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}finally {
-			try {
-				con.commit(); //o todo o nada  
-				return  0;
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				print("Entered Rollback block");
+				ex.printStackTrace();
 			}
 		}
 		return -1;
 	}
-	
-	
-	public Pelicula getMovie(int movie_id) {
-		Pelicula movie = null;
+		
+	public Movie getMovie(int movie_id) {
+		Movie movie = null;
 		int id, id_genero,duracion;
 		String titulo,sinopsis,imagen;
 		double puntuacion;
@@ -259,7 +257,7 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 				duracion = rs.getInt("duracion");
 				puntuacion = rs.getDouble("puntuacion");
 				
-				movie = new Pelicula(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, imagen, id_genero);
+				movie = new Movie(id, titulo, sinopsis, puntuacion, duracion, fecha_estreno, imagen, id_genero);
 				return movie;
 			}
 		} catch (SQLException e) {
@@ -268,5 +266,45 @@ public class MySQLPeliculaDAO implements IPeliculaDAO {
 		return null;
 	}
 	
-	//delete movies from movie_actor
+	public ArrayList<Actor> getActorsPerMovie(int movie_id){
+		ArrayList<Actor> actorsList = new ArrayList<>();
+		Connection con = null;
+		int id;
+		String nombre,apellido,foto;
+		LocalDate fechanac;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "SELECT * FROM actor INNER JOIN movie_actor"
+						+" ON(actor.id = movie_actor.actor_id)"
+						+" WHERE movie_id = ?";
+			PreparedStatement ps = null;
+			ResultSet rs = null;			
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, movie_id);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				id = rs.getInt("id");
+				fechanac = LocalDate.parse(rs.getDate("fechanac").toString());
+				nombre = rs.getString("nombre");
+				apellido = rs.getString("apellido");
+				foto = rs.getString("imagen");			
+				Actor actor = new Actor(id, nombre, apellido, fechanac, foto);
+				actorsList.add(actor);
+			}
+			return actorsList;
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	private void print(Object value) {
+		System.out.println(value);
+	}
+
+	@Override
+	public int modifyMovie(Movie movie, ArrayList<Actor> actorsList) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

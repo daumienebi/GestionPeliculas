@@ -4,63 +4,24 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
-
 import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.controllers.HomeScreenController;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
 import es.daumienebi.gestionpeliculas.views.ConfigUI;
-import resources.RoundedBorder;
-
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-
-import java.awt.FlowLayout;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Locale;
-
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-
-import java.awt.Color;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.CardLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.awt.event.ActionEvent;
-import java.awt.SystemColor;
-import java.awt.Cursor;
-import javax.swing.JComboBox;
-import java.awt.Dimension;
 import javax.swing.JLabel;
-import javax.swing.DefaultComboBoxModel;
-import java.awt.ComponentOrientation;
 import java.awt.Toolkit;
-import javax.swing.JSlider;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class HomeScreen {
 

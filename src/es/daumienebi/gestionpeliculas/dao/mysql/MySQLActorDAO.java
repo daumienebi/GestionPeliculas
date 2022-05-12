@@ -10,24 +10,10 @@ import java.util.ArrayList;
 
 import es.daumienebi.gestionpeliculas.dao.IActorDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
-import es.daumienebi.gestionpeliculas.models.Pelicula;
+import es.daumienebi.gestionpeliculas.models.Movie;
 
 public class MySQLActorDAO implements IActorDAO{	
-	/*
-	private void createActors() {
-		//actorsList = new ArrayList<>();
-		actorsList.add(new Actor(1,"Derick Daumienebi","Sakpa", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(2,"Andrea","Pereira San Martin", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(3,"Xalo","Garcia Paz", LocalDate.now(),"/resources/huevo.jpg"));
-		actorsList.add(new Actor(4,"Maria","Lopez Vidal", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(5,"Lidia","Mirad Boto", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(6,"Raquel","Romero Blanco", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(7,"Eloy","Gonzalez", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(8,"Diego","Galloso Orejas", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(9,"Cristian","Coentreras", LocalDate.now(),"/resources/damian.jpg"));
-		actorsList.add(new Actor(10,"Aroa","Fernandez H", LocalDate.now(),"/resources/damian.jpg"));
-	}
-	*/
+	
 	@Override
 	public ArrayList<Actor> getAllActors() {
 		ArrayList<Actor> actorsList = new ArrayList<>();
@@ -104,7 +90,7 @@ public class MySQLActorDAO implements IActorDAO{
 			preparedSt.setInt(1, actor_id);
 			preparedSt.executeUpdate();
 			con.commit();
-			return 1;
+			return 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			return -1;
@@ -114,7 +100,24 @@ public class MySQLActorDAO implements IActorDAO{
 	@Override
 	public int modifyActor(Actor actor) {
 		// TODO Auto-generated method stub
-		return 1;
+		Connection con = null;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "UPDATE actor SET nombre = ?, apellido = ?, fechanac = ?, imagen = ? WHERE id = ? ";
+			PreparedStatement preparedSt = null;		
+			preparedSt = con.prepareStatement(sql);
+			preparedSt.setString(1, actor.getNombre());
+			preparedSt.setString(2, actor.getApellidos());
+			preparedSt.setDate(3, Date.valueOf(actor.getFechaNac()));
+			preparedSt.setString(4, actor.getFoto());
+			preparedSt.setInt(5,actor.getId());
+			preparedSt.executeUpdate();
+			con.commit();
+			return 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 
 	@Override
@@ -137,7 +140,8 @@ public class MySQLActorDAO implements IActorDAO{
 			return -1;
 		}
 	}
-	@Override
+	
+	@Override	
 	public ArrayList<Actor> filterActors(String name) {
 		// TODO Auto-generated method stub
 		ArrayList<Actor> actorsList = new ArrayList<>();
@@ -164,10 +168,31 @@ public class MySQLActorDAO implements IActorDAO{
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-		}finally {
-			
 		}
 		return actorsList;
 	}
-
+	
+	@Override
+	public int getNumberOfMovies(int actor_id) {
+		Connection con = null;
+		int count = 0;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "Select count(*) from movie_actor where actor_id = ?";
+			PreparedStatement preparedSt = null;
+			ResultSet resultSet = null;			
+			preparedSt = con.prepareStatement(sql);
+			preparedSt.setInt(1, actor_id);
+			resultSet = preparedSt.executeQuery();
+			if(resultSet.next()) {
+				count = resultSet.getInt(1);	
+				return count;		
+			}
+		} catch (SQLException e) {
+			
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		return count;
+	}
 }

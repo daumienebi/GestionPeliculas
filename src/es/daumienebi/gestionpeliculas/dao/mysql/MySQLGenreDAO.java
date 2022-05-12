@@ -1,51 +1,52 @@
 package es.daumienebi.gestionpeliculas.dao.mysql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import es.daumienebi.gestionpeliculas.dao.IGeneroDAO;
-import es.daumienebi.gestionpeliculas.models.Genero;
+import es.daumienebi.gestionpeliculas.dao.IGenreDAO;
+import es.daumienebi.gestionpeliculas.models.Genre;
 
-public class MySQLGenreDAO implements IGeneroDAO{
-	ArrayList<Genero> genreList = new ArrayList<>();
+public class MySQLGenreDAO implements IGenreDAO{
+	ArrayList<Genre> genreList = new ArrayList<>();
 	
 	public void createGenre() {
-		genreList.add(new Genero(1,"Action"));//Accion
-		genreList.add(new Genero(2,"Romance"));//Romance
-		genreList.add(new Genero(3,"Crime"));//Crimen
-		genreList.add(new Genero(4,"Fantacy"));//Fantasia
-		genreList.add(new Genero(5,"Horror"));//Horror
-		genreList.add(new Genero(6,"Sport"));//Deporte
-		genreList.add(new Genero(7,"Comedy"));//Comedia
-		genreList.add(new Genero(8,"War"));//Guerra
-		genreList.add(new Genero(9,"Western"));//Occidental
-		genreList.add(new Genero(10,"Science Fiction"));//Ciencia Ficcion
-		genreList.add(new Genero(11,"Mystery"));//Misteria
+		genreList.add(new Genre(1,"Action"));//Accion
+		genreList.add(new Genre(2,"Romance"));//Romance
+		genreList.add(new Genre(3,"Crime"));//Crimen
+		genreList.add(new Genre(4,"Fantacy"));//Fantasia
+		genreList.add(new Genre(5,"Horror"));//Horror
+		genreList.add(new Genre(6,"Sport"));//Deporte
+		genreList.add(new Genre(7,"Comedy"));//Comedia
+		genreList.add(new Genre(8,"War"));//Guerra
+		genreList.add(new Genre(9,"Western"));//Occidental
+		genreList.add(new Genre(10,"Science Fiction"));//Ciencia Ficcion
+		genreList.add(new Genre(11,"Mystery"));//Misteria
 	}
 	
 	@Override
-	public void Insert(Genero genre) {
+	public void Insert(Genre genre) {
 		// TODO Auto-generated method stub		
 	}
 
 	@Override
-	public void Delete(Genero genre) {
+	public void Delete(Genre genre) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public ArrayList<Genero> getAllGenres() {
+	public ArrayList<Genre> getAllGenres() {
 		
 		try {
 			Connection con = DbConnection.getConexion();
 			ResultSet rs = con.prepareStatement("Select * from genre order by id asc").executeQuery();
 			while(rs.next()) {
-				Genero g = new Genero(rs.getInt("id"), rs.getString("name"));
+				Genre g = new Genre(rs.getInt("id"), rs.getString("name"));
 				genreList.add(g);
-				System.out.println(rs.getInt("id") + " " + rs.getString("name") + "\n");
+				//System.out.println(rs.getInt("id") + " " + rs.getString("name") + "\n");
 				
 			}
 		} catch (SQLException e) {
@@ -61,8 +62,22 @@ public class MySQLGenreDAO implements IGeneroDAO{
 	}
 
 	@Override
-	public Genero getGenre(int id) {
-		// TODO Auto-generated method stub
+	public Genre getGenre(int id) {
+		Connection con = null;
+		PreparedStatement preparedSt = null;
+		try {
+			con = DbConnection.getConexion();
+			String sql = "Select * from genre where id = ?";
+			preparedSt = con.prepareStatement(sql);	
+			preparedSt.setInt(1, id);
+			ResultSet rs = preparedSt.executeQuery();
+			if(rs.next()) {
+				Genre genre = new Genre(rs.getInt("id"), rs.getString("name"));
+				return genre;
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 	

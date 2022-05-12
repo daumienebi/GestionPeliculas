@@ -2,7 +2,7 @@ package es.daumienebi.gestionpeliculas.models;
 
 import java.time.LocalDate;
 
-public class Pelicula {
+public class Movie {
 
 	private int id;
 	private String titulo;
@@ -13,7 +13,7 @@ public class Pelicula {
 	private String caratula;
 	private int id_genero;
 	
-	public Pelicula(int id,String titulo, String sinoposis, double puntuation, int duracionEnMinutos, LocalDate fechaEstreno,String caratula,int id_genero) {
+	public Movie(int id,String titulo, String sinoposis, double puntuation, int duracionEnMinutos, LocalDate fechaEstreno,String caratula,int id_genero) {
 		super();
 		this.id = id;
 		this.titulo = titulo;
@@ -25,7 +25,7 @@ public class Pelicula {
 		this.id_genero = id_genero;
 	}
 	
-	public Pelicula() {
+	public Movie() {
 		
 	}	
 	

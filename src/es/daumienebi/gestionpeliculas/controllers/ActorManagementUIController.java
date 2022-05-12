@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import es.daumienebi.gestionpeliculas.dao.IActorDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLActorDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
-import es.daumienebi.gestionpeliculas.models.Pelicula;
+import es.daumienebi.gestionpeliculas.models.Movie;
 
 public class ActorManagementUIController {
 	private static IActorDAO actorDAO = new MySQLActorDAO();

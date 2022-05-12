@@ -15,24 +15,16 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
 import java.awt.Panel;
-import java.awt.Label;
-import java.awt.TextArea;
-import java.awt.List;
 import java.awt.Font;
 import javax.swing.JTextArea;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 import es.daumienebi.gestionpeliculas.viewmodels.ActorTableModel;
 import es.daumienebi.gestionpeliculas.controllers.AddMovieUIController;
 import es.daumienebi.gestionpeliculas.controllers.DataValidator;
 import es.daumienebi.gestionpeliculas.models.Actor;
-import es.daumienebi.gestionpeliculas.models.Genero;
-import es.daumienebi.gestionpeliculas.models.Pelicula;
-
-import javax.swing.JList;
+import es.daumienebi.gestionpeliculas.models.Genre;
+import es.daumienebi.gestionpeliculas.models.Movie;
 import javax.swing.JOptionPane;
-import javax.swing.AbstractListModel;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -41,21 +33,33 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 public class AddMovieUI extends JDialog {
+	
+	//Components
 	private JTextField txtDuration;
 	private JTextField txtDay;
 	private JTextField txtRating;
 	private JTextField txtMonth;
 	private JTextField txtYear;
-	private ArrayList<Actor> actorsList = new ArrayList<>();
 	private JTable table;
-	private Pelicula movie;
-	private String imgRoute;
+	private Movie movie;
+	private String posterImgName;
 	private JTextArea txtSynopsis;
-	private JComboBox<Genero> genreCombo;
+	private JComboBox<Genre> genreCombo;
 	private int id_genero;
+	private JTextArea txtTitle;
+	private JButton btnMoviePoster;
+	private JButton btnAddPoster;
+	private JButton btnAddMovie;
+	private JButton btnSaveMovie;
+	private JButton btnAddActors;
+	//private boolean comboIsLoaded = false;
+	//Collections
+	private ArrayList<Actor> actorsList = new ArrayList<>();
+	
+	//Controllers
+	AddMovieUIController controller = new AddMovieUIController();
 	
 	/**
 	 * Launch the application.
@@ -75,8 +79,66 @@ public class AddMovieUI extends JDialog {
 	}
 	
 	public AddMovieUI() {
+		setDefaultCloseOperation(AddMovieUI.DISPOSE_ON_CLOSE);
 		Inicialize();
 		loadGenreCombo();
+	}
+	
+	public AddMovieUI(Movie movie) {
+		//Instance to Edit a movie
+		
+		this();
+		setDefaultCloseOperation(AddMovieUI.DISPOSE_ON_CLOSE);
+		this.movie = movie;
+		posterImgName = movie.getCaratula();
+		btnAddMovie.setVisible(false);
+		btnSaveMovie.setVisible(true);
+		btnAddActors.setVisible(false);
+		setTitle("Edit Movie");
+		btnAddMovie.setText("Save movie");
+		txtTitle.setText(movie.getTitulo());
+		int day,month,year; //date values
+		txtSynopsis.setText(movie.getSinoposis());
+		txtDuration.setText(String.valueOf(movie.getDuracionEnMinutos()));
+		txtRating.setText(String.valueOf(movie.getPuntuation()));
+		
+		//get the genre
+		Genre genre = controller.getMovieGenre(movie.getId_genero());
+		
+		if(genre != null) {
+			
+			genreCombo.setSelectedItem(genre);
+			genreCombo.updateUI();
+			//txtGenre.setText(genre.getName());
+		}
+		
+		
+		//get the list of actors
+		actorsList = controller.getActorsPerMovie(movie.getId());
+		table.setModel(new ActorTableModel(actorsList));
+		table.removeColumn(table.getColumnModel().getColumn(0));
+		table.removeColumn(table.getColumnModel().getColumn(3));
+		
+		//set the image
+		btnMoviePoster.setIcon(controller.getImagePoster(movie.getCaratula()));
+		btnAddPoster.setText("Edit image");
+		
+		//premiere date
+		day = movie.getFechaEstreno().getDayOfMonth();
+		month = movie.getFechaEstreno().getMonthValue();
+		year = movie.getFechaEstreno().getYear();
+		txtDay.setText(String.valueOf(day));
+		txtMonth.setText(String.valueOf(month));
+		txtYear.setText(String.valueOf(year));
+		
+		/*
+		btnSaveMovie.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				validateMovie_Edit(movie);				
+			}
+		});
+		*/	
 	}
 	/**
 	 * Create the dialog.
@@ -84,7 +146,7 @@ public class AddMovieUI extends JDialog {
 	private void Inicialize() {
 		setTitle("Add a new movie");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AddMovieUI.class.getResource("/resources/movie_management.png")));
-		setBounds(100, 100, 898, 700);
+		setBounds(100, 100, 870, 700);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel headerPanel = new JPanel();
@@ -94,10 +156,10 @@ public class AddMovieUI extends JDialog {
 		fl_headerPanel.setAlignment(FlowLayout.LEFT);
 		getContentPane().add(headerPanel, BorderLayout.NORTH);
 		
-		JButton btnMoviePoster = new JButton("");
+		btnMoviePoster = new JButton("");
 		btnMoviePoster.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				imgRoute = AddMovieUIController.setImagePoster(btnMoviePoster);
+				posterImgName = controller.setImagePoster(btnMoviePoster);
 			}
 		});
 		btnMoviePoster.setMargin(new Insets(0, 0, 0, 0));
@@ -112,10 +174,10 @@ public class AddMovieUI extends JDialog {
 		btnMoviePoster.setIcon(icon);
 		headerPanel.add(btnMoviePoster);
 		
-		JButton btnAddPoster = new JButton("Add Poster");
+		btnAddPoster = new JButton("Add Poster");
 		btnAddPoster.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				imgRoute = AddMovieUIController.setImagePoster(btnMoviePoster);
+				posterImgName = controller.setImagePoster(btnMoviePoster);
 			}
 		});
 		headerPanel.add(btnAddPoster);
@@ -144,10 +206,10 @@ public class AddMovieUI extends JDialog {
 		Panel panel_7 = new Panel();
 		title_panel.add(panel_7);
 		
-		JTextArea txtTitle = new JTextArea();
+		txtTitle = new JTextArea();
 		txtTitle.setLineWrap(true);
-		txtTitle.setFont(new Font("Monospaced", Font.PLAIN, 16));
-		txtTitle.setRows(2);
+		txtTitle.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		txtTitle.setRows(1);
 		txtTitle.setColumns(30);
 		panel_7.add(txtTitle);
 		
@@ -249,65 +311,53 @@ public class AddMovieUI extends JDialog {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(Color.LIGHT_GRAY);
 		FlowLayout flowLayout_7 = (FlowLayout) panel_3.getLayout();
-		flowLayout_7.setHgap(50);
+		flowLayout_7.setAlignment(FlowLayout.LEFT);
+		flowLayout_7.setHgap(0);
 		panel_5.add(panel_3);
 		
-		JLabel lblNewLabel_11 = new JLabel("Genre");
+		JPanel panel_6 = new JPanel();
+		panel_6.setBackground(Color.LIGHT_GRAY);
+		panel_3.add(panel_6);
+		
+		JLabel lblNewLabel_11 = new JLabel("Genre:");
+		panel_6.add(lblNewLabel_11);
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_3.add(lblNewLabel_11);
+		
+		JLabel lblNewLabel_12 = new JLabel("                                    ");
+		panel_6.add(lblNewLabel_12);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(Color.LIGHT_GRAY);
+		panel_3.add(panel_4);
 		
 		genreCombo = new JComboBox();
+		panel_4.add(genreCombo);
 		genreCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				id_genero = ((Genero)genreCombo.getSelectedItem()).getId();
+				id_genero = ((Genre)genreCombo.getSelectedItem()).getId();
+				//String genre = ((Genre)genreCombo.getSelectedItem()).getName();
+				//txtGenre.setText(genre);
 			}
 		});
-		panel_3.add(genreCombo);
 		
 		Panel panel = new Panel();
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		
-		JButton btnAddMovie = new JButton("Add Movie");
+		btnAddMovie = new JButton("Add Movie");
 		btnAddMovie.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int id =1;
-				String title = txtTitle.getText();
-				String synopsis = txtSynopsis.getText();				
-				LocalDate premiere_date = null;
-				int duration =0;double rating= 0;
-				
-				if(DataValidator.isDouble(txtRating.getText())) {
-					rating = Double.valueOf(txtRating.getText());
-				}
-				if(DataValidator.isNumeric(txtDuration.getText())) {
-					duration = Integer.valueOf(txtDuration.getText());
-				}
-				boolean validDate = false;
-				//validate the date
-				if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
-					int day =Integer.parseInt(txtDay.getText());
-					int month =Integer.parseInt(txtMonth.getText());
-					int year =Integer.parseInt(txtYear.getText());
-					
-					if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
-						premiere_date = LocalDate.of(year, month, day);
-						validDate = true; //year takes more than 9999 -- fix that
-					}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
-				}				
-				if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
-					movie = new Pelicula(id,title,synopsis,rating,duration,premiere_date,imgRoute,id_genero);
-					int response = AddMovieUIController.addMovie(movie,actorsList);
-					if(response == 0) {
-						JOptionPane.showMessageDialog(getContentPane(),"The movie has been added successfully",""
-								,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-					}else
-						JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
-				}else
-					JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
-									
+				validateMovie_Add();				
 			}
 		});
 		panel.add(btnAddMovie);
+		
+		btnSaveMovie = new JButton("Save Movie");
+		btnSaveMovie.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				validateMovie_Edit(movie);
+			}
+		});
+		panel.add(btnSaveMovie);
 		
 		Panel panel_1 = new Panel();
 		getContentPane().add(panel_1, BorderLayout.EAST);
@@ -320,14 +370,17 @@ public class AddMovieUI extends JDialog {
 		scrollPane.setPreferredSize(new Dimension(500, 150));
 		
 		
-		JButton btnAddActors = new JButton("Add Actors");
+		btnAddActors = new JButton("Add Actors");
 		btnAddActors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AddActorToMovieUI ui = new AddActorToMovieUI();
 				ui.setLocationRelativeTo(getContentPane());
 				ui.setVisible(true);
-				actorsList = ui.getSelectedActors();
-				if(actorsList.size() >0) {
+				ArrayList<Actor>aux_actorsList = ui.getSelectedActors();
+				if(aux_actorsList.size() >0 && aux_actorsList != null) {
+					for(Actor actor : aux_actorsList) {
+						actorsList.add(actor);
+					}
 					table.setModel(new ActorTableModel(actorsList));
 					table.removeColumn(table.getColumnModel().getColumn(0));
 					table.removeColumn(table.getColumnModel().getColumn(3));
@@ -352,10 +405,93 @@ public class AddMovieUI extends JDialog {
 		scrollPane.setViewportView(table);//para visualizar la cabecera y hacer scroll a los registros
 		panel_2.add(scrollPane);
 		panel_2.add(btnAddActors);
-
+		btnSaveMovie.setVisible(false);
 	}
-	void loadGenreCombo() {		
-		for(Genero genre : AddMovieUIController.getAllGenres()) {
+	
+	void validateMovie_Add() {
+		int id =0;//any number since it's auto-generated in the database
+		String title = txtTitle.getText();
+		String synopsis = txtSynopsis.getText();				
+		LocalDate premiere_date = null;
+		int duration =0;double rating= 0;
+		
+		if(DataValidator.isDouble(txtRating.getText())) {
+			rating = Double.valueOf(txtRating.getText());
+		}
+		if(DataValidator.isNumeric(txtDuration.getText())) {
+			duration = Integer.valueOf(txtDuration.getText());
+		}
+		boolean validDate = false;
+		//validate the date
+		if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
+			int day =Integer.parseInt(txtDay.getText());
+			int month =Integer.parseInt(txtMonth.getText());
+			int year =Integer.parseInt(txtYear.getText());
+			
+			if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
+				premiere_date = LocalDate.of(year, month, day);
+				validDate = true; //year takes more than 9999 -- fix that
+			}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
+		}				
+		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
+			movie = new Movie(id,title,synopsis,rating,duration,premiere_date,posterImgName,id_genero);
+			int response = controller.addMovie(movie,actorsList);
+			if(response == 0) {
+				JOptionPane.showMessageDialog(getContentPane(),"The movie has been added successfully",""
+						,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+				dispose();
+			}else
+				JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+		}else
+			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
+	}
+	
+	void validateMovie_Edit(Movie movie) {
+		int id =0;//any number since it's auto-generated in the database
+		String title = txtTitle.getText();
+		String synopsis = txtSynopsis.getText();				
+		LocalDate premiere_date = null;
+		int duration =0;double rating= 0;
+		
+		if(DataValidator.isDouble(txtRating.getText())) {
+			rating = Double.valueOf(txtRating.getText());
+		}
+		if(DataValidator.isNumeric(txtDuration.getText())) {
+			duration = Integer.valueOf(txtDuration.getText());
+		}
+		boolean validDate = false;
+		//validate the date
+		if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
+			int day =Integer.parseInt(txtDay.getText());
+			int month =Integer.parseInt(txtMonth.getText());
+			int year =Integer.parseInt(txtYear.getText());
+			
+			if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
+				premiere_date = LocalDate.of(year, month, day);
+				validDate = true; //year takes more than 9999 -- fix that
+			}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
+		}				
+		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
+			//movie = new Movie(id,title,synopsis,rating,duration,premiere_date,imgRoute,id_genero);
+			movie.setTitulo(title);
+			movie.setSinoposis(synopsis);
+			movie.setCaratula(posterImgName);
+			movie.setDuracionEnMinutos(duration);
+			movie.setPuntuation(rating);
+			movie.setId_genero(id_genero);
+			int response = controller.modifyMovie(movie);
+			if(response == 0) {
+				JOptionPane.showMessageDialog(getContentPane(),"The movie has been edited and saved successfully",""
+						,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+				dispose();
+			}else
+				JOptionPane.showMessageDialog(getContentPane(),"There was an error saving the record","Error",JOptionPane.ERROR_MESSAGE);
+		}else
+			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
+	}
+	
+	void loadGenreCombo() {
+		for(Genre genre : controller.getAllGenres()) {
 			genreCombo.addItem(genre);
 		}
 	}

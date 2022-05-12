@@ -1,10 +1,10 @@
 package es.daumienebi.gestionpeliculas.models;
 
-public class Genero {
+public class Genre {
 	private int id;
 	private String name;
 	//private ArrayList<Pelicula> getMovies; //returns movies of a specific genre
-	public Genero(int id, String name) {
+	public Genre(int id, String name) {
 		super();
 		this.id = id;
 		this.name = name;

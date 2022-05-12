@@ -10,15 +10,15 @@ import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
-import es.daumienebi.gestionpeliculas.models.Pelicula;
+import es.daumienebi.gestionpeliculas.models.Movie;
 
 public class MovieTableModel extends AbstractTableModel{
 	final static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
 	
-	private ArrayList<Pelicula> movieList;
+	private ArrayList<Movie> movieList;
 	private String [] columns = {"Id","Title","Rating","Duration","Premiere Date","Poster"};
 	
-	public MovieTableModel(ArrayList<Pelicula> movieList) {
+	public MovieTableModel(ArrayList<Movie> movieList) {
 		this.movieList = movieList;
 	}
 	
@@ -56,7 +56,7 @@ public class MovieTableModel extends AbstractTableModel{
 		// TODO Auto-generated method stub
 		switch(columnIndex) {
 		case 5: return Icon.class; //returns an icon class when its the Poster Column
-		default : return Pelicula.class;
+		default : return Movie.class;
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class MovieTableModel extends AbstractTableModel{
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
-		Pelicula movie = movieList.get(rowIndex);
+		Movie movie = movieList.get(rowIndex);
 		switch(columnIndex) {
 		case 0: return movie.getId();
 		case 1: return movie.getTitulo();

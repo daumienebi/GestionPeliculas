@@ -37,7 +37,6 @@ public class AddActorToMovieUI extends JDialog {
 	private AddActorToMovieUIController controller = new AddActorToMovieUIController();
 	private  JTable table;
 	private JTextField txtName;
-	private ArrayList<Actor> actorsList = new ArrayList<>();
 	private ArrayList<Actor> selectedActors = new ArrayList<>();
 	
 	//static values to obtain the selected table item
@@ -129,8 +128,6 @@ public class AddActorToMovieUI extends JDialog {
 		panel.add(txtName);
 		txtName.setColumns(20);
 		
-		JButton btnAddNewActor = new JButton("Create new Actor");
-		panel.add(btnAddNewActor);
 		buttomBtnActions(btnAddActorToMovie);
 	}
 	void buttomBtnActions(JButton btnAddActorToMovie) {
@@ -156,6 +153,7 @@ public class AddActorToMovieUI extends JDialog {
 	}
 	
 	void loadActorsTable() {
+		ArrayList<Actor> actorsList = new ArrayList<>();
 		actorsList = controller.getAllActors();
 		ActorTableModel tableModel = new ActorTableModel(actorsList);
 		table.setModel(tableModel);
