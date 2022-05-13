@@ -40,23 +40,32 @@ group by g.id]]>
 		<band height="60" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="84" splitType="Stretch">
+		<band height="43" splitType="Stretch">
 			<staticText>
 				<reportElement x="380" y="0" width="100" height="30" uuid="cefcae22-0516-4c16-9b5d-3a8aaf617b69"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
 				<text><![CDATA[MOVIE COUNT]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="210" y="0" width="100" height="30" uuid="a8027584-b844-499d-8152-6b6dda76ae83"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
 				<text><![CDATA[GENRE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="100" height="30" uuid="7c0c5c4a-ddd9-485f-948b-3409c81b9480"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
 				<text><![CDATA[GENRE ID]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="74" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="0265306d-d576-46a5-95ea-d507b1444789"/>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
@@ -71,9 +80,6 @@ group by g.id]]>
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="70" splitType="Stretch">
 			<textField>

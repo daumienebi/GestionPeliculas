@@ -309,11 +309,23 @@ public class HomeScreen {
 		JMenuItem menuGenreReport = new JMenuItem("Genres");
 		mnNewMenu.add(menuGenreReport);
 		
-		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Actors");
-		mnNewMenu.add(mntmNewMenuItem_11);
+		JMenuItem menuActorReport = new JMenuItem("Actors");
+		menuActorReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String rutaInformeString =  System.getProperty("user.dir") + "\\src\\reports\\Actors.jrxml";
+				MostrarInforme.mostrar(rutaInformeString);
+			}
+		});
+		mnNewMenu.add(menuActorReport);
 		
-		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Movies");
-		mnNewMenu.add(mntmNewMenuItem_13);
+		JMenuItem menuMovieReport = new JMenuItem("Movies");
+		menuMovieReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String rutaInformeString =  System.getProperty("user.dir") + "\\src\\reports\\Movies.jrxml";
+				MostrarInforme.mostrar(rutaInformeString);
+			}
+		});
+		mnNewMenu.add(menuMovieReport);
 		menuGenreReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//https://es.stackoverflow.com/questions/424596/el-sistema-no-puede-encontrar-el-archivo-especificado-jasperreport-java
