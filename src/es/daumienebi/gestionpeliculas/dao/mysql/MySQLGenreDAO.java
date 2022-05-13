@@ -41,7 +41,7 @@ public class MySQLGenreDAO implements IGenreDAO{
 	public ArrayList<Genre> getAllGenres() {
 		
 		try {
-			Connection con = DbConnection.getConexion();
+			Connection con = DbConnection.getConnection();
 			ResultSet rs = con.prepareStatement("Select * from genre order by id asc").executeQuery();
 			while(rs.next()) {
 				Genre g = new Genre(rs.getInt("id"), rs.getString("name"));
@@ -66,7 +66,7 @@ public class MySQLGenreDAO implements IGenreDAO{
 		Connection con = null;
 		PreparedStatement preparedSt = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "Select * from genre where id = ?";
 			preparedSt = con.prepareStatement(sql);	
 			preparedSt.setInt(1, id);

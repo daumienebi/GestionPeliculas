@@ -149,7 +149,7 @@ public class ConfigUI extends JDialog{
 				if(chkBoxDefaultConfig.isSelected()) {
 					Configuration.use_default_connection = 1;
 					DbConnection.connect();
-					Connection con = DbConnection.getConexion();
+					Connection con = DbConnection.getConnection();
 					if(con != null) {
 						ImageIcon icon = new ImageIcon(getClass().getResource("/resources/tick.jpg"));
 						JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully "+ '\n' +" The Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
@@ -173,7 +173,7 @@ public class ConfigUI extends JDialog{
 						//Configuration.db_password = txtDbPassword.getPassword().toString().trim(); //check out the password control
 						
 						DbConnection.connect();
-						Connection con = DbConnection.getConexion();
+						Connection con = DbConnection.getConnection();
 						if(con != null) {
 							ImageIcon icon = new ImageIcon(getClass().getResource("/resources/tick.jpg"));
 							JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully !, the Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							

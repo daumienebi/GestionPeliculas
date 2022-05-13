@@ -22,7 +22,7 @@ public class MySQLActorDAO implements IActorDAO{
 		LocalDate fechanac = null;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "Select * from actor order by id asc";
 			PreparedStatement ps = null;
 			ResultSet rs = null;			
@@ -55,7 +55,7 @@ public class MySQLActorDAO implements IActorDAO{
 		LocalDate fechanac;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "SELECT * FROM actor WHERE id = ?";
 			PreparedStatement ps = null;
 			ResultSet rs = null;			
@@ -83,7 +83,7 @@ public class MySQLActorDAO implements IActorDAO{
 	public int deleteActor(int actor_id) {
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "DELETE FROM actor WHERE id = ?";
 			PreparedStatement preparedSt = null;		
 			preparedSt = con.prepareStatement(sql);
@@ -102,7 +102,7 @@ public class MySQLActorDAO implements IActorDAO{
 		// TODO Auto-generated method stub
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "UPDATE actor SET nombre = ?, apellido = ?, fechanac = ?, imagen = ? WHERE id = ? ";
 			PreparedStatement preparedSt = null;		
 			preparedSt = con.prepareStatement(sql);
@@ -124,7 +124,7 @@ public class MySQLActorDAO implements IActorDAO{
 	public int addActor(Actor actor) {
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "INSERT INTO actor (nombre,apellido,fechanac,imagen) VALUES(?,?,?,?)";
 			PreparedStatement preparedSt = null;		
 			preparedSt = con.prepareStatement(sql);
@@ -150,7 +150,7 @@ public class MySQLActorDAO implements IActorDAO{
 		LocalDate fechanac;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "Select * from actor where nombre like ? order by id asc";
 			PreparedStatement preparedSt = null;
 			ResultSet resultSet = null;			
@@ -177,7 +177,7 @@ public class MySQLActorDAO implements IActorDAO{
 		Connection con = null;
 		int count = 0;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "Select count(*) from movie_actor where actor_id = ?";
 			PreparedStatement preparedSt = null;
 			ResultSet resultSet = null;			

@@ -59,7 +59,7 @@ public static Connection connect(){
         return con;
     }
      
-    public static Connection getConexion(){
+    public static Connection getConnection(){
     	return con != null ? con : null;
     }
     
@@ -70,6 +70,4 @@ public static Connection connect(){
 			 JOptionPane.showMessageDialog(null, "Error closing the connection");
 		}
     }
-
-    //seperate the connections with switch statements
 }

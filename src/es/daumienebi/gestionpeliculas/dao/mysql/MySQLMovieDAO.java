@@ -26,7 +26,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		LocalDate fecha_estreno;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "Select * from movie order by id asc";
 			PreparedStatement ps = null;
 			ResultSet rs = null;			
@@ -60,7 +60,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		LocalDate fecha_estreno;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "Select * from movie where titulo like ? order by id asc";
 			PreparedStatement ps = null;
 			ResultSet rs = null;			
@@ -92,7 +92,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		// TODO Auto-generated method stub
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "INSERT INTO movie (titulo,puntuacion,duracion,imagen,id_genero,fecha_estreno,sinopsis) VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement preparedSt = null;		
 			preparedSt = con.prepareStatement(sql);
@@ -117,7 +117,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		// TODO Auto-generated method stub
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = 	"UPDATE movie SET titulo = ?, puntuacion = ?, duracion = ?, imagen = ?,"+
 							" id_genero = ?, fecha_estreno = ?, sinopsis = ? WHERE id = ?";
 			PreparedStatement preparedSt = null;		
@@ -154,7 +154,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		Connection con = null;
 		PreparedStatement preparedSt = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			//firstly delete from movie_actor table
 			String query1 = "DELETE FROM movie_actor WHERE movie_id = ?";
 			preparedSt = con.prepareStatement(query1);
@@ -180,7 +180,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		int last_id = 0;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			
 			String sql = "INSERT INTO movie (titulo,puntuacion,duracion,imagen,id_genero,fecha_estreno,sinopsis) VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement preparedSt = null;		
@@ -240,7 +240,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		LocalDate fecha_estreno;
 		Connection con = null;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "SELECT * FROM movie WHERE id = ?";
 			PreparedStatement ps = null;
 			ResultSet rs = null;			
@@ -273,7 +273,7 @@ import es.daumienebi.gestionpeliculas.models.Movie;
 		String nombre,apellido,foto;
 		LocalDate fechanac;
 		try {
-			con = DbConnection.getConexion();
+			con = DbConnection.getConnection();
 			String sql = "SELECT * FROM actor INNER JOIN movie_actor"
 						+" ON(actor.id = movie_actor.actor_id)"
 						+" WHERE movie_id = ?";

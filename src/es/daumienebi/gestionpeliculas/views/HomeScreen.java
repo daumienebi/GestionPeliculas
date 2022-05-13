@@ -7,11 +7,15 @@ import javax.swing.JPanel;
 import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.controllers.HomeScreenController;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
+import es.daumienebi.gestionpeliculas.utils.MostrarInforme;
 import es.daumienebi.gestionpeliculas.views.ConfigUI;
+import net.sf.jasperreports.view.JasperViewer;
+
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -59,7 +63,7 @@ public class HomeScreen {
 	}
 
 	void disableMenus() {
-		if(DbConnection.getConexion() == null) { //Configuration.use_default_config == -1
+		if(DbConnection.getConnection() == null) { //Configuration.use_default_config == -1
 			homeMenu.setEnabled(false);
 			actorMenu.setEnabled(false);
 			movieMenu.setEnabled(false);
@@ -147,7 +151,7 @@ public class HomeScreen {
 				configUI.setLocationRelativeTo(frmGestionPeliculas);
 				configUI.setVisible(true);
 				
-				if(DbConnection.getConexion() != null) {
+				if(DbConnection.getConnection() != null) {
 					configUI.dispose();
 					frmGestionPeliculas.dispose();
 					try {
@@ -298,6 +302,28 @@ public class HomeScreen {
 		reportMenu = new JMenu("Reports");
 		reportMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(reportMenu);
+		
+		JMenu mnNewMenu = new JMenu("Basic Table Reports");
+		reportMenu.add(mnNewMenu);
+		
+		JMenuItem menuGenreReport = new JMenuItem("Genres");
+		mnNewMenu.add(menuGenreReport);
+		
+		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Actors");
+		mnNewMenu.add(mntmNewMenuItem_11);
+		
+		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Movies");
+		mnNewMenu.add(mntmNewMenuItem_13);
+		menuGenreReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//https://es.stackoverflow.com/questions/424596/el-sistema-no-puede-encontrar-el-archivo-especificado-jasperreport-java
+				String rutaInformeString =  System.getProperty("user.dir") + "\\src\\reports\\Genres.jrxml";
+				MostrarInforme.mostrar(rutaInformeString);
+			}
+		});
+		
+		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Personalized Reports");
+		reportMenu.add(mntmNewMenuItem_14);
 		
 		settingsMenu = new JMenu("Settings");
 		settingsMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
