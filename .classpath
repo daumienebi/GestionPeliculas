@@ -24,5 +24,8 @@
 	<classpathentry kind="lib" path="src/reports/lib/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="lib" path="src/reports/lib/stax2-api-4.2.1.jar"/>
 	<classpathentry kind="lib" path="src/reports/lib/woodstox-core-6.2.7.jar"/>
+	<classpathentry kind="lib" path="src/resources/commons-net-3.8.0.jar"/>
+	<classpathentry kind="lib" path="src/resources/commons-net-3.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="src/resources/commons-net-examples-3.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
