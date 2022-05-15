@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PersonalizedReport1" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9bb58b99-ec04-419f-adff-f593a8f24132">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MovieDb_Adapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="RATING" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[SELECT m.*,g.name as genre_name FROM movie m 
+inner join genre g 
+on m.id_genero = g.id
+WHERE puntuacion >  $P{RATING}]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="titulo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="titulo"/>
+		<property name="com.jaspersoft.studio.field.label" value="titulo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="puntuacion" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="puntuacion"/>
+		<property name="com.jaspersoft.studio.field.label" value="puntuacion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="duracion" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="duracion"/>
+		<property name="com.jaspersoft.studio.field.label" value="duracion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="imagen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="imagen"/>
+		<property name="com.jaspersoft.studio.field.label" value="imagen"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="id_genero" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_genero"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_genero"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="fecha_estreno" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_estreno"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_estreno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="sinopsis" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="sinopsis"/>
+		<property name="com.jaspersoft.studio.field.label" value="sinopsis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="movie"/>
+	</field>
+	<field name="genre_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="genre_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="genre"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="72" splitType="Stretch">
+			<textField>
+				<reportElement x="354" y="30" width="50" height="30" uuid="0a491281-ec79-4b41-9789-dc79b6abc113"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RATING}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="93" y="30" width="260" height="30" uuid="5d5234e3-ebf8-43fe-bfb1-2e4fb671015a"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MOVIE WITH RATINGS   >]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="140" height="20" uuid="983b0bee-7032-4160-9fdd-efbcb0c271b1"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TITLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="60" height="20" uuid="7cd1750d-9257-457d-88fe-239f3e33808d"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RATING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="260" y="0" width="80" height="20" uuid="b856c92a-37c4-4f7f-94fb-334fad304db8"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DURATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="90" height="20" uuid="9d1d2efd-1051-47af-98f9-41f093ce20f2"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GENRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="100" height="20" uuid="c7c1047b-4cc1-415d-8a4a-bfe027acb18f"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PREMIERE DATE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="140" height="40" uuid="344a7119-c788-4987-87cb-2d625bdf9ab5"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="0" width="70" height="30" uuid="2b237601-745a-4825-9611-efe405e2b2d2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{puntuacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="70" height="30" uuid="6b985f8e-5633-479f-b073-c77eca87ccc6"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{duracion} + "Min"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="90" height="30" uuid="6211779f-a881-4884-8e80-e999558038a4"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{genre_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="0" width="100" height="30" uuid="5c26e00e-a621-43ed-822d-a78790e3269d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(new java.text.SimpleDateFormat("dd/MM/YYYY")).format($F{fecha_estreno})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="240" y="30" width="100" height="30" uuid="02b14496-5f55-470f-936b-ef5db8282bee"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

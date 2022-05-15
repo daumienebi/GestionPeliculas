@@ -1,10 +1,10 @@
-package es.daumienebi.gestionpeliculas.controllers;
+package es.daumienebi.gestionpeliculas.utils;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
 
-public class DataValidator {
+public class TextFieldValidatorUtil {
 
 	public static boolean isValidDate(int day, int month, int year) {
 		//checks if the date format is correct

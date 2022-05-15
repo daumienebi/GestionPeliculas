@@ -36,12 +36,12 @@ public class AddMovieUIController {
 		return movieDAO.deleteMovie(id);
 	}
 	
-	public String setImagePoster(JButton imgBtn) {
+	public File setImagePoster(JButton imgBtn) {
 		// btnFoto -- the button where the image will be displayed
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogTitle("Select the image poster");
 		String imgRoute = "";
-		String imgName ="";
+		File imgFile = null;
 		
 		//poner el directorio en el escritorio
 		String dirEsc = System.getProperty("user.home");
@@ -52,7 +52,7 @@ public class AddMovieUIController {
 		int option = jfc.showOpenDialog(jfc);
 		if(option == JFileChooser.APPROVE_OPTION) {
 			imgRoute = jfc.getSelectedFile().getAbsolutePath();
-			imgName = jfc.getSelectedFile().getName();
+			imgFile = jfc.getSelectedFile();
 		}		
 		//check if the imgRoute is not null before placing the button
 		
@@ -67,7 +67,7 @@ public class AddMovieUIController {
 			imgBtn.setIcon(icon);
 		}
 		
-		return imgName;
+		return imgFile;
 	}
 	
 	public ArrayList<Genre> getAllGenres(){

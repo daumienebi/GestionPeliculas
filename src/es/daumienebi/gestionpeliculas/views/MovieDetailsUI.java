@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.controllers.ActorManagementUIController;
-import es.daumienebi.gestionpeliculas.controllers.DataValidator;
+import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
 import es.daumienebi.gestionpeliculas.dao.IGenreDAO;
 import es.daumienebi.gestionpeliculas.dao.IMovieDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLGenreDAO;
@@ -302,7 +302,7 @@ public class MovieDetailsUI extends JDialog {
 		txtSynopsis.setText(movie.getSinoposis());
 		txtDuration.setText(String.valueOf(movie.getDuracionEnMinutos()));
 		txtRating.setText(String.valueOf(movie.getPuntuation()));
-		if(DataValidator.isDouble(String.valueOf(movie.getPuntuation()))) {
+		if(TextFieldValidatorUtil.isDouble(String.valueOf(movie.getPuntuation()))) {
 			double rating = Double.valueOf(String.valueOf(movie.getPuntuation()));
 			if(rating < 5) {
 				txtRating.setForeground(Color.red);

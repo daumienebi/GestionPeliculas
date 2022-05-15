@@ -8,7 +8,6 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
@@ -47,23 +46,24 @@ public class AddActorUIController {
 		return actorDAO.addActor(actor);
 	}
 	
-	public String setFotoPerfil(JButton btnFoto) {
-		// btnFoto -- el boton que servirá para colocar la foto de perfil
+	public File setFotoPerfil(JButton btnFoto) {
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogTitle("Elegir foto perfil");
 		String rutaImagen ="";
 		String nombreImagen = "";
+		File imgFile = null;
 		
-		//poner el directorio en el escritorio
+		//user desktop directory
 		String dirEsc = System.getProperty("user.home");
 		jfc.setCurrentDirectory(new File(dirEsc + "/Desktop"));
 		
-		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Filtro imagenes", "png","jpg");
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image filter", "png","jpg");
 		jfc.setFileFilter(filtro);
 		int opcion = jfc.showOpenDialog(jfc);
 		if(opcion == JFileChooser.APPROVE_OPTION) {
 			rutaImagen = jfc.getSelectedFile().getAbsolutePath();
-			nombreImagen = jfc.getSelectedFile().getName();
+			imgFile = jfc.getSelectedFile();
+			//nombreImagen = jfc.getSelectedFile().getName();
 		}
 		
 		//comprobar que rutaImagen no esta vacio antes de colocar la imagen para que no se
@@ -78,7 +78,7 @@ public class AddActorUIController {
 			icon =new ImageIcon(imgNuevo);
 			btnFoto.setIcon(icon);
 		}
-		return nombreImagen; //to save the image name in the db
+		return imgFile; //to save the image name in the db
 	}		
 		
 	public int modifyActor(Actor actor) {

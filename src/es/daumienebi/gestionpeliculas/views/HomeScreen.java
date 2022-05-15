@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.controllers.HomeScreenController;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
-import es.daumienebi.gestionpeliculas.utils.MostrarInforme;
+import es.daumienebi.gestionpeliculas.utils.ReportsUtil;
 import es.daumienebi.gestionpeliculas.views.ConfigUI;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -312,8 +312,8 @@ public class HomeScreen {
 		JMenuItem menuActorReport = new JMenuItem("Actors");
 		menuActorReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String rutaInformeString =  System.getProperty("user.dir") + "\\src\\reports\\Actors.jrxml";
-				MostrarInforme.mostrar(rutaInformeString);
+				String reportName = "Actors.jrxml";
+				ReportsUtil.viewReport(reportName);
 			}
 		});
 		mnNewMenu.add(menuActorReport);
@@ -321,21 +321,29 @@ public class HomeScreen {
 		JMenuItem menuMovieReport = new JMenuItem("Movies");
 		menuMovieReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String rutaInformeString =  System.getProperty("user.dir") + "\\src\\reports\\Movies.jrxml";
-				MostrarInforme.mostrar(rutaInformeString);
+				String reportName = "Movies.jrxml";
+				ReportsUtil.viewReport(reportName);
 			}
 		});
 		mnNewMenu.add(menuMovieReport);
 		menuGenreReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//https://es.stackoverflow.com/questions/424596/el-sistema-no-puede-encontrar-el-archivo-especificado-jasperreport-java
-				String rutaInformeString =  System.getProperty("user.dir") + "\\src\\reports\\Genres.jrxml";
-				MostrarInforme.mostrar(rutaInformeString);
+				String reportName =  "Genres.jrxml";
+				ReportsUtil.viewReport(reportName);
 			}
 		});
 		
-		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Personalized Reports");
-		reportMenu.add(mntmNewMenuItem_14);
+		JMenuItem menuPersonalizedReports = new JMenuItem("Personalized Reports");
+		menuPersonalizedReports.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PersonalizedReportsUI reportsUI = new PersonalizedReportsUI();
+				reportsUI.setModal(true);
+				reportsUI.setLocationRelativeTo(frmGestionPeliculas);
+				reportsUI.setVisible(true);
+			}
+		});
+		reportMenu.add(menuPersonalizedReports);
 		
 		settingsMenu = new JMenu("Settings");
 		settingsMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));

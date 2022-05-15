@@ -134,7 +134,7 @@ public class MySQLActorDAO implements IActorDAO{
 			preparedSt.setString(4, actor.getFoto());
 			preparedSt.executeUpdate();
 			con.commit();
-			return 1;
+			return 0;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			return -1;

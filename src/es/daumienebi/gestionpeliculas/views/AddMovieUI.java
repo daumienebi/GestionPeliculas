@@ -20,13 +20,15 @@ import javax.swing.JTextArea;
 import javax.swing.JTable;
 import es.daumienebi.gestionpeliculas.viewmodels.ActorTableModel;
 import es.daumienebi.gestionpeliculas.controllers.AddMovieUIController;
-import es.daumienebi.gestionpeliculas.controllers.DataValidator;
+import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
+import es.daumienebi.gestionpeliculas.utils.UploadImageUtil;
 import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Genre;
 import es.daumienebi.gestionpeliculas.models.Movie;
 import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -44,7 +46,8 @@ public class AddMovieUI extends JDialog {
 	private JTextField txtYear;
 	private JTable table;
 	private Movie movie;
-	private String posterImgName;
+	private String posterImgName ="";
+	private File imgFile;
 	private JTextArea txtSynopsis;
 	private JComboBox<Genre> genreCombo;
 	private int id_genero;
@@ -159,7 +162,7 @@ public class AddMovieUI extends JDialog {
 		btnMoviePoster = new JButton("");
 		btnMoviePoster.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				posterImgName = controller.setImagePoster(btnMoviePoster);
+				imgFile = controller.setImagePoster(btnMoviePoster);
 			}
 		});
 		btnMoviePoster.setMargin(new Insets(0, 0, 0, 0));
@@ -177,7 +180,7 @@ public class AddMovieUI extends JDialog {
 		btnAddPoster = new JButton("Add Poster");
 		btnAddPoster.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				posterImgName = controller.setImagePoster(btnMoviePoster);
+				imgFile = controller.setImagePoster(btnMoviePoster);
 			}
 		});
 		headerPanel.add(btnAddPoster);
@@ -415,33 +418,43 @@ public class AddMovieUI extends JDialog {
 		LocalDate premiere_date = null;
 		int duration =0;double rating= 0;
 		
-		if(DataValidator.isDouble(txtRating.getText())) {
+		if(TextFieldValidatorUtil.isDouble(txtRating.getText())) {
 			rating = Double.valueOf(txtRating.getText());
 		}
-		if(DataValidator.isNumeric(txtDuration.getText())) {
+		if(TextFieldValidatorUtil.isNumeric(txtDuration.getText())) {
 			duration = Integer.valueOf(txtDuration.getText());
 		}
 		boolean validDate = false;
 		//validate the date
-		if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
+		if(TextFieldValidatorUtil.isNumeric(txtDay.getText()) && TextFieldValidatorUtil.isNumeric(txtMonth.getText()) && TextFieldValidatorUtil.isNumeric(txtYear.getText())) {
 			int day =Integer.parseInt(txtDay.getText());
 			int month =Integer.parseInt(txtMonth.getText());
 			int year =Integer.parseInt(txtYear.getText());
 			
-			if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
+			if(TextFieldValidatorUtil.isValidDate(day, month, year) && year >1800 && year <9999) {
 				premiere_date = LocalDate.of(year, month, day);
 				validDate = true; //year takes more than 9999 -- fix that
 			}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
 		}				
 		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
-			movie = new Movie(id,title,synopsis,rating,duration,premiere_date,posterImgName,id_genero);
-			int response = controller.addMovie(movie,actorsList);
-			if(response == 0) {
-				JOptionPane.showMessageDialog(getContentPane(),"The movie has been added successfully",""
-						,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-				dispose();
-			}else
-				JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+			//upload the image to the server
+			Object [] uploadResult = new Object[2];
+			uploadResult = UploadImageUtil.uploadMovieImage(imgFile);
+			
+			boolean uploaded = Boolean.parseBoolean(uploadResult[0].toString());
+			posterImgName = uploadResult[1].toString();
+			if(uploaded) {
+				movie = new Movie(id,title,synopsis,rating,duration,premiere_date,posterImgName,id_genero);
+				int response = controller.addMovie(movie,actorsList);
+				if(response == 0) {
+					JOptionPane.showMessageDialog(getContentPane(),"The movie has been added successfully",""
+							,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+					dispose();
+				}else
+					JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+			}else {
+				JOptionPane.showMessageDialog(getContentPane(),"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
+			}			
 		}else
 			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
 	}
@@ -453,26 +466,43 @@ public class AddMovieUI extends JDialog {
 		LocalDate premiere_date = null;
 		int duration =0;double rating= 0;
 		
-		if(DataValidator.isDouble(txtRating.getText())) {
+		if(TextFieldValidatorUtil.isDouble(txtRating.getText())) {
 			rating = Double.valueOf(txtRating.getText());
 		}
-		if(DataValidator.isNumeric(txtDuration.getText())) {
+		if(TextFieldValidatorUtil.isNumeric(txtDuration.getText())) {
 			duration = Integer.valueOf(txtDuration.getText());
 		}
 		boolean validDate = false;
 		//validate the date
-		if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
+		if(TextFieldValidatorUtil.isNumeric(txtDay.getText()) && TextFieldValidatorUtil.isNumeric(txtMonth.getText()) && TextFieldValidatorUtil.isNumeric(txtYear.getText())) {
 			int day =Integer.parseInt(txtDay.getText());
 			int month =Integer.parseInt(txtMonth.getText());
 			int year =Integer.parseInt(txtYear.getText());
 			
-			if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
+			if(TextFieldValidatorUtil.isValidDate(day, month, year) && year >1800 && year <9999) {
 				premiere_date = LocalDate.of(year, month, day);
 				validDate = true; //year takes more than 9999 -- fix that
 			}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
 		}				
 		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
 			//movie = new Movie(id,title,synopsis,rating,duration,premiere_date,imgRoute,id_genero);
+			if(imgFile != null) {
+				Object [] uploadResult = new Object[2];
+				uploadResult = UploadImageUtil.uploadMovieImage(imgFile);
+				
+				boolean uploaded = Boolean.parseBoolean(uploadResult[0].toString());
+				posterImgName = uploadResult[1].toString();
+				
+				if(uploaded) {
+					editMovie(movie, title, synopsis, duration, rating);
+				}else {
+					JOptionPane.showMessageDialog(getContentPane(),"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}else {
+				posterImgName = movie.getCaratula();
+				editMovie(movie, title, synopsis, duration, rating);
+			}
+			/*
 			movie.setTitulo(title);
 			movie.setSinoposis(synopsis);
 			movie.setCaratula(posterImgName);
@@ -486,10 +516,27 @@ public class AddMovieUI extends JDialog {
 				dispose();
 			}else
 				JOptionPane.showMessageDialog(getContentPane(),"There was an error saving the record","Error",JOptionPane.ERROR_MESSAGE);
+			*/
 		}else
 			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
 	}
 	
+	void editMovie(Movie movie,String title,String synopsis,int duration,double rating) {
+		//to be called internally by validateMovie_Edit()
+		movie.setTitulo(title);
+		movie.setSinoposis(synopsis);
+		movie.setCaratula(posterImgName);
+		movie.setDuracionEnMinutos(duration);
+		movie.setPuntuation(rating);
+		movie.setId_genero(id_genero);
+		int response = controller.modifyMovie(movie);
+		if(response == 0) {
+			JOptionPane.showMessageDialog(getContentPane(),"The movie has been edited and saved successfully",""
+					,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+			dispose();
+		}else
+			JOptionPane.showMessageDialog(getContentPane(),"There was an error saving the record","Error",JOptionPane.ERROR_MESSAGE);
+	}
 	void loadGenreCombo() {
 		for(Genre genre : controller.getAllGenres()) {
 			genreCombo.addItem(genre);

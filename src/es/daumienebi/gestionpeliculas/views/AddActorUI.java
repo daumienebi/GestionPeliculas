@@ -6,7 +6,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import es.daumienebi.gestionpeliculas.controllers.AddActorUIController;
-import es.daumienebi.gestionpeliculas.controllers.DataValidator;
+import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
+import es.daumienebi.gestionpeliculas.utils.UploadImageUtil;
 import es.daumienebi.gestionpeliculas.models.Actor;
 
 import javax.swing.ImageIcon;
@@ -23,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
@@ -41,7 +43,8 @@ public class AddActorUI extends JDialog {
 	private JButton btnSave;
 	
 	Actor actor;
-	private String nombreImagen = "";
+	private String imagenName = "";
+	private File imgFile;
 	
 	//Controller
 	private AddActorUIController controller = new AddActorUIController();
@@ -71,7 +74,9 @@ public class AddActorUI extends JDialog {
 		btnImage = new JButton("");
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nombreImagen = controller.setFotoPerfil(btnImage);
+				//nombreImagen = controller.setFotoPerfil(btnImage);
+				imgFile = controller.setFotoPerfil(btnImage);
+				//nombreImagen = imgFile.getName();
 			}
 		});
 		btnImage.setMargin(new Insets(0, 0, 0, 0));
@@ -88,7 +93,8 @@ public class AddActorUI extends JDialog {
 		btnAddImage = new JButton("Add Image");
 		btnAddImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nombreImagen = controller.setFotoPerfil(btnImage);
+				//nombreImagen = controller.setFotoPerfil(btnImage);
+				imgFile = controller.setFotoPerfil(btnImage);
 			}
 		});
 		panel.add(btnAddImage);
@@ -192,7 +198,7 @@ public class AddActorUI extends JDialog {
 		txtYear.setText(String.valueOf(year));
 		btnAdd.setVisible(false);
 		btnSave.setVisible(true);
-		nombreImagen = actor.getFoto();
+		imagenName = actor.getFoto();
 		btnImage.setIcon(controller.getActorsImage(actor.getFoto()));
 		//btnAddImage.setVisible(true);
 		
@@ -204,12 +210,12 @@ public class AddActorUI extends JDialog {
 		LocalDate birthDate = null;
 		boolean validDate = false;
 		//validate the date
-		if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
+		if(TextFieldValidatorUtil.isNumeric(txtDay.getText()) && TextFieldValidatorUtil.isNumeric(txtMonth.getText()) && TextFieldValidatorUtil.isNumeric(txtYear.getText())) {
 			int day =Integer.parseInt(txtDay.getText());
 			int month =Integer.parseInt(txtMonth.getText());
 			int year =Integer.parseInt(txtYear.getText());
 			
-			if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
+			if(TextFieldValidatorUtil.isValidDate(day, month, year) && year >1800 && year <9999) {
 				birthDate = LocalDate.of(year, month, day);
 				validDate = true; //year takes more than 9999 -- fix that
 			}else JOptionPane.showMessageDialog(mainPanel,"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
@@ -217,33 +223,46 @@ public class AddActorUI extends JDialog {
 		
 		//check for blank text boxes
 		if(!name.isBlank() && !surname.isBlank() && validDate) {
-			actor = new Actor(0,name,surname,birthDate,nombreImagen);
-			//if the actor is added correctly, upload the image to the server else, don't upload it
-			int response = controller.addActor(actor);
-			if(response == 1) {
-				JOptionPane.showMessageDialog(mainPanel,"The record has been added successfully",""
-						,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-				dispose();
+			//upload the image to the server
+			Object [] uploadResult = new Object[2];
+			uploadResult = UploadImageUtil.uploadActorImage(imgFile);
+			
+			boolean uploaded = Boolean.parseBoolean(uploadResult[0].toString());
+			imagenName = uploadResult[1].toString();
+			
+			if(uploaded) {
+				actor = new Actor(0,name,surname,birthDate,imagenName);
+				//if the actor is added correctly, upload the image to the server else, don't upload it
+				int response = controller.addActor(actor);
+				if(response == 0) {
+					JOptionPane.showMessageDialog(mainPanel,"The record has been added successfully",""
+							,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+					dispose();
+				}else {
+					JOptionPane.showMessageDialog(mainPanel,"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+				}
 			}else {
-				JOptionPane.showMessageDialog(mainPanel,"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(mainPanel,"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
 			}
+			
 		}else {
 			JOptionPane.showMessageDialog(mainPanel,"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	void validateActor_Edit(Actor actor) {
+		boolean uploaded = false;
 		String name = txtName.getText();
 		String surname = txtSurname.getText();
 		LocalDate birthDate = null;
 		boolean validDate = false;
 		//validate the date
-		if(DataValidator.isNumeric(txtDay.getText()) && DataValidator.isNumeric(txtMonth.getText()) && DataValidator.isNumeric(txtYear.getText())) {
+		if(TextFieldValidatorUtil.isNumeric(txtDay.getText()) && TextFieldValidatorUtil.isNumeric(txtMonth.getText()) && TextFieldValidatorUtil.isNumeric(txtYear.getText())) {
 			int day =Integer.parseInt(txtDay.getText());
 			int month =Integer.parseInt(txtMonth.getText());
 			int year =Integer.parseInt(txtYear.getText());
 			
-			if(DataValidator.isValidDate(day, month, year) && year >1800 && year <9999) {
+			if(TextFieldValidatorUtil.isValidDate(day, month, year) && year >1800 && year <9999) {
 				birthDate = LocalDate.of(year, month, day);
 				validDate = true; //year takes more than 9999 -- fix that
 			}else JOptionPane.showMessageDialog(mainPanel,"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
@@ -252,11 +271,31 @@ public class AddActorUI extends JDialog {
 		//check for blank text boxes
 		if(!name.isBlank() && !surname.isBlank() && validDate) {
 			//actor = new Actor(0,name,surname,birthDate,nombreImagen);
+			//upload the image to the server
+			
+			if(imgFile != null) {
+				Object [] uploadResult = new Object[2];
+				uploadResult = UploadImageUtil.uploadActorImage(imgFile);
+				
+				uploaded = Boolean.parseBoolean(uploadResult[0].toString());
+				imagenName = uploadResult[1].toString();
+				if(uploaded) {
+					editActor(actor, name, surname, birthDate);
+				}else {
+					JOptionPane.showMessageDialog(mainPanel,"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
+				}					
+			}else {
+				imagenName = actor.getFoto();
+				editActor(actor, name, surname, birthDate);
+			}
+			
+			/**
 			actor.setNombre(name);
 			actor.setApellidos(surname);
 			actor.setFechaNac(birthDate);
-			actor.setFoto(nombreImagen);
+			actor.setFoto(imagenName);
 			//if the actor is modified correctly, upload the image to the server else, don't upload it
+			
 			int response = controller.modifyActor(actor);
 			if(response == 0) {
 				JOptionPane.showMessageDialog(mainPanel,"The record has been updated successfully",""
@@ -265,8 +304,26 @@ public class AddActorUI extends JDialog {
 			}else {
 				JOptionPane.showMessageDialog(mainPanel,"There was an error updating the record","Error",JOptionPane.ERROR_MESSAGE);
 			}
+			*/
+			
 		}else {
 			JOptionPane.showMessageDialog(mainPanel,"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	void editActor(Actor actor,String name,String surname,LocalDate birthDate){
+		actor.setNombre(name);
+		actor.setApellidos(surname);
+		actor.setFechaNac(birthDate);
+		actor.setFoto(imagenName);
+		//if the actor is modified correctly, upload the image to the server else, don't upload it
+		int response = controller.modifyActor(actor);
+		if(response == 0) {
+			JOptionPane.showMessageDialog(mainPanel,"The record has been updated successfully",""
+					,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+			dispose();
+		}else {
+			JOptionPane.showMessageDialog(mainPanel,"There was an error updating the record","Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
