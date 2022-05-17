@@ -18,6 +18,7 @@ import es.daumienebi.gestionpeliculas.dao.mysql.MySQLMovieDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Genre;
 import es.daumienebi.gestionpeliculas.models.Movie;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class AddMovieUIController {
 	private static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
@@ -112,6 +113,12 @@ public class AddMovieUIController {
 	
 	public int modifyMovie(Movie movie) {
 		return movieDAO.modifyMovie(movie);
+	}
+	
+	public void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translateAddMovieUI(DefaultConfiguration.lang_id);
+		}
 	}
 
 }

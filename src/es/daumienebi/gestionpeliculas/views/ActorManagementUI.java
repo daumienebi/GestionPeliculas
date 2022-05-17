@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import es.daumienebi.gestionpeliculas.controllers.ActorManagementUIController;
 import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.viewmodels.ActorTableModel;
-import resources.GlobalResources;
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -42,6 +40,13 @@ public class ActorManagementUI extends JDialog {
 	private JTextField txtName;
 	private ArrayList<Actor> actorsList = new ArrayList<>();
 	
+	/**
+	 * To be translated
+	 */
+	public static JLabel ActorMngment_lblActorName;
+	public static JButton ActorMngment_btnDelete;
+	public static JButton ActorMngment_btnEdit;
+	
 	//static values to obtain the selected table item
 	static int row;
 	static int column;
@@ -68,6 +73,7 @@ public class ActorManagementUI extends JDialog {
 	 */
 	public ActorManagementUI() {
 		Inicialize();
+		controller.translate();
 		loadActorsTable();
 		
 	}
@@ -79,8 +85,8 @@ public class ActorManagementUI extends JDialog {
 		JPanel actionBtnPane = new JPanel();
 		getContentPane().add(actionBtnPane, BorderLayout.SOUTH);
 		
-		JButton btnEdit = new JButton("Edit");
-		btnEdit.addActionListener(new ActionListener() {
+		ActorMngment_btnEdit = new JButton("Edit");
+		ActorMngment_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int actor_id = getActorId();
 				Actor actor = controller.getActor(actor_id);
@@ -92,11 +98,11 @@ public class ActorManagementUI extends JDialog {
 				
 			}
 		});
-		btnEdit.setVisible(false);
-		actionBtnPane.add(btnEdit);
+		ActorMngment_btnEdit.setVisible(false);
+		actionBtnPane.add(ActorMngment_btnEdit);
 		
-		JButton btnDelete = new JButton("Delete");
-		btnDelete.addActionListener(new ActionListener() {
+		ActorMngment_btnDelete = new JButton("Delete");
+		ActorMngment_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int actor_id,response,exitCode;
 				actor_id= getActorId();
@@ -115,8 +121,8 @@ public class ActorManagementUI extends JDialog {
 				}	
 			}
 		});
-		btnDelete.setVisible(false);
-		actionBtnPane.add(btnDelete);
+		ActorMngment_btnDelete.setVisible(false);
+		actionBtnPane.add(ActorMngment_btnDelete);
 		
 		JPanel contentPane = new JPanel();
 		getContentPane().add(contentPane, BorderLayout.CENTER);
@@ -138,16 +144,17 @@ public class ActorManagementUI extends JDialog {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		contentPane.add(panel, BorderLayout.NORTH);
 		
-		JLabel lblNewLabel = new JLabel("Actor's Name");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel.setIcon(new ImageIcon(ActorManagementUI.class.getResource("/resources/search.jpg")));
-		panel.add(lblNewLabel);
+		ActorMngment_lblActorName = new JLabel("Actor's Name");
+		ActorMngment_lblActorName.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		ActorMngment_lblActorName.setIcon(new ImageIcon(ActorManagementUI.class.getResource("/resources/search.jpg")));
+		panel.add(ActorMngment_lblActorName);
 		
 		txtName = new JTextField();
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				ActorTableModel tableModel = new ActorTableModel(controller.fliterMovie(txtName.getText()));
+				tableModel.translateColumns();
 				table.setModel(tableModel);
 				table.removeColumn(table.getColumnModel().getColumn(0));
 			}
@@ -157,7 +164,7 @@ public class ActorManagementUI extends JDialog {
 		txtName.setColumns(20);
 		
 		//extra actions and more stuff
-		buttomBtnActions(btnEdit,btnDelete);
+		buttomBtnActions(ActorMngment_btnEdit,ActorMngment_btnDelete);
 		tableDoubleClick(table);
 	}
 	
@@ -213,6 +220,7 @@ public class ActorManagementUI extends JDialog {
 	void loadActorsTable() {
 		actorsList = controller.getAllActors();
 		ActorTableModel tableModel = new ActorTableModel(actorsList);
+		tableModel.translateColumns();
 		table.setModel(tableModel);
 		table.removeColumn(table.getColumnModel().getColumn(0));
 		tableModel.fireTableDataChanged();

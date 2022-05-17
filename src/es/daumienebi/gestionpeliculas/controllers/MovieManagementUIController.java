@@ -2,10 +2,12 @@ package es.daumienebi.gestionpeliculas.controllers;
 
 import java.util.ArrayList;
 
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.dao.IMovieDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLMovieDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.models.Movie;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class MovieManagementUIController {
 	final static String MOVIE_IMAGE_SERVER = "http://192.168.56.101/moviemanagement_images/movies/"; 
@@ -28,5 +30,11 @@ public class MovieManagementUIController {
 	
 	public static Movie getMovie(int movie_id) {
 		return movieDAO.getMovie(movie_id);
+	}
+	
+	public static void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translateMovieManagementUI(DefaultConfiguration.lang_id);
+		}
 	}
 }

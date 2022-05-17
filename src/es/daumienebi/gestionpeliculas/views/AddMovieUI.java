@@ -35,33 +35,54 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
 import javax.swing.JComboBox;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class AddMovieUI extends JDialog {
 	
-	//Components
+	/**
+	 * Components
+	 */
 	private JTextField txtDuration;
 	private JTextField txtDay;
 	private JTextField txtRating;
 	private JTextField txtMonth;
 	private JTextField txtYear;
 	private JTable table;
+	private JTextArea txtTitle;
+	private JTextArea txtSynopsis;
+	private JComboBox<Genre> genreCombo;
+	private JButton btnMoviePoster;
+	
 	private Movie movie;
 	private String posterImgName ="";
 	private File imgFile;
-	private JTextArea txtSynopsis;
-	private JComboBox<Genre> genreCombo;
 	private int id_genero;
-	private JTextArea txtTitle;
-	private JButton btnMoviePoster;
-	private JButton btnAddPoster;
-	private JButton btnAddMovie;
-	private JButton btnSaveMovie;
-	private JButton btnAddActors;
-	//private boolean comboIsLoaded = false;
-	//Collections
+	
+	
+	/**
+	 * To be translated
+	 */
+	public static JButton AddMovie_btnAddPoster;
+	public static JButton AddMovie_btnAddMovie;
+	public static JButton AddMovie_btnSaveMovie;
+	public static JButton AddMovie_btnAddActors;
+	public static JLabel AddMovie_valid_lblRating;
+	public static String AddMovie_windowTitle = "Add new movie";
+	public static JLabel AddMovie_lblTitle;
+	public static JLabel AddMovie_lblDuration;
+	public static JLabel AddMovie_lblRating;
+	public static JLabel AddMovie_lblPremiereD;
+	public static JLabel AddMovie_lblGenre;
+	
+	/**
+	 * Collections
+	 */
 	private ArrayList<Actor> actorsList = new ArrayList<>();
 	
-	//Controllers
+	/**
+	 * Controllers
+	 */
 	AddMovieUIController controller = new AddMovieUIController();
 	
 	/**
@@ -82,8 +103,11 @@ public class AddMovieUI extends JDialog {
 	}
 	
 	public AddMovieUI() {
+		setMaximumSize(new Dimension(900, 700));
 		setDefaultCloseOperation(AddMovieUI.DISPOSE_ON_CLOSE);
 		Inicialize();
+		controller.translate();
+		setTitle(AddMovie_windowTitle);
 		loadGenreCombo();
 	}
 	
@@ -94,11 +118,12 @@ public class AddMovieUI extends JDialog {
 		setDefaultCloseOperation(AddMovieUI.DISPOSE_ON_CLOSE);
 		this.movie = movie;
 		posterImgName = movie.getCaratula();
-		btnAddMovie.setVisible(false);
-		btnSaveMovie.setVisible(true);
-		btnAddActors.setVisible(false);
+		AddMovie_btnAddMovie.setVisible(false);
+		AddMovie_btnSaveMovie.setVisible(true);
+		AddMovie_btnAddActors.setVisible(false);
+		AddMovie_valid_lblRating.setVisible(true);
 		setTitle("Edit Movie");
-		btnAddMovie.setText("Save movie");
+		AddMovie_btnAddMovie.setText("Save movie");
 		txtTitle.setText(movie.getTitulo());
 		int day,month,year; //date values
 		txtSynopsis.setText(movie.getSinoposis());
@@ -124,7 +149,7 @@ public class AddMovieUI extends JDialog {
 		
 		//set the image
 		btnMoviePoster.setIcon(controller.getImagePoster(movie.getCaratula()));
-		btnAddPoster.setText("Edit image");
+		AddMovie_btnAddPoster.setText("Edit image");
 		
 		//premiere date
 		day = movie.getFechaEstreno().getDayOfMonth();
@@ -149,7 +174,7 @@ public class AddMovieUI extends JDialog {
 	private void Inicialize() {
 		setTitle("Add a new movie");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AddMovieUI.class.getResource("/resources/movie_management.png")));
-		setBounds(100, 100, 870, 700);
+		setBounds(100, 100, 900, 700);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel headerPanel = new JPanel();
@@ -177,13 +202,13 @@ public class AddMovieUI extends JDialog {
 		btnMoviePoster.setIcon(icon);
 		headerPanel.add(btnMoviePoster);
 		
-		btnAddPoster = new JButton("Add Poster");
-		btnAddPoster.addActionListener(new ActionListener() {
+		AddMovie_btnAddPoster = new JButton("Add Poster");
+		AddMovie_btnAddPoster.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				imgFile = controller.setImagePoster(btnMoviePoster);
 			}
 		});
-		headerPanel.add(btnAddPoster);
+		headerPanel.add(AddMovie_btnAddPoster);
 		
 		Panel panel_5 = new Panel();
 		panel_5.setBackground(Color.LIGHT_GRAY);
@@ -199,9 +224,9 @@ public class AddMovieUI extends JDialog {
 		flowLayout_5.setAlignment(FlowLayout.LEFT);
 		title_panel.add(panel_8);
 		
-		JLabel lblNewLabel_2 = new JLabel("Title:");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8.add(lblNewLabel_2);
+		AddMovie_lblTitle = new JLabel("Title:");
+		AddMovie_lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8.add(AddMovie_lblTitle);
 		
 		JLabel lblNewLabel_4 = new JLabel("             ");
 		title_panel.add(lblNewLabel_4);
@@ -224,9 +249,9 @@ public class AddMovieUI extends JDialog {
 		Panel panel_8_1 = new Panel();
 		duration_panel.add(panel_8_1);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Duration:");
-		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8_1.add(lblNewLabel_2_1);
+		AddMovie_lblDuration = new JLabel("Duration:");
+		AddMovie_lblDuration.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8_1.add(AddMovie_lblDuration);
 		
 		JLabel lblNewLabel = new JLabel("                        ");
 		duration_panel.add(lblNewLabel);
@@ -253,9 +278,9 @@ public class AddMovieUI extends JDialog {
 		Panel panel_8_2 = new Panel();
 		premiere_panel.add(panel_8_2);
 		
-		JLabel lblNewLabel_2_2 = new JLabel("Premiere Date :");
-		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8_2.add(lblNewLabel_2_2);
+		AddMovie_lblPremiereD = new JLabel("Premiere Date :");
+		AddMovie_lblPremiereD.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8_2.add(AddMovie_lblPremiereD);
 		
 		JLabel lblNewLabel_5 = new JLabel(" ");
 		premiere_panel.add(lblNewLabel_5);
@@ -289,9 +314,9 @@ public class AddMovieUI extends JDialog {
 		Panel panel_8_3 = new Panel();
 		rating_panel.add(panel_8_3);
 		
-		JLabel lblNewLabel_2_3 = new JLabel("Rating:");
-		lblNewLabel_2_3.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8_3.add(lblNewLabel_2_3);
+		AddMovie_lblRating = new JLabel("Rating:");
+		AddMovie_lblRating.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8_3.add(AddMovie_lblRating);
 		
 		JLabel lblNewLabel_1 = new JLabel("             ");
 		rating_panel.add(lblNewLabel_1);
@@ -303,6 +328,22 @@ public class AddMovieUI extends JDialog {
 		rating_panel.add(panel_7_3);
 		
 		txtRating = new JTextField();
+		txtRating.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(TextFieldValidatorUtil.isDouble(txtRating.getText())) {
+					double rating = Double.parseDouble(txtRating.getText());
+					if(rating > 10 || rating < 0) {
+						AddMovie_valid_lblRating.setVisible(true);
+						AddMovie_valid_lblRating.setText("Cannot be > 10 or < 0");
+						AddMovie_valid_lblRating.setForeground(Color.red);
+					}else {
+						AddMovie_valid_lblRating.setVisible(false);
+					}
+				}
+				
+			}
+		});
 		txtRating.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtRating.setColumns(3);
 		panel_7_3.add(txtRating);
@@ -310,6 +351,12 @@ public class AddMovieUI extends JDialog {
 		JLabel lblNewLabel_6 = new JLabel("");
 		lblNewLabel_6.setIcon(new ImageIcon(AddMovieUI.class.getResource("/resources/rating.png")));
 		rating_panel.add(lblNewLabel_6);
+		
+		AddMovie_valid_lblRating = new JLabel("");
+		rating_panel.add(AddMovie_valid_lblRating);
+		AddMovie_valid_lblRating.setVisible(false);
+		
+		
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(Color.LIGHT_GRAY);
@@ -322,9 +369,9 @@ public class AddMovieUI extends JDialog {
 		panel_6.setBackground(Color.LIGHT_GRAY);
 		panel_3.add(panel_6);
 		
-		JLabel lblNewLabel_11 = new JLabel("Genre:");
-		panel_6.add(lblNewLabel_11);
-		lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		AddMovie_lblGenre = new JLabel("Genre:");
+		panel_6.add(AddMovie_lblGenre);
+		AddMovie_lblGenre.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		JLabel lblNewLabel_12 = new JLabel("                                    ");
 		panel_6.add(lblNewLabel_12);
@@ -346,24 +393,21 @@ public class AddMovieUI extends JDialog {
 		Panel panel = new Panel();
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		
-		btnAddMovie = new JButton("Add Movie");
-		btnAddMovie.addActionListener(new ActionListener() {
+		AddMovie_btnAddMovie = new JButton("Add Movie");
+		AddMovie_btnAddMovie.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				validateMovie_Add();				
 			}
 		});
-		panel.add(btnAddMovie);
+		panel.add(AddMovie_btnAddMovie);
 		
-		btnSaveMovie = new JButton("Save Movie");
-		btnSaveMovie.addActionListener(new ActionListener() {
+		AddMovie_btnSaveMovie = new JButton("Save Movie");
+		AddMovie_btnSaveMovie.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				validateMovie_Edit(movie);
 			}
 		});
-		panel.add(btnSaveMovie);
-		
-		Panel panel_1 = new Panel();
-		getContentPane().add(panel_1, BorderLayout.EAST);
+		panel.add(AddMovie_btnSaveMovie);
 		
 		Panel panel_2 = new Panel();
 		FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
@@ -373,8 +417,8 @@ public class AddMovieUI extends JDialog {
 		scrollPane.setPreferredSize(new Dimension(500, 150));
 		
 		
-		btnAddActors = new JButton("Add Actors");
-		btnAddActors.addActionListener(new ActionListener() {
+		AddMovie_btnAddActors = new JButton("Add Actors");
+		AddMovie_btnAddActors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AddActorToMovieUI ui = new AddActorToMovieUI();
 				ui.setLocationRelativeTo(getContentPane());
@@ -407,8 +451,8 @@ public class AddMovieUI extends JDialog {
 		table.setBackground(Color.ORANGE);
 		scrollPane.setViewportView(table);//para visualizar la cabecera y hacer scroll a los registros
 		panel_2.add(scrollPane);
-		panel_2.add(btnAddActors);
-		btnSaveMovie.setVisible(false);
+		panel_2.add(AddMovie_btnAddActors);
+		AddMovie_btnSaveMovie.setVisible(false);
 	}
 	
 	void validateMovie_Add() {
@@ -417,6 +461,7 @@ public class AddMovieUI extends JDialog {
 		String synopsis = txtSynopsis.getText();				
 		LocalDate premiere_date = null;
 		int duration =0;double rating= 0;
+		boolean uploaded = false;
 		
 		if(TextFieldValidatorUtil.isDouble(txtRating.getText())) {
 			rating = Double.valueOf(txtRating.getText());
@@ -436,27 +481,26 @@ public class AddMovieUI extends JDialog {
 				validDate = true; //year takes more than 9999 -- fix that
 			}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
 		}				
-		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
+		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0 && rating <= 10 && rating > 0) {
+			movie = new Movie(id,title,synopsis,rating,duration,premiere_date,posterImgName,id_genero);
 			//upload the image to the server
 			Object [] uploadResult = new Object[2];
-			uploadResult = UploadImageUtil.uploadMovieImage(imgFile);
-			
-			boolean uploaded = Boolean.parseBoolean(uploadResult[0].toString());
-			posterImgName = uploadResult[1].toString();
-			if(uploaded) {
-				movie = new Movie(id,title,synopsis,rating,duration,premiere_date,posterImgName,id_genero);
-				int response = controller.addMovie(movie,actorsList);
-				if(response == 0) {
-					JOptionPane.showMessageDialog(getContentPane(),"The movie has been added successfully",""
-							,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-					dispose();
-				}else
-					JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+			if(imgFile != null) {
+				uploadResult = UploadImageUtil.uploadMovieImage(imgFile);
+				uploaded = Boolean.parseBoolean(uploadResult[0].toString());
+				posterImgName = uploadResult[1].toString();
+				if(uploaded) {
+					movie.setCaratula(posterImgName);
+					addMovie(movie, actorsList);
+				}else {
+					JOptionPane.showMessageDialog(getContentPane(),"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
+				}
 			}else {
-				JOptionPane.showMessageDialog(getContentPane(),"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
-			}			
+				movie.setCaratula("");
+				addMovie(movie, actorsList);
+			}	
 		}else
-			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields correctly","Error",JOptionPane.ERROR_MESSAGE);
 	}
 	
 	void validateMovie_Edit(Movie movie) {
@@ -484,7 +528,7 @@ public class AddMovieUI extends JDialog {
 				validDate = true; //year takes more than 9999 -- fix that
 			}else JOptionPane.showMessageDialog(getContentPane(),"Incorrect Date Format","Error",JOptionPane.ERROR_MESSAGE);
 		}				
-		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0) {
+		if(!title.isBlank() && !synopsis.isBlank() && duration >0 && validDate && id_genero > 0 && rating <= 10 && rating > 0) {
 			//movie = new Movie(id,title,synopsis,rating,duration,premiere_date,imgRoute,id_genero);
 			if(imgFile != null) {
 				Object [] uploadResult = new Object[2];
@@ -502,23 +546,8 @@ public class AddMovieUI extends JDialog {
 				posterImgName = movie.getCaratula();
 				editMovie(movie, title, synopsis, duration, rating);
 			}
-			/*
-			movie.setTitulo(title);
-			movie.setSinoposis(synopsis);
-			movie.setCaratula(posterImgName);
-			movie.setDuracionEnMinutos(duration);
-			movie.setPuntuation(rating);
-			movie.setId_genero(id_genero);
-			int response = controller.modifyMovie(movie);
-			if(response == 0) {
-				JOptionPane.showMessageDialog(getContentPane(),"The movie has been edited and saved successfully",""
-						,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-				dispose();
-			}else
-				JOptionPane.showMessageDialog(getContentPane(),"There was an error saving the record","Error",JOptionPane.ERROR_MESSAGE);
-			*/
 		}else
-			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields correctly","Error",JOptionPane.ERROR_MESSAGE);
 	}
 	
 	void editMovie(Movie movie,String title,String synopsis,int duration,double rating) {
@@ -537,6 +566,18 @@ public class AddMovieUI extends JDialog {
 		}else
 			JOptionPane.showMessageDialog(getContentPane(),"There was an error saving the record","Error",JOptionPane.ERROR_MESSAGE);
 	}
+	
+	void addMovie(Movie movie,ArrayList<Actor> actorsList) {
+		//to be called internally by validateMovie_Add()
+		int response = controller.addMovie(movie,actorsList);
+		if(response == 0) {
+			JOptionPane.showMessageDialog(getContentPane(),"The movie has been added successfully",""
+					,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+			dispose();
+		}else
+			JOptionPane.showMessageDialog(getContentPane(),"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+	}
+	
 	void loadGenreCombo() {
 		for(Genre genre : controller.getAllGenres()) {
 			genreCombo.addItem(genre);

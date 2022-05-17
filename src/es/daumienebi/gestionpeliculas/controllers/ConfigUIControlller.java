@@ -9,6 +9,8 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import es.daumienebi.gestionpeliculas.config.Configuration;
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -51,5 +53,11 @@ public class ConfigUIControlller {
 		//ResourceBundle.clearCache(this.getClass().getClassLoader());
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("app");
 		
+	}
+	
+	public void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translateConfigUI(DefaultConfiguration.lang_id);
+		}
 	}
 }

@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.utils.ReportsUtil;
 
 import javax.swing.JButton;
@@ -26,6 +28,20 @@ public class PersonalizedReportsUI extends JDialog {
 	private JTextField txtMovieCount;
 	private JTextField txtPremiereYear;
 
+	
+	/**
+	 * To be translated 
+	 */
+	public static String header1 = "Actors Report";
+	public static String header2 = "Movies Report";	
+	public static JLabel lblMovieCount;
+	public static JLabel lblPremiereYear;
+	public static JButton btnLoadReport1;
+	public static JButton btnLoadReport2;
+	public static JButton btnLoadReport3;
+	public static JLabel lblRating;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -46,7 +62,13 @@ public class PersonalizedReportsUI extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	
 	public PersonalizedReportsUI() {
+		Inicialize();
+		translate();
+	}
+	
+	void Inicialize() {
 		setTitle("Personalized Reports");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PersonalizedReportsUI.class.getResource("/resources/movie_management.png")));
 		setBounds(100, 100, 690, 570);
@@ -55,21 +77,21 @@ public class PersonalizedReportsUI extends JDialog {
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		JPanel panel = new JPanel();
-		tabbedPane.addTab("Movies Report", null, panel, null);
+		tabbedPane.addTab(header2, null, panel, null);
 		tabbedPane.setBackgroundAt(0, Color.LIGHT_GRAY);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Rating");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel.setBounds(30, 53, 80, 26);
-		panel.add(lblNewLabel);
+		lblRating = new JLabel("Rating");
+		lblRating.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblRating.setBounds(30, 53, 80, 26);
+		panel.add(lblRating);
 		
 		txtRating = new JTextField();
 		txtRating.setBounds(270, 58, 59, 19);
 		panel.add(txtRating);
 		txtRating.setColumns(10);
 		
-		JButton btnLoadReport1 = new JButton("Load Report");
+		btnLoadReport1 = new JButton("Load Report");
 		btnLoadReport1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(TextFieldValidatorUtil.isDouble(txtRating.getText())) {
@@ -96,10 +118,10 @@ public class PersonalizedReportsUI extends JDialog {
 		lblNewLabel_1.setBounds(185, 59, 45, 20);
 		panel.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_4 = new JLabel("Premiere Year");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel_4.setBounds(30, 170, 94, 26);
-		panel.add(lblNewLabel_4);
+		lblPremiereYear = new JLabel("Premiere Year");
+		lblPremiereYear.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblPremiereYear.setBounds(30, 170, 94, 26);
+		panel.add(lblPremiereYear);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("=");
 		lblNewLabel_1_1.setForeground(Color.GREEN);
@@ -113,7 +135,7 @@ public class PersonalizedReportsUI extends JDialog {
 		panel.add(txtPremiereYear);
 		txtPremiereYear.setColumns(10);
 		
-		JButton btnLoadReport2 = new JButton("Load Report");
+		btnLoadReport2 = new JButton("Load Report");
 		btnLoadReport2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(TextFieldValidatorUtil.isNumeric(txtPremiereYear.getText())) {
@@ -148,13 +170,13 @@ public class PersonalizedReportsUI extends JDialog {
 		panel.add(btnNewButton_1);
 		
 		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Actors Report", null, panel_1, null);
+		tabbedPane.addTab(header1, null, panel_1, null);
 		panel_1.setLayout(null);
 		
-		JLabel lblNewLabel_2 = new JLabel("Movie count");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_2.setBounds(10, 60, 103, 27);
-		panel_1.add(lblNewLabel_2);
+		lblMovieCount = new JLabel("Movie count");
+		lblMovieCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblMovieCount.setBounds(10, 60, 103, 27);
+		panel_1.add(lblMovieCount);
 		
 		JLabel lblNewLabel_3 = new JLabel("=\\>");
 		lblNewLabel_3.setForeground(Color.GREEN);
@@ -167,7 +189,7 @@ public class PersonalizedReportsUI extends JDialog {
 		panel_1.add(txtMovieCount);
 		txtMovieCount.setColumns(10);
 		
-		JButton btnLoadReport3 = new JButton("Load Report");
+		btnLoadReport3 = new JButton("Load Report");
 		btnLoadReport3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(TextFieldValidatorUtil.isNumeric(txtMovieCount.getText())) {
@@ -196,5 +218,11 @@ public class PersonalizedReportsUI extends JDialog {
 		btnNewButton_2.setBounds(523, 65, 15, 21);
 		panel_1.add(btnNewButton_2);
 
+	}
+	
+	void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translatePersonalizedReportsUI(DefaultConfiguration.lang_id);
+		}
 	}
 }

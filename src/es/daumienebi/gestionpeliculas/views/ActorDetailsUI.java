@@ -27,6 +27,8 @@ import es.daumienebi.gestionpeliculas.controllers.AddActorUIController;
 import es.daumienebi.gestionpeliculas.dao.IActorDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLActorDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
+
 import java.awt.Dialog.ModalityType;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Window.Type;
@@ -41,12 +43,21 @@ public class ActorDetailsUI extends JDialog {
 	private JButton btnImage;
 
 	/**
+	 * To be translated
+	 */
+	public static JLabel ActorDetail_Surname;
+	public static JLabel ActorDetail_Name;
+	public static JLabel ActorDetail_DateOfBirth;
+	public static JLabel ActorDetail_MovieCount;
+	
+	/**
 	 * Create the dialog.
 	 */
 	public ActorDetailsUI(Actor actor) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		Inicialize(actor);
+		translate();
 		
 	}
 	void Inicialize(Actor actor) {
@@ -88,8 +99,8 @@ public class ActorDetailsUI extends JDialog {
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_3);
 		
-		JLabel lblNewLabel = new JLabel("Name");
-		panel_3.add(lblNewLabel);
+		ActorDetail_Name = new JLabel("Name");
+		panel_3.add(ActorDetail_Name);
 		
 		txtName = new JTextField();
 		txtName.setEditable(false);
@@ -101,8 +112,8 @@ public class ActorDetailsUI extends JDialog {
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_4);
 		
-		JLabel lblNewLabel_1 = new JLabel("Surname");
-		panel_4.add(lblNewLabel_1);
+		ActorDetail_Surname = new JLabel("Surname");
+		panel_4.add(ActorDetail_Surname);
 		
 		txtSurname = new JTextField();
 		txtSurname.setEditable(false);
@@ -114,8 +125,8 @@ public class ActorDetailsUI extends JDialog {
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_5);
 		
-		JLabel lblNewLabel_2 = new JLabel("Date of birth");
-		panel_5.add(lblNewLabel_2);
+		ActorDetail_DateOfBirth = new JLabel("Date of birth");
+		panel_5.add(ActorDetail_DateOfBirth);
 		
 		txtFechaNac = new JTextField();
 		txtFechaNac.setEditable(false);
@@ -130,8 +141,8 @@ public class ActorDetailsUI extends JDialog {
 		flowLayout_4.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_6);
 		
-		JLabel lblNewLabel_3 = new JLabel("Number of movies");
-		panel_6.add(lblNewLabel_3);
+		ActorDetail_MovieCount = new JLabel("Number of movies");
+		panel_6.add(ActorDetail_MovieCount);
 		
 		txtMovieNum = new JTextField();
 		txtMovieNum.setEditable(false);
@@ -147,6 +158,12 @@ public class ActorDetailsUI extends JDialog {
 		txtFechaNac.setText(String.valueOf(actor.getFechaNac().toString()));
 		btnImage.setIcon(getActorsImage(actor.getFoto()));
 		txtMovieNum.setText(String.valueOf(actorDAO.getNumberOfMovies(actor.getId())));
+	}
+	
+	void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translateActorDetailsUI(DefaultConfiguration.lang_id);
+		}
 	}
 	
 	private ImageIcon getActorsImage(String imgRoute) {

@@ -14,6 +14,7 @@ import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.dao.IActorDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLActorDAO;
 import es.daumienebi.gestionpeliculas.models.Actor;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class AddActorUIController {
 	private static IActorDAO actorDAO = new MySQLActorDAO();
@@ -85,6 +86,11 @@ public class AddActorUIController {
 		return actorDAO.modifyActor(actor);
 	}
 	
+	public void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translateAddActorUI(DefaultConfiguration.lang_id);
+		}
+	}
 	public void print(Object value) {
 		System.out.print(value);
 	}

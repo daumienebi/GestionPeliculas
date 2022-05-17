@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -11,12 +12,27 @@ import javax.swing.table.AbstractTableModel;
 
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.models.Movie;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class MovieTableModel extends AbstractTableModel{
 	final static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
-	
 	private ArrayList<Movie> movieList;
+	//Resource Bundle to translate the table headers
+	ResourceBundle bundle = null;
 	private String [] columns = {"Id","Title","Rating","Duration","Premiere Date","Poster"};
+	
+	public String [] translateColumns() {
+		if(TranslatorUtil.bundle != null) {
+			bundle = TranslatorUtil.bundle;
+			columns[0] = bundle.getString("TableHeader_Id");
+			columns[1] = bundle.getString("TableHeader_Title");
+			columns[2] = bundle.getString("TableHeader_Rating");
+			columns[3] = bundle.getString("TableHeader_Duration");
+			columns[4] = bundle.getString("TableHeader_PremiereDate");
+			columns[5] = bundle.getString("TableHeader_Poster");
+		}
+		return columns;
+	}
 	
 	public MovieTableModel(ArrayList<Movie> movieList) {
 		this.movieList = movieList;
@@ -40,7 +56,7 @@ public class MovieTableModel extends AbstractTableModel{
 		// TODO Auto-generated method stub
 		return columns[column];
 	}
-
+	
 
 	/*
 	 * Class[] columnTypes = new Class[] {

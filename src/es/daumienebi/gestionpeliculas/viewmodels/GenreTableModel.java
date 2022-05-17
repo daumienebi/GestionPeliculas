@@ -2,15 +2,29 @@ package es.daumienebi.gestionpeliculas.viewmodels;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 import es.daumienebi.gestionpeliculas.models.Genre;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class GenreTableModel extends AbstractTableModel{
 
 	private ArrayList<Genre> genreList;
 	private String [] columns = {"ID","NAME"};
+	private ResourceBundle bundle = null;
+	
+	
+	public String [] translateColumns() {
+		if(TranslatorUtil.bundle != null) {
+			bundle = TranslatorUtil.bundle;
+			columns[0] = bundle.getString("TableHeader_Id");
+			columns[1] = bundle.getString("TableHeader_Name");
+		}
+		return columns;
+	}
 	
 	public GenreTableModel(ArrayList<Genre> genreList) {
 		this.genreList = genreList;

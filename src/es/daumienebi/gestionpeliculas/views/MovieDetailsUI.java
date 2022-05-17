@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.controllers.ActorManagementUIController;
 import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 import es.daumienebi.gestionpeliculas.dao.IGenreDAO;
 import es.daumienebi.gestionpeliculas.dao.IMovieDAO;
 import es.daumienebi.gestionpeliculas.dao.mysql.MySQLGenreDAO;
@@ -47,7 +48,6 @@ public class MovieDetailsUI extends JDialog {
 	private static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
 	private IMovieDAO movieDAO = new MySQLMovieDAO();
 	private IGenreDAO genreDAO = new MySQLGenreDAO();
-	private ActorManagementUIController controller = new ActorManagementUIController();
 	private JTextField txtDuration;
 	private JTextField txtRating;
 	private JTextField txtYear;
@@ -59,11 +59,27 @@ public class MovieDetailsUI extends JDialog {
 	private JButton btnMoviePoster;
 	
 	/**
+	 * To be translated
+	 */
+	public static JLabel MovieDetail_Title;
+	public static JLabel MovieDetail_Rating;
+	public static JLabel MovieDetail_Genre;
+	public static JLabel MovieDetail_PremiereD;
+	public static JLabel MovieDetail_Duration;
+	
+	
+	/**
+	 * Controllers
+	 */
+	private ActorManagementUIController controller = new ActorManagementUIController();
+	
+	/**
 	 * Create the dialog.
 	 */
 	public MovieDetailsUI(Movie movie) {
 		setModal(true);
 		Inicialize(movie);
+		translate();
 	}
 	
 	void Inicialize(Movie movie) {
@@ -112,9 +128,9 @@ public class MovieDetailsUI extends JDialog {
 		flowLayout_5.setAlignment(FlowLayout.LEFT);
 		title_panel.add(panel_8);
 		
-		JLabel lblNewLabel_2 = new JLabel("Title:");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8.add(lblNewLabel_2);
+		MovieDetail_Title = new JLabel("Title:");
+		MovieDetail_Title.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8.add(MovieDetail_Title);
 		
 		JLabel lblNewLabel_4 = new JLabel("             ");
 		title_panel.add(lblNewLabel_4);
@@ -139,9 +155,9 @@ public class MovieDetailsUI extends JDialog {
 		Panel panel_8_1 = new Panel();
 		duration_panel.add(panel_8_1);
 		
-		JLabel lblNewLabel_2_1 = new JLabel("Duration:");
-		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8_1.add(lblNewLabel_2_1);
+		MovieDetail_Duration = new JLabel("Duration:");
+		MovieDetail_Duration.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8_1.add(MovieDetail_Duration);
 		
 		JLabel lblNewLabel = new JLabel("                        ");
 		duration_panel.add(lblNewLabel);
@@ -169,9 +185,9 @@ public class MovieDetailsUI extends JDialog {
 		Panel panel_8_2 = new Panel();
 		premiere_panel.add(panel_8_2);
 		
-		JLabel lblNewLabel_2_2 = new JLabel("Premiere Date :");
-		lblNewLabel_2_2.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8_2.add(lblNewLabel_2_2);
+		MovieDetail_PremiereD = new JLabel("Premiere Date :");
+		MovieDetail_PremiereD.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8_2.add(MovieDetail_PremiereD);
 		
 		JLabel lblNewLabel_5 = new JLabel(" ");
 		premiere_panel.add(lblNewLabel_5);
@@ -189,9 +205,9 @@ public class MovieDetailsUI extends JDialog {
 		Panel panel_8_3 = new Panel();
 		rating_panel.add(panel_8_3);
 		
-		JLabel lblNewLabel_2_3 = new JLabel("Rating:");
-		lblNewLabel_2_3.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_8_3.add(lblNewLabel_2_3);
+		MovieDetail_Rating = new JLabel("Rating:");
+		MovieDetail_Rating.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_8_3.add(MovieDetail_Rating);
 		
 		JLabel lblNewLabel_1 = new JLabel("             ");
 		rating_panel.add(lblNewLabel_1);
@@ -205,7 +221,7 @@ public class MovieDetailsUI extends JDialog {
 		
 		txtRating = new JTextField();
 		txtRating.setEditable(false);
-		txtRating.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtRating.setFont(new Font("Tahoma", Font.BOLD, 12));
 		txtRating.setColumns(3);
 		panel_7_3.add(txtRating);
 		
@@ -224,10 +240,10 @@ public class MovieDetailsUI extends JDialog {
 		panel_4.setBackground(Color.LIGHT_GRAY);
 		panel_3.add(panel_4);
 		
-		JLabel lblNewLabel_11 = new JLabel("Genre");
-		lblNewLabel_11.setBackground(Color.GRAY);
-		panel_4.add(lblNewLabel_11);
-		lblNewLabel_11.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		MovieDetail_Genre = new JLabel("Genre:");
+		MovieDetail_Genre.setBackground(Color.GRAY);
+		panel_4.add(MovieDetail_Genre);
+		MovieDetail_Genre.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		JLabel lblNewLabel_7 = new JLabel("                                       ");
 		panel_3.add(lblNewLabel_7);
@@ -306,8 +322,11 @@ public class MovieDetailsUI extends JDialog {
 			double rating = Double.valueOf(String.valueOf(movie.getPuntuation()));
 			if(rating < 5) {
 				txtRating.setForeground(Color.red);
-			}else
+			}else if(rating >= 5 && rating < 8) {
+				txtRating.setForeground(Color.orange);
+			}else {
 				txtRating.setForeground(Color.green);
+			}
 		}
 		//double rating = Double.value
 		txtYear.setText(String.valueOf(movie.getFechaEstreno().toString()));
@@ -322,6 +341,12 @@ public class MovieDetailsUI extends JDialog {
 		table.setModel(new ActorTableModel(actorsList));
 		table.removeColumn(table.getColumnModel().getColumn(0));
 		table.removeColumn(table.getColumnModel().getColumn(3));
+	}
+	
+	void translate() {
+		if(TranslatorUtil.bundle != null) {
+			TranslatorUtil.translateMovieDetailsUI(DefaultConfiguration.lang_id);
+		}
 	}
 	
 	public ImageIcon getImagePoster(String imgRoute) {

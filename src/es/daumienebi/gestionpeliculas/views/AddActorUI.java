@@ -5,8 +5,10 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.controllers.AddActorUIController;
 import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 import es.daumienebi.gestionpeliculas.utils.UploadImageUtil;
 import es.daumienebi.gestionpeliculas.models.Actor;
 
@@ -18,10 +20,14 @@ import java.awt.Insets;
 
 import java.awt.Toolkit;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import org.bouncycastle.util.encoders.Translator;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -38,9 +44,16 @@ public class AddActorUI extends JDialog {
 	private JTextField txtMonth;
 	private JTextField txtYear;
 	private JButton btnImage;
-	private JButton btnAdd;
-	private JButton btnAddImage;
-	private JButton btnSave;
+	
+	//To be translated
+	public static JButton btnAdd;
+	public static JButton btnAddImage;
+	public static JButton btnSave;
+	public static JLabel AddActor_lblName;
+	public static JLabel AddActor_lblSurname;
+	public static JLabel AddActor_lblDateOfBirth;
+	public static JLabel AddActor_lblDateFormat;
+	public static String AddActor_windowTitle = "Add new Actor";
 	
 	Actor actor;
 	private String imagenName = "";
@@ -48,6 +61,7 @@ public class AddActorUI extends JDialog {
 	
 	//Controller
 	private AddActorUIController controller = new AddActorUIController();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -57,11 +71,17 @@ public class AddActorUI extends JDialog {
 	 */
 	
 	public AddActorUI() {
+		Inicialize();
+		controller.translate();
+		setTitle(AddActor_windowTitle);
+	}
+	
+	void Inicialize() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AddActorUI.class.getResource("/resources/movie_management.png")));
 		setBounds(100, 100, 500, 600);
 		getContentPane().setLayout(new BorderLayout(0, 0));
-		setTitle("Add new actor");
+		setTitle(AddActor_windowTitle);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout(0,0));
 		getContentPane().add(mainPanel,BorderLayout.CENTER);
@@ -74,9 +94,7 @@ public class AddActorUI extends JDialog {
 		btnImage = new JButton("");
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//nombreImagen = controller.setFotoPerfil(btnImage);
 				imgFile = controller.setFotoPerfil(btnImage);
-				//nombreImagen = imgFile.getName();
 			}
 		});
 		btnImage.setMargin(new Insets(0, 0, 0, 0));
@@ -128,9 +146,9 @@ public class AddActorUI extends JDialog {
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_3);
 		
-		JLabel lblNewLabel = new JLabel("Name");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		panel_3.add(lblNewLabel);
+		AddActor_lblName = new JLabel("Name");
+		AddActor_lblName.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		panel_3.add(AddActor_lblName);
 		
 		txtName = new JTextField();
 		txtName.setColumns(25);
@@ -141,9 +159,9 @@ public class AddActorUI extends JDialog {
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_4);
 		
-		JLabel lblNewLabel_1 = new JLabel("Surname");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		panel_4.add(lblNewLabel_1);
+		AddActor_lblSurname = new JLabel("Surname");
+		AddActor_lblSurname.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		panel_4.add(AddActor_lblSurname);
 		
 		txtSurname = new JTextField();
 		panel_4.add(txtSurname);
@@ -154,9 +172,9 @@ public class AddActorUI extends JDialog {
 		flowLayout_3.setAlignment(FlowLayout.LEFT);
 		formPanel.add(panel_5);
 		
-		JLabel lblNewLabel_2 = new JLabel("Date of birth");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		panel_5.add(lblNewLabel_2);
+		AddActor_lblDateOfBirth = new JLabel("Date of birth");
+		AddActor_lblDateOfBirth.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		panel_5.add(AddActor_lblDateOfBirth);
 		
 		txtDay = new JTextField();
 		panel_5.add(txtDay);
@@ -176,10 +194,10 @@ public class AddActorUI extends JDialog {
 		panel_5.add(txtYear);
 		txtYear.setColumns(5);
 		
-		JLabel lblNewLabel_6 = new JLabel("(dd/mm/yyyy)");
-		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		panel_5.add(lblNewLabel_6);
-				
+		AddActor_lblDateFormat = new JLabel("(dd/mm/yyyy)");
+		AddActor_lblDateFormat.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		panel_5.add(AddActor_lblDateFormat);
+		
 	}
 	
 	public AddActorUI(Actor actor) {

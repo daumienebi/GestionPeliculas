@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 
 import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
+import es.daumienebi.gestionpeliculas.controllers.ConfigUIControlller;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
 
 import javax.swing.JPasswordField;
@@ -33,6 +34,20 @@ public class ConfigUI extends JDialog{
 	private JTextField txtDbUser;
 	private JPasswordField txtDbPassword;
 	private JTextField txtDbName;
+	
+	/**
+	 * To be translated
+	 */
+	
+	public static JButton ConfigUI_btnConnect;
+	public static JLabel ConfigUI_dbName;
+	public static JCheckBox ConfigUI_chkBoxDefaultConfig;
+	public static JLabel ConfigUI_dbPass;
+	public static JLabel ConfigUI_dbUser;
+	public static JLabel ConfigUI_Port;
+	
+	ConfigUIControlller controller = new ConfigUIControlller();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -49,14 +64,13 @@ public class ConfigUI extends JDialog{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	
 	public ConfigUI() {
+		Inicializar();
+		 controller.translate();
+	}
+	
+	void Inicializar() {
 		setResizable(false);
 		setModal(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ConfigUI.class.getResource("/resources/movie_management.png")));
@@ -77,17 +91,17 @@ public class ConfigUI extends JDialog{
 		panel.add(txtIp);
 		txtIp.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("PORT");
-		lblNewLabel_1.setBounds(33, 159, 116, 14);
-		panel.add(lblNewLabel_1);
+		ConfigUI_Port = new JLabel("PORT");
+		ConfigUI_Port.setBounds(33, 159, 116, 14);
+		panel.add(ConfigUI_Port);
 		
-		JLabel lblNewLabel_2 = new JLabel("DB_USER");
-		lblNewLabel_2.setBounds(33, 225, 116, 14);
-		panel.add(lblNewLabel_2);
+		ConfigUI_dbUser = new JLabel("DB_USER");
+		ConfigUI_dbUser.setBounds(33, 225, 116, 14);
+		panel.add(ConfigUI_dbUser);
 		
-		JLabel lblNewLabel_3 = new JLabel("DB_PASSWORD");
-		lblNewLabel_3.setBounds(33, 256, 116, 14);
-		panel.add(lblNewLabel_3);
+		ConfigUI_dbPass = new JLabel("DB_PASSWORD");
+		ConfigUI_dbPass.setBounds(33, 256, 116, 14);
+		panel.add(ConfigUI_dbPass);
 		
 		txtPort = new JTextField();
 		txtPort.setBounds(208, 156, 80, 20);
@@ -103,10 +117,10 @@ public class ConfigUI extends JDialog{
 		txtDbPassword.setBounds(208, 253, 190, 20);
 		panel.add(txtDbPassword);
 		
-		JCheckBox chkBoxDefaultConfig = new JCheckBox("Use default configuration");
-		chkBoxDefaultConfig.addActionListener(new ActionListener() {
+		ConfigUI_chkBoxDefaultConfig = new JCheckBox("Use default configuration");
+		ConfigUI_chkBoxDefaultConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(chkBoxDefaultConfig.isSelected()) {
+				if(ConfigUI_chkBoxDefaultConfig.isSelected()) {
 					disableTxtBoxes();
 					fiilDefaultValues();
 				}else {
@@ -116,8 +130,8 @@ public class ConfigUI extends JDialog{
 			}
 		});
 		
-		chkBoxDefaultConfig.setBounds(33, 338, 209, 23);
-		panel.add(chkBoxDefaultConfig);
+		ConfigUI_chkBoxDefaultConfig.setBounds(33, 338, 209, 23);
+		panel.add(ConfigUI_chkBoxDefaultConfig);
 		ImageIcon icon = new ImageIcon(ConfigUI.class.getResource("/resources/db.png"));
 		Image img = icon.getImage();			
 		//scale the image
@@ -130,9 +144,9 @@ public class ConfigUI extends JDialog{
 		lblNewLabel_4.setBounds(166, 11, 99, 100);
 		panel.add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel("DB_NAME");
-		lblNewLabel_5.setBounds(33, 194, 116, 14);
-		panel.add(lblNewLabel_5);
+		ConfigUI_dbName = new JLabel("DB_NAME");
+		ConfigUI_dbName.setBounds(33, 194, 116, 14);
+		panel.add(ConfigUI_dbName);
 		
 		txtDbName = new JTextField();
 		txtDbName.setBounds(208, 187, 190, 20);
@@ -143,10 +157,10 @@ public class ConfigUI extends JDialog{
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
 		
-		JButton btnConnect = new JButton("Connect");
-		btnConnect.addActionListener(new ActionListener() {
+		ConfigUI_btnConnect = new JButton("Connect");
+		ConfigUI_btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(chkBoxDefaultConfig.isSelected()) {
+				if(ConfigUI_chkBoxDefaultConfig.isSelected()) {
 					Configuration.use_default_connection = 1;
 					DbConnection.connect();
 					Connection con = DbConnection.getConnection();
@@ -191,7 +205,7 @@ public class ConfigUI extends JDialog{
 			}
 			
 		});
-		panel_1.add(btnConnect);	
+		panel_1.add(ConfigUI_btnConnect);	
 	}
 	
 	void disableTxtBoxes() {

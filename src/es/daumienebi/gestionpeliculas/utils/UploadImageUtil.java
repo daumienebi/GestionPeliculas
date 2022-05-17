@@ -135,14 +135,14 @@ public class UploadImageUtil {
     }
     
     public static void deleteImage() {
-    	//maybe delete the image from the server after delete an actor or movie
+    	//maybe delete the image from the server after deleting an actor or movie
     }
     
     public static String getImageExtension(String filename) {
         return FilenameUtils.getExtension(filename);
     }
     
-    private static void xd() {
+    private static void test() {
     	String server = DefaultConfiguration.ftp_server;
         int port = 21;
         String user = DefaultConfiguration.ftp_user;

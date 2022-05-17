@@ -39,9 +39,13 @@ public class AddActorToMovieUI extends JDialog {
 	private JTextField txtName;
 	private ArrayList<Actor> selectedActors = new ArrayList<>();
 	
+	public static JButton AddActorToMovie_btnAdd;
+	public static JLabel AddActorToMovie_Search;
+	
 	//static values to obtain the selected table item
 	static int row;
 	static int column;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -65,6 +69,7 @@ public class AddActorToMovieUI extends JDialog {
 	 */
 	public AddActorToMovieUI() {
 		Inicialize();
+		controller.translate();
 		loadActorsTable();
 		
 	}
@@ -76,19 +81,19 @@ public class AddActorToMovieUI extends JDialog {
 		JPanel actionBtnPane = new JPanel();
 		getContentPane().add(actionBtnPane, BorderLayout.SOUTH);
 		
-		JButton btnAddActorToMovie = new JButton("Add  actor to the movie");
-		btnAddActorToMovie.setVisible(false);
-		btnAddActorToMovie.addActionListener(new ActionListener() {
+		AddActorToMovie_btnAdd = new JButton("Add  actor to the movie");
+		AddActorToMovie_btnAdd.setVisible(false);
+		AddActorToMovie_btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int actor_id = getActorId();
 				Actor selectedActor = controller.getActor(actor_id);
 				//intentar que no se repitan actores en la lista
 				//poder añadir mas actores a la lista sin sobreescribir los existentes
 				selectedActors.add(selectedActor);
-				btnAddActorToMovie.setVisible(false);
+				AddActorToMovie_btnAdd.setVisible(false);
 			}
 		});
-		actionBtnPane.add(btnAddActorToMovie);
+		actionBtnPane.add(AddActorToMovie_btnAdd);
 		
 		JPanel contentPane = new JPanel();
 		getContentPane().add(contentPane, BorderLayout.CENTER);
@@ -110,10 +115,10 @@ public class AddActorToMovieUI extends JDialog {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		contentPane.add(panel, BorderLayout.NORTH);
 		
-		JLabel lblNewLabel = new JLabel("Search");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel.setIcon(new ImageIcon(AddActorToMovieUI.class.getResource("/resources/search.jpg")));
-		panel.add(lblNewLabel);
+		AddActorToMovie_Search = new JLabel("Search");
+		AddActorToMovie_Search.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		AddActorToMovie_Search.setIcon(new ImageIcon(AddActorToMovieUI.class.getResource("/resources/search.jpg")));
+		panel.add(AddActorToMovie_Search);
 		
 		txtName = new JTextField();
 		txtName.addKeyListener(new KeyAdapter() {
@@ -128,7 +133,7 @@ public class AddActorToMovieUI extends JDialog {
 		panel.add(txtName);
 		txtName.setColumns(20);
 		
-		buttomBtnActions(btnAddActorToMovie);
+		buttomBtnActions(AddActorToMovie_btnAdd);
 	}
 	void buttomBtnActions(JButton btnAddActorToMovie) {
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {			

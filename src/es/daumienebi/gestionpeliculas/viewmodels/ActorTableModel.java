@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -11,11 +12,25 @@ import javax.swing.table.AbstractTableModel;
 
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.models.Actor;
+import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class ActorTableModel extends AbstractTableModel {
 	final static String ACTOR_IMAGE_SERVER = DefaultConfiguration.actor_image_server;
 	private ArrayList<Actor> actorsList = new ArrayList<>();
 	private String [] columns = {"Id","Name","Surname","Date of birth","Image"};
+	private ResourceBundle bundle = null;
+	
+	public String [] translateColumns() {
+		if(TranslatorUtil.bundle != null) {
+			bundle = TranslatorUtil.bundle;
+			columns[0] = bundle.getString("TableHeader_Id");
+			columns[1] = bundle.getString("TableHeader_Name");
+			columns[2] = bundle.getString("TableHeader_Surname");
+			columns[3] = bundle.getString("TableHeader_DateOfBirth");
+			columns[4] = bundle.getString("TableHeader_Image");
+		}
+		return columns;
+	}
 	
 	public ActorTableModel(ArrayList<Actor> actorsList) {
 		this.actorsList = actorsList;

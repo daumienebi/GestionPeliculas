@@ -60,6 +60,7 @@ public class GenreManagementUI extends JDialog {
 		genreList = GenreManagementUIController.getAllGenres();
 		GenreTableModel tableModel = new GenreTableModel(genreList);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		tableModel.translateColumns();
 		table.setModel(tableModel);
 		
 		JScrollPane scrollPane = new JScrollPane();

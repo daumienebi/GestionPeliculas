@@ -42,6 +42,13 @@ public class MovieManagementUI extends JDialog {
 	private JTable table;
 	private ArrayList<Movie> movieList = new ArrayList<>();
 	
+	/**
+	 * To be translated
+	 */
+	public static JButton MovieMngment_btnDelete;
+	public static JButton MovieMngment_btnEdit;
+	public static JLabel MovieMngment_lblMovieName;
+	
 	//static values to obtain the selected table item
 		static int row;
 		static int column;
@@ -64,6 +71,7 @@ public class MovieManagementUI extends JDialog {
 	 */
 	public MovieManagementUI() {
 		Inicialize();
+		MovieManagementUIController.translate();
 		loadMoviesTable();
 	}
 	private void Inicialize() {
@@ -81,16 +89,17 @@ public class MovieManagementUI extends JDialog {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		contentPanel.add(panel, BorderLayout.NORTH);
 		
-		JLabel lblNewLabel = new JLabel("Movie name :");
-		lblNewLabel.setIcon(new ImageIcon(MovieManagementUI.class.getResource("/resources/search.jpg")));
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		panel.add(lblNewLabel);
+		MovieMngment_lblMovieName = new JLabel("Movie name :");
+		MovieMngment_lblMovieName.setIcon(new ImageIcon(MovieManagementUI.class.getResource("/resources/search.jpg")));
+		MovieMngment_lblMovieName.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		panel.add(MovieMngment_lblMovieName);
 		
 		txtFilter = new JTextField();
 		txtFilter.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				MovieTableModel tableModel = new MovieTableModel(MovieManagementUIController.fliterMovie(txtFilter.getText().trim()));
+				tableModel.translateColumns();
 				table.setModel(tableModel);
 				table.removeColumn(table.getColumnModel().getColumn(0));
 			}
@@ -115,9 +124,9 @@ public class MovieManagementUI extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
-			JButton btnEdit = new JButton("Edit Movie");
-			btnEdit.setVisible(false);
-			btnEdit.addActionListener(new ActionListener() {
+			MovieMngment_btnEdit = new JButton("Edit Movie");
+			MovieMngment_btnEdit.setVisible(false);
+			MovieMngment_btnEdit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int movie_id = getMovieId();
 					Movie movie = MovieManagementUIController.getMovie(movie_id);
@@ -126,18 +135,18 @@ public class MovieManagementUI extends JDialog {
 						ui.setLocationRelativeTo(getContentPane());
 						ui.setModal(true);
 						ui.setVisible(true);
-						btnEdit.setVisible(false);
+						MovieMngment_btnEdit.setVisible(false);
 						loadMoviesTable();
 					}else
 						JOptionPane.showMessageDialog(getContentPane(), "The movie was not found", "Movie not found", JOptionPane.ERROR_MESSAGE);					
 						loadMoviesTable();
 				}				
 			});
-			buttonPane.add(btnEdit);
+			buttonPane.add(MovieMngment_btnEdit);
 			
-			JButton btnDelete = new JButton("Delete Movie");
-			btnDelete.setVisible(false);
-			btnDelete.addActionListener(new ActionListener() {
+			MovieMngment_btnDelete = new JButton("Delete Movie");
+			MovieMngment_btnDelete.setVisible(false);
+			MovieMngment_btnDelete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int movie_id = getMovieId();
 					int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the movie ?", "Delete Movie", JOptionPane.YES_NO_OPTION);
@@ -147,7 +156,7 @@ public class MovieManagementUI extends JDialog {
 							JOptionPane.showMessageDialog(getContentPane(), "Record deleted successfully", "Delete Record",
 									JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/resources/tick.jpg")));
 							loadMoviesTable();
-							btnDelete.setVisible(false);
+							MovieMngment_btnDelete.setVisible(false);
 						}else {
 							JOptionPane.showMessageDialog(getContentPane(), "Error deleting the record", 
 									"Error", JOptionPane.ERROR_MESSAGE);
@@ -156,8 +165,8 @@ public class MovieManagementUI extends JDialog {
 					
 				}
 			});
-			buttonPane.add(btnDelete);	
-			buttomBtnActions(btnEdit,btnDelete);
+			buttonPane.add(MovieMngment_btnDelete);	
+			buttomBtnActions(MovieMngment_btnEdit,MovieMngment_btnDelete);
 			tableDoubleClick(table);
 	}
 	
@@ -183,7 +192,10 @@ public class MovieManagementUI extends JDialog {
 	}
 	
 	void loadMoviesTable() {
-		table.setModel(new MovieTableModel(MovieManagementUIController.getAllMovies()));
+		MovieTableModel tableModel = new MovieTableModel(MovieManagementUIController.getAllMovies());
+		tableModel.translateColumns();
+		table.setModel(tableModel);
+		
 		table.removeColumn(table.getColumnModel().getColumn(0));
 	}
 
