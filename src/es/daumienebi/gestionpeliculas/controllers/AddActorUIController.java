@@ -91,6 +91,7 @@ public class AddActorUIController {
 			TranslatorUtil.translateAddActorUI(DefaultConfiguration.lang_id);
 		}
 	}
+	
 	public void print(Object value) {
 		System.out.print(value);
 	}

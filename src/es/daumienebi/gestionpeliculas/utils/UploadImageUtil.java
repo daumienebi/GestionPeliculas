@@ -44,8 +44,9 @@ public class UploadImageUtil {
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             //return ftpClient;
         }catch (IOException ex) {
-            System.out.println("Error: " + ex.getMessage());
-            ex.printStackTrace();
+            //System.out.println("Error: " + ex.getMessage());
+            //ex.printStackTrace();
+            JOptionPane.showInternalMessageDialog(null, "Please check your FTP Client server settings", "Unable to connect to FTP Client", JOptionPane.ERROR_MESSAGE);
         }
         return ftpClient;
 	}
@@ -119,8 +120,8 @@ public class UploadImageUtil {
             }
             
 		}catch (IOException ex) {
-		    System.out.println("Error: " + ex.getMessage());
-		    ex.printStackTrace();
+		    //System.out.println("Error: " + ex.getMessage());
+		    //ex.printStackTrace();
 		}finally {
 		    try {
 		        if (ftpClient.isConnected()) {
@@ -128,7 +129,7 @@ public class UploadImageUtil {
 		            ftpClient.disconnect();
 		        }
 		    } catch (IOException ex) {
-		        ex.printStackTrace();
+		        //ex.printStackTrace();
 		    }
 		}
     	return uploaded;
