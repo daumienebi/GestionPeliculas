@@ -175,7 +175,7 @@ public class PersonalizedReportsUI extends JDialog {
 		
 		lblMovieCount = new JLabel("Movie count");
 		lblMovieCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblMovieCount.setBounds(10, 60, 103, 27);
+		lblMovieCount.setBounds(10, 60, 140, 27);
 		panel_1.add(lblMovieCount);
 		
 		JLabel lblNewLabel_3 = new JLabel("=\\>");
@@ -209,13 +209,13 @@ public class PersonalizedReportsUI extends JDialog {
 				
 			}
 		});
-		btnLoadReport3.setBounds(409, 66, 108, 21);
+		btnLoadReport3.setBounds(409, 66, 125, 21);
 		panel_1.add(btnLoadReport3);
 		
 		JButton btnNewButton_2 = new JButton("");
 		btnNewButton_2.setToolTipText("Show the list of actors that have participated in the number \\ greater than the number of movies given");
 		btnNewButton_2.setIcon(new ImageIcon(PersonalizedReportsUI.class.getResource("/resources/info.png")));
-		btnNewButton_2.setBounds(523, 65, 15, 21);
+		btnNewButton_2.setBounds(544, 66, 15, 21);
 		panel_1.add(btnNewButton_2);
 
 	}

@@ -145,7 +145,7 @@ public class TranslatorUtil {
 			PersonalizedReportsUI.header2 = bundle.getString("PersonalizedReportsUI_btnLoadReport");
 			PersonalizedReportsUI.lblRating.setText(bundle.getString("PersonalizedReportsUI_lblRating"));
 			PersonalizedReportsUI.lblPremiereYear.setText(bundle.getString("PersonalizedReportsUI_lblPremiereYear"));
-			PersonalizedReportsUI.lblMovieCount.setText(bundle.getString("PersonalizedReportsUI_lblPremiereYear"));
+			PersonalizedReportsUI.lblMovieCount.setText(bundle.getString("PersonalizedReportsUI_lblMovieCount"));
 
 	}
 
