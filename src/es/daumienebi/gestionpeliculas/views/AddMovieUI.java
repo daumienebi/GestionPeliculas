@@ -500,7 +500,7 @@ public class AddMovieUI extends JDialog {
 				addMovie(movie, actorsList);
 			}	
 		}else
-			JOptionPane.showMessageDialog(getContentPane(),"Fill in the necessary fields correctly","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(),"Please fill in the necessary fields correctly","Error",JOptionPane.ERROR_MESSAGE);
 	}
 	
 	void validateMovie_Edit(Movie movie) {

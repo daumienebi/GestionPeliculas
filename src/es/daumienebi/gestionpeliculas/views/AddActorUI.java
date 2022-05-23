@@ -56,7 +56,7 @@ public class AddActorUI extends JDialog {
 	public static String AddActor_windowTitle = "Add new Actor";
 	
 	Actor actor;
-	private String imagenName = "";
+	private String imageName = "";
 	private File imgFile;
 	
 	//Controller
@@ -216,7 +216,7 @@ public class AddActorUI extends JDialog {
 		txtYear.setText(String.valueOf(year));
 		btnAdd.setVisible(false);
 		btnSave.setVisible(true);
-		imagenName = actor.getFoto();
+		imageName = actor.getFoto();
 		btnImage.setIcon(controller.getActorsImage(actor.getFoto()));
 		//btnAddImage.setVisible(true);
 		
@@ -241,33 +241,44 @@ public class AddActorUI extends JDialog {
 		
 		//check for blank text boxes
 		if(!name.isBlank() && !surname.isBlank() && validDate) {
+			actor = new Actor(0,name,surname,birthDate,imageName);
 			//upload the image to the server
 			Object [] uploadResult = new Object[2];
-			uploadResult = UploadImageUtil.uploadActorImage(imgFile);
-			
-			boolean uploaded = Boolean.parseBoolean(uploadResult[0].toString());
-			imagenName = uploadResult[1].toString();
-			
-			if(uploaded) {
-				actor = new Actor(0,name,surname,birthDate,imagenName);
-				//if the actor is added correctly, upload the image to the server else, don't upload it
-				int response = controller.addActor(actor);
-				if(response == 0) {
-					JOptionPane.showMessageDialog(mainPanel,"The record has been added successfully",""
-							,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
-					dispose();
+			if(imgFile != null) {
+				uploadResult = UploadImageUtil.uploadActorImage(imgFile);
+				boolean uploaded = Boolean.parseBoolean(uploadResult[0].toString());
+				imageName = uploadResult[1].toString();
+				if(uploaded) {
+					actor.setFoto(imageName);
+					addActor(actor);
 				}else {
-					JOptionPane.showMessageDialog(mainPanel,"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getContentPane(),"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}else {
-				JOptionPane.showMessageDialog(mainPanel,"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
-			}
-			
-		}else {
-			JOptionPane.showMessageDialog(mainPanel,"Fill in the necessary fields","Error",JOptionPane.ERROR_MESSAGE);
-		}
+				actor.setFoto("");
+				addActor(actor);
+			}			
+		}else 
+			JOptionPane.showMessageDialog(mainPanel,"Please fill in the necessary fields correctly","Error",JOptionPane.ERROR_MESSAGE);
 	}
 
+	void addActor(Actor actor) {
+		//to be called internally by validateActor_Add()
+		int response = controller.addActor(actor);
+		if(response == 0) {
+			JOptionPane.showMessageDialog(mainPanel,"The record has been added successfully",""
+					,JOptionPane.INFORMATION_MESSAGE,new ImageIcon(getClass().getResource("/resources/tick.jpg")));
+			dispose();
+		}else {
+			JOptionPane.showMessageDialog(mainPanel,"There was an error adding the record","Error",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	void editActor(Actor actor) {
+		//to be called internally by validateActor_Edit()
+		
+	}
+	
 	void validateActor_Edit(Actor actor) {
 		boolean uploaded = false;
 		String name = txtName.getText();
@@ -296,14 +307,14 @@ public class AddActorUI extends JDialog {
 				uploadResult = UploadImageUtil.uploadActorImage(imgFile);
 				
 				uploaded = Boolean.parseBoolean(uploadResult[0].toString());
-				imagenName = uploadResult[1].toString();
+				imageName = uploadResult[1].toString();
 				if(uploaded) {
 					editActor(actor, name, surname, birthDate);
 				}else {
 					JOptionPane.showMessageDialog(mainPanel,"There was an error uploading the image","Error",JOptionPane.ERROR_MESSAGE);
 				}					
 			}else {
-				imagenName = actor.getFoto();
+				imageName = actor.getFoto();
 				editActor(actor, name, surname, birthDate);
 			}
 			
@@ -333,7 +344,7 @@ public class AddActorUI extends JDialog {
 		actor.setNombre(name);
 		actor.setApellidos(surname);
 		actor.setFechaNac(birthDate);
-		actor.setFoto(imagenName);
+		actor.setFoto(imageName);
 		//if the actor is modified correctly, upload the image to the server else, don't upload it
 		int response = controller.modifyActor(actor);
 		if(response == 0) {
