@@ -1,2 +1,3 @@
 # Gestion de Peliculas (Movie Management App)
-A simple school project with Java and MySQL and few reports with JasperReports.
+A simple school project with Java Swing, MYSQL,JasperReports for integrated reports and XAMPP to simulate a web server for the images.
+More details soon...
