@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ConfigUIControlller {
-	private static final String FILENAME = "../config/app";
+	//private static final String FILENAME = "../config/app";
 	private void saveConfig() {
 		Properties prop = null;
 		//get the props

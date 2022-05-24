@@ -30,6 +30,7 @@ import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -82,8 +83,6 @@ public class HomeScreen {
 	
 	Timer tm;
     int imgPos = 0; //for the image position
-    private JButton btnBoton;
-    private JTextField txtCampo;
     //private boolean muteAudio = false; //to be used later for controlling the background audio
 	/**
 	 * Launch the application.
@@ -127,10 +126,15 @@ public class HomeScreen {
 		//configController.loadConfig();
 		//HomeScreenController.setConfig();
 		
-		//DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen except for testing
+		DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen except for testing
 		initialize();
 		
-		generateHelp();
+		try {
+			generateHelp();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Error generating the help contents");
+		}
 	}
 
 	/**
@@ -184,15 +188,6 @@ public class HomeScreen {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(204, 255, 255));
 		mainPanel.add(panel_3, BorderLayout.NORTH);
-		
-		btnBoton = new JButton("New button");
-		btnBoton.setVisible(false);
-		panel_3.add(btnBoton);
-		
-		txtCampo = new JTextField();
-		txtCampo.setVisible(false);
-		panel_3.add(txtCampo);
-		txtCampo.setColumns(10);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 9));
@@ -483,11 +478,16 @@ public class HomeScreen {
 	}
 	*/
 	
-	void generateHelp() {
+	void generateHelp() throws MalformedURLException {
 		try 
         {
 			//Definición del fichero de configuración (tipo HelpSet)
-            URL helpURL = this.getClass().getResource("../help/help.hs"); 
+            URL helpURL = this.getClass().getResource("../help/help.hs"); //Development
+			
+			/**
+			 * Deployment
+			 */
+			//URL helpURL = new URL("jar:file:MovieManagement.jar!/es/daumienebi/gestionpeliculas/help/help.hs");
             helpset = new HelpSet(null, helpURL);
             
             //Definición del objeto del visor (tipo HelpBroker)            
@@ -495,10 +495,6 @@ public class HomeScreen {
             
             //Definición de botón de inicio de ayuda. El menú
             browser.enableHelpOnButton(menuHelpContents, "manual", helpset);
-            
-            //Definición de elementos con los que F1 abrirá la ayuda en determinadas páginas
-            browser.enableHelpKey(btnBoton, "archivo", helpset);
-            browser.enableHelpKey(txtCampo, "menu", helpset);     
             //frmGestionPeliculas.getContentPane().setLayout(null);            
         } 
         catch (HelpSetException ex) 

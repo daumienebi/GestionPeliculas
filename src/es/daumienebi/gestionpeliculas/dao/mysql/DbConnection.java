@@ -27,15 +27,6 @@ public static Connection connect(){
         {
         	defaultConnection();
         	
-        	/*
-        	if(Configuration.use_default_connection == 1) {
-        		defaultConnection();
-        		return con;
-        	}else {
-        		userConnection();
-        		return con;
-        	}
-        	*/           
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "The JDBC library was not found");
         } catch (SQLException ex) {
@@ -53,6 +44,7 @@ public static Connection connect(){
         return con;
     }
     
+    /*
     private static Connection userConnection() throws ClassNotFoundException, SQLException {
     	Class.forName("org.mariadb.jdbc.Driver");
 		String urlCon="jdbc:mariadb://"+ip+":"+port+"/"+db_name;
@@ -60,6 +52,7 @@ public static Connection connect(){
         con.setAutoCommit(false);          
         return con;
     }
+    */
      
     public static Connection getConnection(){
     	return con != null ? con : null;
