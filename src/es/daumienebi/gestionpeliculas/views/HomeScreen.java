@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 
 import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
+import es.daumienebi.gestionpeliculas.controllers.ConfigUIControlller;
 import es.daumienebi.gestionpeliculas.controllers.HomeScreenController;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
 import es.daumienebi.gestionpeliculas.utils.ReportsUtil;
@@ -77,6 +78,8 @@ public class HomeScreen {
 	
 	
 	String[] imgList = HomeScreenController.getMovieSliderImages();
+	ConfigUIControlller configController = new ConfigUIControlller();
+	
 	Timer tm;
     int imgPos = 0; //for the image position
     private JButton btnBoton;
@@ -119,9 +122,13 @@ public class HomeScreen {
 		}
 	}
 	
-	public HomeScreen(){	
-		DbConnection.connect();
+	public HomeScreen(){
+		//Load the config file values
+		//configController.loadConfig();
+		//HomeScreenController.setConfig();
+		
 		initialize();
+		//DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen
 		generateHelp();
 	}
 
@@ -162,19 +169,19 @@ public class HomeScreen {
 		mainPanel.add(imgSlider);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(240, 248, 255));
+		panel.setBackground(new Color(204, 255, 255));
 		mainPanel.add(panel, BorderLayout.WEST);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(240, 248, 255));
+		panel_1.setBackground(new Color(0, 204, 204));
 		mainPanel.add(panel_1, BorderLayout.SOUTH);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(240, 248, 255));
+		panel_2.setBackground(new Color(0, 204, 204));
 		mainPanel.add(panel_2, BorderLayout.EAST);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(240, 248, 255));
+		panel_3.setBackground(new Color(204, 255, 255));
 		mainPanel.add(panel_3, BorderLayout.NORTH);
 		
 		btnBoton = new JButton("New button");
@@ -215,6 +222,7 @@ public class HomeScreen {
 					
 					HomeScreen window = new HomeScreen();										
 					window.frmGestionPeliculas.setResizable(true);
+					//HomeScreenController.setConfig();
 					disableMenus();
 					window.frmGestionPeliculas.setVisible(true);
 				}
@@ -237,9 +245,9 @@ public class HomeScreen {
 				}
 				HomeScreen window = new HomeScreen();										
 				window.frmGestionPeliculas.setResizable(true);
-				System.out.println(" value before :" + Configuration.use_default_connection);
+				//System.out.println(" value before :" + Configuration.use_default_connection);
 				disableMenus();
-				System.out.println(" value after :" + Configuration.use_default_connection);
+				//System.out.println(" value after :" + Configuration.use_default_connection);
 				window.frmGestionPeliculas.setVisible(true);
 			}
 		});

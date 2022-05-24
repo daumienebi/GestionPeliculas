@@ -17,8 +17,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ConfigUIControlller {
-
-	public void saveConfig() {
+	private static final String FILENAME = "../config/app";
+	private void saveConfig() {
 		Properties prop = null;
 		//get the props
 		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("app.properties")){
@@ -50,7 +50,7 @@ public class ConfigUIControlller {
 		}				
 }
 
-	public void loadConfig() {
+	private void loadConfig() {
 		//Load the configurations and save it in the Configuration.java file
 		ResourceBundle.clearCache();
 		//ResourceBundle.clearCache(this.getClass().getClassLoader());

@@ -26,14 +26,16 @@ public static Connection connect(){
         try
         {
         	defaultConnection();
+        	
         	/*
         	if(Configuration.use_default_connection == 1) {
         		defaultConnection();
-        		//return con; maybe
+        		return con;
         	}else {
         		userConnection();
-        		//return con;
-        	} */           
+        		return con;
+        	}
+        	*/           
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "The JDBC library was not found");
         } catch (SQLException ex) {
@@ -42,7 +44,7 @@ public static Connection connect(){
         return null;
     }
     
-    public static Connection defaultConnection() throws ClassNotFoundException, SQLException {
+    private static Connection defaultConnection() throws ClassNotFoundException, SQLException {
     	Class.forName("org.mariadb.jdbc.Driver");
 		//Class.forName("com.mysql.cj.jdbc.Driver");
 		String urlCon="jdbc:mariadb://"+DefaultConfiguration.ip+":"+DefaultConfiguration.port+"/"+DefaultConfiguration.db_name;
@@ -51,7 +53,7 @@ public static Connection connect(){
         return con;
     }
     
-    public static Connection userConnection() throws ClassNotFoundException, SQLException {
+    private static Connection userConnection() throws ClassNotFoundException, SQLException {
     	Class.forName("org.mariadb.jdbc.Driver");
 		String urlCon="jdbc:mariadb://"+ip+":"+port+"/"+db_name;
         con=DriverManager.getConnection(urlCon, db_user, db_password);
