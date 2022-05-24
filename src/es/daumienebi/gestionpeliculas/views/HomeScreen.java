@@ -127,8 +127,9 @@ public class HomeScreen {
 		//configController.loadConfig();
 		//HomeScreenController.setConfig();
 		
+		//DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen except for testing
 		initialize();
-		//DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen
+		
 		generateHelp();
 	}
 
