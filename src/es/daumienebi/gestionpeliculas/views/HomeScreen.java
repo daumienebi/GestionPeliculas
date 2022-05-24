@@ -4,20 +4,22 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.controllers.HomeScreenController;
 import es.daumienebi.gestionpeliculas.dao.mysql.DbConnection;
 import es.daumienebi.gestionpeliculas.utils.ReportsUtil;
 import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
-import es.daumienebi.gestionpeliculas.views.ConfigUI;
-import net.sf.jasperreports.view.JasperViewer;
-
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.HelpSetException;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -25,15 +27,24 @@ import javax.swing.Timer;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Toolkit;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 public class HomeScreen {
 
 	private JFrame frmGestionPeliculas;
 	private JPanel mainPanel;
 	private JLabel imgSlider;
+	
+	//Generate Java Help
+	private HelpBroker browser;
+	HelpSet helpset;    
 	
 	//Components to be translated
 	public static JMenu genreMenu;
@@ -68,6 +79,8 @@ public class HomeScreen {
 	String[] imgList = HomeScreenController.getMovieSliderImages();
 	Timer tm;
     int imgPos = 0; //for the image position
+    private JButton btnBoton;
+    private JTextField txtCampo;
     //private boolean muteAudio = false; //to be used later for controlling the background audio
 	/**
 	 * Launch the application.
@@ -93,7 +106,7 @@ public class HomeScreen {
 			movieMenu.setEnabled(false);
 			genreMenu.setEnabled(false);
 			reportMenu.setEnabled(false);
-			helpMenu.setEnabled(false);
+			//helpMenu.setEnabled(false);
 			settingsMenu.setEnabled(false);
 		}else {
 			homeMenu.setEnabled(true);
@@ -101,15 +114,15 @@ public class HomeScreen {
 			movieMenu.setEnabled(true);
 			genreMenu.setEnabled(true);
 			reportMenu.setEnabled(true);
-			helpMenu.setEnabled(true);
+			//helpMenu.setEnabled(true);
 			settingsMenu.setEnabled(true);
 		}
 	}
+	
 	public HomeScreen(){	
-		
 		DbConnection.connect();
 		initialize();
-		
+		generateHelp();
 	}
 
 	/**
@@ -118,6 +131,8 @@ public class HomeScreen {
 	private void initialize() {
 		frmGestionPeliculas = new JFrame();
 		frmGestionPeliculas.setIconImage(Toolkit.getDefaultToolkit().getImage(HomeScreen.class.getResource("/resources/movie_management.png")));
+		//frmGestionPeliculas.setIconImage(Toolkit.getDefaultToolkit().getImage(HomeScreen.class.getResource("../help/movie_management.png")));
+
 		frmGestionPeliculas.setTitle("Movie Management");
 		frmGestionPeliculas.setBounds(100, 100, 1300,800);
 		frmGestionPeliculas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -147,16 +162,29 @@ public class HomeScreen {
 		mainPanel.add(imgSlider);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(240, 248, 255));
 		mainPanel.add(panel, BorderLayout.WEST);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(240, 248, 255));
 		mainPanel.add(panel_1, BorderLayout.SOUTH);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(240, 248, 255));
 		mainPanel.add(panel_2, BorderLayout.EAST);
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(240, 248, 255));
 		mainPanel.add(panel_3, BorderLayout.NORTH);
+		
+		btnBoton = new JButton("New button");
+		btnBoton.setVisible(false);
+		panel_3.add(btnBoton);
+		
+		txtCampo = new JTextField();
+		txtCampo.setVisible(false);
+		panel_3.add(txtCampo);
+		txtCampo.setColumns(10);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 9));
@@ -275,7 +303,7 @@ public class HomeScreen {
 		menuOptionActorMng.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/management.jpg")));
 		actorMenu.add(menuOptionActorMng);
 		
-		movieMenu = new JMenu("Movie");
+		movieMenu = new JMenu("Movies");
 		movieMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(movieMenu);
 		
@@ -305,7 +333,7 @@ public class HomeScreen {
 		});
 		movieMenu.add(menuOptionMovieMng);
 		
-		genreMenu = new JMenu("Genre");
+		genreMenu = new JMenu("Genres");
 		genreMenu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		menuBar.add(genreMenu);
 		
@@ -403,6 +431,11 @@ public class HomeScreen {
 		menuBar.add(helpMenu);
 		
 		menuHelpContents = new JMenuItem("Help Contents");
+		menuHelpContents.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		menuHelpContents.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuHelpContents.setIcon(new ImageIcon(HomeScreen.class.getResource("/resources/help.jpg")));
 		helpMenu.add(menuHelpContents);
@@ -414,7 +447,22 @@ public class HomeScreen {
 		
 		disableMenus();
 		//disableTranslate();
+
+		
+		/**		
+		frmGestionPeliculas.addKeyListener(new KeyAdapter () { 
+	         @Override
+	         public void keyPressed(KeyEvent e) {
+	              if ( e.equals(KeyEvent.VK_F1 ) ) {
+	                   // Do something
+	            	  System.out.print("F1 is pressed");
+	            	  generateHelp();
+	              }
+	         }
+	    });
+	    */
 	}
+	
 	/*
 	void disableTranslate() {
 		if(DefaultConfiguration.lang_id == 1){
@@ -425,6 +473,31 @@ public class HomeScreen {
 		}
 	}
 	*/
+	
+	void generateHelp() {
+		try 
+        {
+			//Definición del fichero de configuración (tipo HelpSet)
+            URL helpURL = this.getClass().getResource("../help/help.hs"); 
+            helpset = new HelpSet(null, helpURL);
+            
+            //Definición del objeto del visor (tipo HelpBroker)            
+            browser = helpset.createHelpBroker();
+            
+            //Definición de botón de inicio de ayuda. El menú
+            browser.enableHelpOnButton(menuHelpContents, "manual", helpset);
+            
+            //Definición de elementos con los que F1 abrirá la ayuda en determinadas páginas
+            browser.enableHelpKey(btnBoton, "archivo", helpset);
+            browser.enableHelpKey(txtCampo, "menu", helpset);     
+            //frmGestionPeliculas.getContentPane().setLayout(null);            
+        } 
+        catch (HelpSetException ex) 
+        {
+            ex.printStackTrace();
+        }
+	}
+	
 	public void SetImageSize(int index){
 		Image img = null;
 		Image newImg;

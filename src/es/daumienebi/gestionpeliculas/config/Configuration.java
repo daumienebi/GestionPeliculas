@@ -14,36 +14,17 @@ public class Configuration {
 	public static String port;
 	// {1} -> English   or directly save the locale
 	// {2} -> Spanish
-	public static int language = 1;
+	public static int lang_id = 1;
 	
 	//{1} to use default connection,
 	//{0} to use the user configuration (from the ConfigUI)
 	//{-1} if its not configured - (the user cannot access the menu options without a Database connection)
 	public static int use_default_connection = -1; 
 	
-	//getters
-	public static String getIp() {
-		return ip;
-	}
-	public static String getDb_user() {
-		return db_user;
-	}
-	public static String getDb_password() {
-		return db_password;
-	}
 	
-	public static String getDb_Name() {
-		return db_name;
-	}
-	public static String getPort() {
-		return port;
-	}
-	public static int getUseDefaultConnection() {
-		return use_default_connection;
-	}
 	
-	public static int getLanguage() {
-		return language;
+	public static int getLang_id() {
+		return lang_id;
 	}
 	public static void setIp(String ip) {
 		Configuration.ip = ip;
@@ -60,13 +41,11 @@ public class Configuration {
 	public static void setPort(String port) {
 		Configuration.port = port;
 	}
-	public static void setLanguage(int language) {
-		Configuration.language = language;
+	public static void setLang_id(int lang_id) {
+		Configuration.lang_id = lang_id;
 	}
 	public static void setUse_default_connection(int use_default_connection) {
 		Configuration.use_default_connection = use_default_connection;
 	}
-	
-	
-	
+		
 }

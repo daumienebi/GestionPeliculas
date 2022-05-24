@@ -16,11 +16,11 @@ public class DbConnection {
 //creates a MYSQL DB connection using the available connector
 //This class will be modified later on
 private static Connection con;
-static String ip = Configuration.getIp();
-static String port = Configuration.getPort();
-static String db_name = Configuration.getDb_Name();
-static String db_user = Configuration.getDb_user();
-static String db_password = Configuration.getDb_password();
+static String ip = Configuration.ip;
+static String port = Configuration.port;
+static String db_name = Configuration.db_name;
+static String db_user = Configuration.db_user;
+static String db_password = Configuration.db_password;
 
 public static Connection connect(){        
         try

@@ -32,5 +32,7 @@
 	<classpathentry kind="lib" path="src/resources/commons-io-2.11.0-sources.jar"/>
 	<classpathentry kind="lib" path="src/resources/commons-io-2.11.0-tests.jar"/>
 	<classpathentry kind="lib" path="src/resources/commons-io-2.11.0-test-sources.jar"/>
+	<classpathentry kind="lib" path="src/es/daumienebi/gestionpeliculas/help/lib/javahelp-2.0.05.jar"/>
+	<classpathentry kind="lib" path="src/es/daumienebi/gestionpeliculas/help/lib/javahelp-2.0.06.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

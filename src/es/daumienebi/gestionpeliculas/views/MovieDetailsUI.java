@@ -220,6 +220,7 @@ public class MovieDetailsUI extends JDialog {
 		rating_panel.add(panel_7_3);
 		
 		txtRating = new JTextField();
+		txtRating.setBackground(new Color(0, 0, 0));
 		txtRating.setEditable(false);
 		txtRating.setFont(new Font("Tahoma", Font.BOLD, 12));
 		txtRating.setColumns(3);

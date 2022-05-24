@@ -58,7 +58,7 @@ public class AddActorUIController {
 		String dirEsc = System.getProperty("user.home");
 		jfc.setCurrentDirectory(new File(dirEsc + "/Desktop"));
 		
-		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image filter", "png","jpg");
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image filter", "png","jpg","jpeg");
 		jfc.setFileFilter(filtro);
 		int opcion = jfc.showOpenDialog(jfc);
 		if(opcion == JFileChooser.APPROVE_OPTION) {

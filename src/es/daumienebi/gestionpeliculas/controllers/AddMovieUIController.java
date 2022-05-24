@@ -48,7 +48,7 @@ public class AddMovieUIController {
 		String dirEsc = System.getProperty("user.home");
 		jfc.setCurrentDirectory(new File(dirEsc + "/Desktop"));
 		
-		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image Filter", "png","jpg");
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image Filter", "png","jpg","jpeg");
 		jfc.setFileFilter(filtro);
 		int option = jfc.showOpenDialog(jfc);
 		if(option == JFileChooser.APPROVE_OPTION) {

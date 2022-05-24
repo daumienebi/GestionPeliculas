@@ -185,7 +185,9 @@ public class ConfigUI extends JDialog{
 						Configuration.db_user = txtDbUser.getText();
 						//Configuration.db_password = "root";
 						//Configuration.db_password = txtDbPassword.getPassword().toString().trim(); //check out the password control
-						
+						String pass = new String(txtDbPassword.getPassword());
+						Configuration.db_password = pass;
+						pass = "";
 						DbConnection.connect();
 						Connection con = DbConnection.getConnection();
 						if(con != null) {
