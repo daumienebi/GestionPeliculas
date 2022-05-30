@@ -7,6 +7,27 @@ package es.daumienebi.gestionpeliculas.config;
 public class Configuration {
 	
 	
+	public static String ip;
+	public static String port;
+	public static String db_name;
+	public static String db_user;
+	public static String db_password;
+	public static int lang_id;
+	public static String actor_image_server;
+	public static String movie_image_server;
+	public static String ftp_server;
+	public static String ftp_user;
+	public static String ftp_password;
+	public static int use_default_connection = 1;
+	
+	
+	
+	
+	/*
+	 *
+	 *
+	 *
+	 
 	public static String ip = "192.168.56.102";
 	public static String port = "3306";
 	public static String db_name = "moviedb";
@@ -18,8 +39,7 @@ public class Configuration {
 	public static String ftp_server = "192.168.56.102";
 	public static String ftp_user = "moviedb";
 	public static String ftp_password = "moviedb";
-	public static int use_default_connection = 1;
-	/*
+	public static int use_default_connection = 1; 
 	//model for the app properties
 	public static String ip;
 	public static String db_name;

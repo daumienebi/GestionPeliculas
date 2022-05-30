@@ -234,17 +234,19 @@ public class ConfigUI extends JDialog{
 						dispose();
 					}
 						}else {
+							String bd_pass,ftp_pass;
 							if(!txtIp.getText().isBlank() && !txtPort.getText().isBlank() && !txtDbUser.getText().isBlank() && 
 							!txtDbName.getText().isBlank()) {
 								DefaultConfiguration.ip = txtIp.getText();
 								DefaultConfiguration.port = txtPort.getText();
 								DefaultConfiguration.db_name = txtDbName.getText();
 								DefaultConfiguration.db_user = txtDbUser.getText();
-								String pass = new String(txtDbPassword.getPassword());
-								DefaultConfiguration.db_password = pass;
-								pass = "";
+								bd_pass = new String(txtDbPassword.getPassword());
+								DefaultConfiguration.db_password = bd_pass;
+								bd_pass = "";
 								DefaultConfiguration.ftp_user = txtFtpUser.getText().trim();
-								DefaultConfiguration.ftp_password = txtFtpPass.getText().trim();
+								ftp_pass = "";
+								DefaultConfiguration.ftp_password = ftp_pass;
 								DefaultConfiguration.ftp_server = txtFtpServer.getText().trim();
 								DefaultConfiguration.actor_image_server = txtActorImgServer.getText().trim();
 								DefaultConfiguration.movie_image_server = txtMovieImgServer.getText().trim();

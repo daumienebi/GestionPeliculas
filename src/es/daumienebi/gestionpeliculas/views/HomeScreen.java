@@ -123,7 +123,22 @@ public class HomeScreen {
 	
 	public HomeScreen(){
 		//Load the config file values
-		//configController.loadConfig();
+		
+		configController.loadConfig();
+		System.out.println("ip:" + Configuration.ip);
+		System.out.println("db_name:"+ Configuration.db_name);
+		System.out.println("port:" +Configuration.port);
+		System.out.println("db_user:"+ Configuration.db_user);
+		System.out.println("movie_server:" +Configuration.movie_image_server);
+		System.out.println("ftp_server:"+ Configuration.ftp_server);
+		System.out.println("ftp_user:"+ Configuration.ftp_user);
+		System.out.println("ftp_pass:"+ Configuration.ftp_password);
+		System.out.println("user_def:"+ Configuration.use_default_connection);
+		System.out.println("actor_server:"+ Configuration.actor_image_server);
+		System.out.println("db_pass:"+ Configuration.db_password);
+		System.out.println("lang id:"+ Configuration.lang_id);
+		System.out.println("db_name:"+ Configuration.db_name);
+		
 		//HomeScreenController.setConfig();
 		
 		DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen except for testing

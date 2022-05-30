@@ -47,8 +47,8 @@
    <!-- Configuración de la pantalla de ayuda -->
     <presentation default="true" displayviews="false" displayviewimages="true">
 		<name>MainWin</name>
-		<size width="750" height="850"/>		
-		<location x="300" y="200"/>			
+		<size width="850" height="600"/>		
+		<location x="550" y="250"/>			
 		<title></title> 
 		<toolbar>	
 				<helpaction image="BackwardIco">javax.help.BackAction</helpaction>
