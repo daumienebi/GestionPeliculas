@@ -44,7 +44,7 @@ public static Connection connect(){
         return con;
     }
     
-    /*
+    
     private static Connection userConnection() throws ClassNotFoundException, SQLException {
     	Class.forName("org.mariadb.jdbc.Driver");
 		String urlCon="jdbc:mariadb://"+ip+":"+port+"/"+db_name;
@@ -52,7 +52,7 @@ public static Connection connect(){
         con.setAutoCommit(false);          
         return con;
     }
-    */
+    
      
     public static Connection getConnection(){
     	return con != null ? con : null;

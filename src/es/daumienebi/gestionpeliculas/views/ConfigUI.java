@@ -135,6 +135,7 @@ public class ConfigUI extends JDialog{
 				if(ConfigUI_chkBoxDefaultConfig.isSelected()) {
 					disableTxtBoxes();
 					fillDefaultValues();
+					
 				}else {
 					enableTxtBoxes();
 					//hideDefaultValues();
@@ -237,19 +238,23 @@ public class ConfigUI extends JDialog{
 							String bd_pass,ftp_pass;
 							if(!txtIp.getText().isBlank() && !txtPort.getText().isBlank() && !txtDbUser.getText().isBlank() && 
 							!txtDbName.getText().isBlank()) {
-								DefaultConfiguration.ip = txtIp.getText();
-								DefaultConfiguration.port = txtPort.getText();
-								DefaultConfiguration.db_name = txtDbName.getText();
-								DefaultConfiguration.db_user = txtDbUser.getText();
+								Configuration.ip = txtIp.getText();
+								Configuration.port = txtPort.getText();
+								Configuration.db_name = txtDbName.getText();
+								Configuration.db_user = txtDbUser.getText();
 								bd_pass = new String(txtDbPassword.getPassword());
-								DefaultConfiguration.db_password = bd_pass;
+								Configuration.db_password = bd_pass;
 								bd_pass = "";
-								DefaultConfiguration.ftp_user = txtFtpUser.getText().trim();
+								Configuration.ftp_user = txtFtpUser.getText().trim();
+								ftp_pass = new String(txtFtpPass.getPassword());
+								Configuration.ftp_password = ftp_pass;
 								ftp_pass = "";
-								DefaultConfiguration.ftp_password = ftp_pass;
-								DefaultConfiguration.ftp_server = txtFtpServer.getText().trim();
-								DefaultConfiguration.actor_image_server = txtActorImgServer.getText().trim();
-								DefaultConfiguration.movie_image_server = txtMovieImgServer.getText().trim();
+								Configuration.ftp_server = txtFtpServer.getText().trim();
+								Configuration.actor_image_server = txtActorImgServer.getText().trim();
+								Configuration.movie_image_server = txtMovieImgServer.getText().trim();
+								controller.saveConfig();
+								//DefaultConfiguration
+								
 								DbConnection.connect();
 								Connection con = DbConnection.getConnection();
 								if(con != null) {
