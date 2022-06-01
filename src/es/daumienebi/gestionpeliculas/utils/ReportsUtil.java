@@ -15,7 +15,10 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class ReportsUtil{	
-	static String REPORT_ROUTE =  System.getProperty("user.dir") + "\\src\\es\\daumienebi\\gestionpeliculas\\reports\\";
+	//static String REPORT_ROUTE =  System.getProperty("user.dir") + "\\src\\es\\daumienebi\\gestionpeliculas\\reports\\";
+	//static String REPORT_ROUTE =  "/es/daumienebi/gestionpeliculas/reports/";
+	static String REPORT_ROUTE =  "./reports/";
+	
 	/**
 	 * 
 	 * @param rutaInforme - The route where the report is stored

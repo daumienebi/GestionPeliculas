@@ -115,8 +115,8 @@ public class ActorManagementUI extends JDialog {
 								JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/resources/tick.jpg")));
 						loadActorsTable();
 					}else {
-						JOptionPane.showMessageDialog(getContentPane(), "Error deleting the record", 
-								"Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(getContentPane(), "The record cannot be deleted at the moment because the Actor\\ Actress features in 1 or more movies", 
+								"Error deleting the record", JOptionPane.ERROR_MESSAGE);
 					}
 				}	
 			}

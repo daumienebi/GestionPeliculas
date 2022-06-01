@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import java.awt.Toolkit;
@@ -57,6 +58,7 @@ public class ConfigUI extends JDialog{
 	ConfigUIControlller controller = new ConfigUIControlller();
 	private JSeparator separator_1;
 	private JPasswordField txtFtpPass;
+	private JLabel lblNewLabel_1;
 	
 	
 	/**
@@ -78,7 +80,8 @@ public class ConfigUI extends JDialog{
 	
 	public ConfigUI() {
 		Inicializar();
-		fillDefaultValues();
+		fillConfigValues();
+		//fillDefaultValues();
 		controller.translate();
 	}
 	
@@ -129,7 +132,7 @@ public class ConfigUI extends JDialog{
 		txtDbPassword.setBounds(222, 285, 190, 20);
 		panel.add(txtDbPassword);
 		
-		ConfigUI_chkBoxDefaultConfig = new JCheckBox("Use default configuration");
+		ConfigUI_chkBoxDefaultConfig = new JCheckBox("Use default database configuration");
 		ConfigUI_chkBoxDefaultConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(ConfigUI_chkBoxDefaultConfig.isSelected()) {
@@ -143,7 +146,7 @@ public class ConfigUI extends JDialog{
 			}
 		});
 		
-		ConfigUI_chkBoxDefaultConfig.setBounds(33, 540, 209, 23);
+		ConfigUI_chkBoxDefaultConfig.setBounds(33, 540, 244, 23);
 		panel.add(ConfigUI_chkBoxDefaultConfig);
 		ImageIcon icon = new ImageIcon(ConfigUI.class.getResource("/resources/db.png"));
 		Image img = icon.getImage();			
@@ -218,6 +221,16 @@ public class ConfigUI extends JDialog{
 		txtFtpPass.setBounds(222, 501, 116, 20);
 		panel.add(txtFtpPass);
 		
+		JLabel label = new JLabel("New label");
+		label.setBounds(231, 544, 46, 14);
+		panel.add(label);
+		
+		lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setToolTipText("It only configures the database connection, the FTP Server need to be set up later on to view the images in the application");
+		lblNewLabel_1.setIcon(new ImageIcon(ConfigUI.class.getResource("/resources/info.png")));
+		lblNewLabel_1.setBounds(283, 544, 16, 19);
+		panel.add(lblNewLabel_1);
+		
 		
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.SOUTH);
@@ -227,14 +240,25 @@ public class ConfigUI extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if(ConfigUI_chkBoxDefaultConfig.isSelected()) {
 					//Configuration.use_default_connection = 1;
-					DbConnection.connect();
+					Connection existingCon = DbConnection.getConnection() == null ? null : DbConnection.getConnection();
+					if(existingCon != null) {
+						try {
+							existingCon.close();
+							//DbConnection.setToNull();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					DbConnection.defaultConnect();
 					Connection con = DbConnection.getConnection();
 					if(con != null) {
 						ImageIcon icon = new ImageIcon(getClass().getResource("/resources/tick.jpg"));
-						JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully "+ '\n' +" The Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
+						JOptionPane.showMessageDialog(getRootPane(),"New\\Existing Connection established to the following  IP Address : "+ DefaultConfiguration.ip +  "\n" +"\nThe Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
+						
 						dispose();
 					}
-						}else {
+				}else {
 							String bd_pass,ftp_pass;
 							if(!txtIp.getText().isBlank() && !txtPort.getText().isBlank() && !txtDbUser.getText().isBlank() && 
 							!txtDbName.getText().isBlank()) {
@@ -253,22 +277,27 @@ public class ConfigUI extends JDialog{
 								Configuration.actor_image_server = txtActorImgServer.getText().trim();
 								Configuration.movie_image_server = txtMovieImgServer.getText().trim();
 								controller.saveConfig();
-								//DefaultConfiguration
 								
+								Connection existingCon = DbConnection.getConnection() == null ? null : DbConnection.getConnection();
+								if(existingCon != null) {
+									try {
+										existingCon.close();
+										//DbConnection.setToNull();
+									} catch (SQLException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+								}
+								controller.loadConfig();
 								DbConnection.connect();
 								Connection con = DbConnection.getConnection();
 								if(con != null) {
 									//controller.saveConfig();
 									ImageIcon icon = new ImageIcon(getClass().getResource("/resources/tick.jpg"));
-									JOptionPane.showMessageDialog(getRootPane(),"Connection established successfully !, the Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
+									JOptionPane.showMessageDialog(getRootPane(),"Connection established !" +  "\n" +"\nThe Application will proceed to restart automatically.","Database connection",JOptionPane.INFORMATION_MESSAGE,icon);							
 									dispose();
 								}else {
 								}
-								System.out.println(DefaultConfiguration.ip);
-								System.out.println(DefaultConfiguration.port);
-								System.out.println(DefaultConfiguration.db_name);
-								System.out.println(DefaultConfiguration.db_user);
-								System.out.println(DefaultConfiguration.db_password);
 							}else {
 								JOptionPane.showMessageDialog(null,"Fill  in the necessary fields","Error", JOptionPane.ERROR_MESSAGE);
 							}					
@@ -379,11 +408,14 @@ public class ConfigUI extends JDialog{
 		txtDbUser.setText(DefaultConfiguration.db_user);
 		txtDbPassword.setText(DefaultConfiguration.db_password);
 		txtDbName.setText(DefaultConfiguration.db_name);
+		
+		/*
 		txtFtpServer.setText(DefaultConfiguration.ftp_server);
 		txtFtpUser.setText(DefaultConfiguration.ftp_user);
 		txtActorImgServer.setText(DefaultConfiguration.actor_image_server);
 		txtMovieImgServer.setText(DefaultConfiguration.movie_image_server);
 		txtFtpPass.setText(DefaultConfiguration.ftp_password);
+		*/
 	}
 	
 	void fillConfigValues() {

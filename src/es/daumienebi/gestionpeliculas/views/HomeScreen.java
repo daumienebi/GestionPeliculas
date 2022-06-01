@@ -32,6 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Toolkit;
@@ -40,7 +41,7 @@ import java.awt.SystemColor;
 
 public class HomeScreen {
 
-	private JFrame frmGestionPeliculas;
+	public JFrame frmGestionPeliculas;
 	private JPanel mainPanel;
 	private JLabel imgSlider;
 	
@@ -101,7 +102,7 @@ public class HomeScreen {
 		});
 	}
 
-	void disableMenus() {
+	public void disableMenus() {
 		if(DbConnection.getConnection() == null) { //Configuration.use_default_config == -1
 			homeMenu.setEnabled(false);
 			actorMenu.setEnabled(false);
@@ -125,6 +126,7 @@ public class HomeScreen {
 		//Load the config file values
 		
 		configController.loadConfig();
+		/*
 		System.out.println("ip:" + Configuration.ip);
 		System.out.println("db_name:"+ Configuration.db_name);
 		System.out.println("port:" +Configuration.port);
@@ -138,11 +140,15 @@ public class HomeScreen {
 		System.out.println("db_pass:"+ Configuration.db_password);
 		System.out.println("lang id:"+ Configuration.lang_id);
 		System.out.println("db_name:"+ Configuration.db_name);
-		
+		*/
 		//HomeScreenController.setConfig();
-		
+		System.out.println("ip:" + Configuration.ip);
+		System.out.println("db_name:"+ Configuration.db_name);
+		System.out.println("port:" +Configuration.port);
+		System.out.println("db_user:"+ Configuration.db_user);
 		DbConnection.connect(); //not connecting at the beginning to avoid unnecessary blank screen except for testing
 		initialize();
+		
 		
 		try {
 			generateHelp();
@@ -497,12 +503,12 @@ public class HomeScreen {
 		try 
         {
 			//Definición del fichero de configuración (tipo HelpSet)
-            URL helpURL = this.getClass().getResource("../help/help.hs"); //Development
+            //URL helpURL = this.getClass().getResource("../help/help.hs"); //Development
 			
 			/**
 			 * Deployment
 			 */
-			//URL helpURL = new URL("jar:file:MovieManagement.jar!/es/daumienebi/gestionpeliculas/help/help.hs");
+			URL helpURL = new URL("jar:file:MovieManagement.jar!/es/daumienebi/gestionpeliculas/help/help.hs");
             helpset = new HelpSet(null, helpURL);
             
             //Definición del objeto del visor (tipo HelpBroker)            

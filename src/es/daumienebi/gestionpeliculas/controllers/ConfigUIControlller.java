@@ -1,6 +1,7 @@
 package es.daumienebi.gestionpeliculas.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,22 +18,36 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ConfigUIControlller {
-	//private static final String FILENAME = "../config/app";
+	private static final String PATH = "./app.properties";
+	//private static final String DEV_PATH = "./app.properties";
+	
 	public void saveConfig() {
+		FileInputStream file1 ;
 		Properties prop = null;
 		//get the props
 		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("app.properties")){
 			prop = new Properties();
-			prop.load(inputStream);
+			
+			//PROD 
+			file1 = new FileInputStream(PATH);
+			prop.load(file1);
+			
+			//DEV
+			//prop.load(inputStream);
 		} catch (IOException e) {
 			e.printStackTrace();			
 		}
 		
 		URL resourseUrl = this.getClass().getClassLoader().getResource("app.properties");
-		File file;
+		File output_file;
 		try{
-			file = new File(resourseUrl.toURI());
-			try(OutputStream outputStream = new FileOutputStream(file);){
+			//DEV
+			//output_file = new File(resourseUrl.toURI());
+			
+			//PROD
+			output_file = new File(PATH);
+			
+			try(OutputStream outputStream = new FileOutputStream(output_file);){
 				prop.setProperty("ip",Configuration.ip);
 				prop.setProperty("port",Configuration.port);
 				prop.setProperty("db_user",Configuration.db_user);
@@ -47,16 +62,15 @@ public class ConfigUIControlller {
 				prop.setProperty("use_default_connection",String.valueOf(Configuration.use_default_connection));
 				prop.store(outputStream, null);
 				
-				//store it with the Configuration object
-			
+				//store it with the Configuration object			
 		}catch (IOException e) {
 			e.printStackTrace();		
 		} 
-		}catch (URISyntaxException e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}				
 }
-
+	
 	public void loadConfig() {
 		//Load the configurations and save it in the Configuration.java file
 		ResourceBundle.clearCache();

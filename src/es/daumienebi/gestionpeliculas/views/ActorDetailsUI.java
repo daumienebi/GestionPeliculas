@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.controllers.AddActorUIController;
 import es.daumienebi.gestionpeliculas.dao.IActorDAO;
@@ -171,12 +172,13 @@ public class ActorDetailsUI extends JDialog {
 		ImageIcon icon = null;
 		ImageIcon default_icon = new ImageIcon(getClass().getResource("/resources/no_image.jpg"));
 		try {
-			url = new URL(DefaultConfiguration.actor_image_server + imgRoute);
+			url = new URL(Configuration.actor_image_server + imgRoute);
 			icon = new ImageIcon(url);
 			if(icon.getImageLoadStatus() == MediaTracker.ERRORED) {
 				//
 			}
-			if(icon == null || icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
+			if(icon == null || icon.getImageLoadStatus() != MediaTracker.COMPLETE || icon.getImageLoadStatus() == MediaTracker.ERRORED  
+					|| icon.getImageLoadStatus() == MediaTracker.ABORTED) {
 				icon = default_icon;
 			}
 			Image img = icon.getImage();

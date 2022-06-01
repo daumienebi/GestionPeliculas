@@ -10,12 +10,13 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
+import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.models.Movie;
 import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class MovieTableModel extends AbstractTableModel{
-	final static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
+	final static String MOVIE_IMAGE_SERVER = Configuration.movie_image_server;
 	private ArrayList<Movie> movieList;
 	//Resource Bundle to translate the table headers
 	ResourceBundle bundle = null;
@@ -102,7 +103,7 @@ public class MovieTableModel extends AbstractTableModel{
 			if(icon.getImageLoadStatus() == MediaTracker.ERRORED) {
 				//
 			}
-			if(icon == null || icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
+			if(icon == null || icon.getImageLoadStatus() != MediaTracker.COMPLETE || icon.getImageLoadStatus() == MediaTracker.ERRORED) {
 				icon = default_icon;
 			}
 			Image img = icon.getImage();

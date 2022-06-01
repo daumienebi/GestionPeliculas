@@ -10,12 +10,13 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
+import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.models.Actor;
 import es.daumienebi.gestionpeliculas.utils.TranslatorUtil;
 
 public class ActorTableModel extends AbstractTableModel {
-	final static String ACTOR_IMAGE_SERVER = DefaultConfiguration.actor_image_server;
+	final static String ACTOR_IMAGE_SERVER = Configuration.actor_image_server;
 	private ArrayList<Actor> actorsList = new ArrayList<>();
 	private String [] columns = {"Id","Name","Surname","Date of birth","Image"};
 	private ResourceBundle bundle = null;

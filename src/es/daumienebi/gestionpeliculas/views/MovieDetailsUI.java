@@ -30,6 +30,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
 import es.daumienebi.gestionpeliculas.controllers.ActorManagementUIController;
 import es.daumienebi.gestionpeliculas.utils.TextFieldValidatorUtil;
@@ -45,7 +46,7 @@ import es.daumienebi.gestionpeliculas.viewmodels.ActorTableModel;
 import java.awt.SystemColor;
 
 public class MovieDetailsUI extends JDialog {
-	private static String MOVIE_IMAGE_SERVER = DefaultConfiguration.movie_image_server;
+	private static String MOVIE_IMAGE_SERVER = Configuration.movie_image_server;
 	private IMovieDAO movieDAO = new MySQLMovieDAO();
 	private IGenreDAO genreDAO = new MySQLGenreDAO();
 	private JTextField txtDuration;

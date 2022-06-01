@@ -19,6 +19,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import com.fasterxml.jackson.databind.util.ObjectBuffer;
 
+import es.daumienebi.gestionpeliculas.config.Configuration;
 import es.daumienebi.gestionpeliculas.config.DefaultConfiguration;
  
 
@@ -32,10 +33,10 @@ public class UploadImageUtil {
 	private static double IMAGE_MAX_SIZE = 5.0;
 	
 	private static FTPClient connect() {
-		String server = DefaultConfiguration.ftp_server;
+		String server = Configuration.ftp_server;
         int port = 21;
-        String user = DefaultConfiguration.ftp_user;
-        String pass = DefaultConfiguration.ftp_password;
+        String user = Configuration.ftp_user;
+        String pass = Configuration.ftp_password;
         try { 
             ftpClient.connect(server, port);
             ftpClient.login(user, pass);
@@ -71,8 +72,8 @@ public class UploadImageUtil {
     
     /**
      * 
-     * @param imgFile The selected image file to be uploaded
-     * @return returns an array of objects, the first index [0] indicates if the image has been uploaded successfully
+     * @param - imgFile The selected image file to be uploaded
+     * @return an array of objects, the first index [0] indicates if the image has been uploaded successfully(true or false)
      * and the second index [1] contains the file name in the server.
      */
     public static Object[] uploadActorImage(File imgFile) {
@@ -86,8 +87,8 @@ public class UploadImageUtil {
     
     /**
      * 
-     * @param imgFile The selected image file to be uploaded
-     * @return returns an array of objects, the first index [0] indicates if the image has been uploaded successfully
+     * @param imgFile - The selected image file to be uploaded
+     * @return returns an array of objects, the first index [0] indicates if the image has been uploaded successfully(true or false)
      * and the second index [1] contains the file name in the server.
      */
     public static Object[] uploadMovieImage(File imgFile) {

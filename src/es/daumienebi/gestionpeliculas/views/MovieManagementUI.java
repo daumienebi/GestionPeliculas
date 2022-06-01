@@ -153,12 +153,12 @@ public class MovieManagementUI extends JDialog {
 					if(response == JOptionPane.YES_OPTION) {
 						int exitCode = MovieManagementUIController.deleteMovie(movie_id);
 						if(exitCode == 0) {
-							JOptionPane.showMessageDialog(getContentPane(), "Record deleted successfully", "Delete Record",
+							JOptionPane.showMessageDialog(getContentPane(), "Movie deleted successfully", "Delete Movie",
 									JOptionPane.INFORMATION_MESSAGE, new ImageIcon(getClass().getResource("/resources/tick.jpg")));
 							loadMoviesTable();
 							MovieMngment_btnDelete.setVisible(false);
 						}else {
-							JOptionPane.showMessageDialog(getContentPane(), "Error deleting the record", 
+							JOptionPane.showMessageDialog(getContentPane(), "Error deleting the movie", 
 									"Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
